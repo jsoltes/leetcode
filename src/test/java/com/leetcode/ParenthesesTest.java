@@ -38,4 +38,20 @@ public class ParenthesesTest
         List<String> expected = new ArrayList(Arrays.asList("()()()", "(())()"));
         assertTrue(result==expected);
     }
+    
+    public void testParentheses2 ()
+    {
+        Parentheses p = new Parentheses();
+        List<String> result = p.removeInvalidParentheses("(a)())()");
+        List<String> expected = new ArrayList(Arrays.asList("(a)()()", "(a())()"));
+        assertTrue(result==expected);
+    }
+    
+    public void testParentheses3 ()
+    {
+        Parentheses p = new Parentheses();
+        List<String> result = p.removeInvalidParentheses(")(");
+        List<String> expected = new ArrayList(Arrays.asList(""));
+        assertTrue(result==expected);
+    }
 }
