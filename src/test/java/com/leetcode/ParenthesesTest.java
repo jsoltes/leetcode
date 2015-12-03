@@ -1,5 +1,8 @@
 package com.leetcode;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -7,7 +10,7 @@ import junit.framework.TestSuite;
 /**
  * Unit test for simple App.
  */
-public class AppTest 
+public class ParenthesesTest 
     extends TestCase
 {
     /**
@@ -15,7 +18,7 @@ public class AppTest
      *
      * @param testName name of the test case
      */
-    public AppTest( String testName )
+    public ParenthesesTest( String testName )
     {
         super( testName );
     }
@@ -25,14 +28,14 @@ public class AppTest
      */
     public static Test suite()
     {
-        return new TestSuite( AppTest.class );
+        return new TestSuite( ParenthesesTest.class );
     }
 
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
+    public void testParentheses1 ()
     {
-        assertTrue( true );
+        Parentheses p = new Parentheses();
+        List<String> result = p.removeInvalidParentheses("()())()");
+        List<String> expected = new ArrayList(Arrays.asList("()()()", "(())()"));
+        assertTrue(result==expected);
     }
 }

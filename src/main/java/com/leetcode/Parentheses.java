@@ -1,13 +1,14 @@
 package com.leetcode;
 
+import java.util.List;
+
 /**
  * Hello world!
  *
  */
-public class App 
+public class Parentheses 
 {
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
+    public List<String> removeInvalidParentheses(String s){
+        return null;
     }
 }
