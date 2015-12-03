@@ -6,6 +6,7 @@ import java.util.List;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import org.junit.Ignore;
 
 /**
  * Unit test for simple App.
@@ -31,9 +32,10 @@ public class ParenthesesTest
         return new TestSuite( ParenthesesTest.class );
     }
 
+    Parentheses p = new Parentheses();
+    
     public void testParentheses1 ()
     {
-        Parentheses p = new Parentheses();
         List<String> result = p.removeInvalidParentheses("()())()");
         List<String> expected = new ArrayList(Arrays.asList("()()()", "(())()"));
         assertTrue(result==expected);
@@ -41,7 +43,6 @@ public class ParenthesesTest
     
     public void testParentheses2 ()
     {
-        Parentheses p = new Parentheses();
         List<String> result = p.removeInvalidParentheses("(a)())()");
         List<String> expected = new ArrayList(Arrays.asList("(a)()()", "(a())()"));
         assertTrue(result==expected);
@@ -49,9 +50,15 @@ public class ParenthesesTest
     
     public void testParentheses3 ()
     {
-        Parentheses p = new Parentheses();
         List<String> result = p.removeInvalidParentheses(")(");
         List<String> expected = new ArrayList(Arrays.asList(""));
+        assertTrue(result==expected);
+    }
+    
+    public void testParentheses4 ()
+    {
+        List<String> result = p.removeInvalidParentheses("()()))()");
+        List<String> expected = new ArrayList(Arrays.asList("()()()", "(())()"));
         assertTrue(result==expected);
     }
 }
