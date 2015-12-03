@@ -13,6 +13,7 @@ import java.util.List;
  */
 public class Parentheses 
 {  
+    private String s;
     //count left parentheses
     private int countLeft(String s){
         int numLeft=0; 
@@ -47,29 +48,41 @@ public class Parentheses
     }
     
     //removes next parentesis of particular type from the given position
-    private String removeNext(String s, char parenthesis, int from){
-        int nextIndex = s.indexOf(parenthesis,from+1);
+    private String removeParenthesis(String s, int index){
         StringBuilder sb = new StringBuilder(s);
-        sb.replace(nextIndex,nextIndex+1,"");
+        sb.replace(index,index+1,"");
         return sb.toString();
     }
+    
+    private List<String> addToList(String s,List<String> solutions,int number){
+        String original =this.s;
+        int minNumber=getMinNumber(original);
+        char parenthesis=getExceedingParenthesis(original);
+        
+        for(int i=0;i<s.length();i++){
+            if(s.charAt(i)==parenthesis){
+                s=removeParenthesis(s,i);        
+                if(number<minNumber) return addToList(s,solutions,number-1);
+                else{
+                  if(isValid(s)) solutions.add(s);
+                  s=original;
+                }
+            }
+        }
+        return solutions;
+    }
+            
             
     public List<String> removeInvalidParentheses(String s){
         List<String> solutions =new ArrayList<String>();
         
         if(isValid(s)) return Arrays.asList(s);
-        else{ //removes minimum number of the exceeding parentheses, checks if the solution is valid, if yes, adds it to the list
-            StringBuilder sb = new StringBuilder(s);
-            int minNumber=getMinNumber(s);
-            char parentesis=getExceedingParenthesis(s);
-            
-            
-        }
-        return solutions;
+        //removes minimum number of the exceeding parentheses, checks if the solution is valid, if yes, adds it to the list
+        else return addToList(s,solutions,getMinNumber(this.s));
     }
     
     public static void main(String[] args) {
         Parentheses p=new Parentheses();
-        System.out.println(p.removeNext("(()())(",')',3));
+        System.out.println(p.removeParenthesis("(()())(",3));
     }
 }
