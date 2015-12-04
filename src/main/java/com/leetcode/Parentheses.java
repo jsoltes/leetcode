@@ -17,14 +17,16 @@ public class Parentheses
     //count left parentheses
     private int countLeft(String s){
         int numLeft=0; 
-        for(int i=0;i<s.length();i++) numLeft++;
+        for(int i=0;i<s.length();i++) 
+            if(s.charAt(i)=='(') numLeft++;
         return numLeft;
     }
     
     //count right parentheses
     private int countRight(String s){
         int numRight=0;
-        for(int i=0;i<s.length();i++) numRight++;
+        for(int i=0;i<s.length();i++) 
+            if(s.charAt(i)==')') numRight++;
         return numRight;
     }
     
@@ -82,7 +84,8 @@ public class Parentheses
     }
     
     public static void main(String[] args) {
-        Parentheses p=new Parentheses();
-        System.out.println(p.removeParenthesis("(()())(",3));
+        List<String> result = new ArrayList(Arrays.asList("()()()", "(())()"));
+        List<String> expected = new ArrayList(Arrays.asList("()()()", "(())()"));
+        System.out.println(result.equals(expected));
     }
 }
