@@ -15,7 +15,7 @@ public class Parentheses
 {  
     private String s;
     //count left parentheses
-    private int countLeft(String s){
+    public int countLeft(String s){
         int numLeft=0; 
         for(int i=0;i<s.length();i++) 
             if(s.charAt(i)=='(') numLeft++;
@@ -23,7 +23,7 @@ public class Parentheses
     }
     
     //count right parentheses
-    private int countRight(String s){
+    public int countRight(String s){
         int numRight=0;
         for(int i=0;i<s.length();i++) 
             if(s.charAt(i)==')') numRight++;
@@ -31,7 +31,7 @@ public class Parentheses
     }
     
     //decide if the string contains invalid parentheses
-    private boolean isValid(String s){     
+    public boolean isValid(String s){     
         //start and end characters have to be '(' and ')'
         if (s.charAt(0)!='(' || s.charAt(s.length()-1)!=')') return false;
         //number of left and right parentheses has to be equal
@@ -39,24 +39,24 @@ public class Parentheses
     }
 
     //returns minimum number of invalid parentheses
-    private int getMinNumber(String s){
+    public int getMinNumber(String s){
         return Math.abs(countLeft(s)-countRight(s));
     }
     
     //returns the exceeding parenthesis
-    private char getExceedingParenthesis(String s){
+    public char getExceedingParenthesis(String s){
         if(countLeft(s)>countRight(s)) return '(';
         return ')';
     }
     
     //removes next parentesis of particular type from the given position
-    private String removeParenthesis(String s, int index){
+    public String removeParenthesis(String s, int index){
         StringBuilder sb = new StringBuilder(s);
         sb.replace(index,index+1,"");
         return sb.toString();
     }
     
-    private void addToList(String s,List<String> solutions,int minNumber){
+    public void addToList(String s,List<String> solutions,int minNumber){
         String original =this.s;
         char parenthesis=getExceedingParenthesis(original);
         
