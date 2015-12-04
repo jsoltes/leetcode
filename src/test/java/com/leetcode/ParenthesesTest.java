@@ -61,6 +61,27 @@ public class ParenthesesTest
         assertEquals(expected, result);
     }
     
+    public void testIsValid1 ()
+    {
+        boolean result = p.isValid("(()()(()))");
+        boolean expected = true;
+        assertEquals(expected, result);
+    }
+    
+    public void testIsValid2 ()
+    {
+        boolean result = p.isValid("((()()(()))");
+        boolean expected = false;
+        assertEquals(expected, result);
+    }
+    
+    public void testIsValid3 ()
+    {
+        boolean result = p.isValid("");
+        boolean expected = true;
+        assertEquals(expected, result);
+    }
+    
     public void testParentheses1 ()
     {
         List<String> result = p.removeInvalidParentheses("()())()");
