@@ -40,6 +40,8 @@ public class Parentheses
     
     //decide if the string contains invalid parentheses
     public boolean isValid(String s){     
+        //the empty string is valid
+        if ("".equals(s)) return true;
         //start and end characters have to be '(' and ')'
         if (s.charAt(0)!='(' || s.charAt(s.length()-1)!=')') return false;
         //number of left and right parentheses has to be equal
@@ -64,23 +66,36 @@ public class Parentheses
         return sb.toString();
     }
     
-    public void addToList(String s,List<String> solutions,int minNumber){
-        String original =this.s;
-        char parenthesis=getExceedingParenthesis(original);
+    //this function picks all possible (unordered) combinations of indexes of given chars in given String
+    //returns as list of Strings s=given string, c=given char, i=number to be picked
+    public List<String> pickChars(String s, char c, int i){
+        //s.getPositions -> list integerov pozicii danych charov
+        //
+    }
+    
+    /*
+    public void addToList(String s,List<String> solutions,int minNumber){ //((())())())),null,2//
+        if ("".equals(s)) solutions.add("");
+        else{
+            String original =s;
+            char parenthesis=getExceedingParenthesis(getS());
         
-        for(int i=0;i<s.length();i++){
-            if(s.charAt(i)==parenthesis){
-                s=removeParenthesis(s,i);
-                if(minNumber>1)
-                    addToList(s,solutions,minNumber-1);
-                else{
-                  if(isValid(s) && solutions.contains(s)!=true)
-                      solutions.add(s);
-                  s=original;
+            for(int i=0;i<s.length();i++){
+                if(s.charAt(i)==parenthesis){
+                    s=removeParenthesis(s,i);
+                    if(minNumber>1){
+                        addToList(s,solutions,minNumber-1);
+                    }
+                    else{
+                    if(isValid(s) && solutions.contains(s)!=true)
+                        solutions.add(s);
+                    s=original;
+                    }
                 }
             }
         }
     }
+    */
             
     public List<String> removeInvalidParentheses(String s){
         List<String> solutions =new ArrayList<String>();
@@ -91,5 +106,13 @@ public class Parentheses
             addToList(s,solutions,getMinNumber(this.s));
             return solutions;
         }
+    }
+    
+    public static void main(String[] args) {
+        Parentheses p = new Parentheses();
+        p.setS("((())())()))");
+        List<String> solutions =new ArrayList<String>();
+        p.addToList(p.getS(),solutions, p.getMinNumber(p.getS()));
+        System.out.println(solutions);
     }
 }

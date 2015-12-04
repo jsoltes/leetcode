@@ -116,6 +116,43 @@ public class ParenthesesTest
         String expected = "()()()";
         assertEquals(expected, result);
     }
+    /*
+    public void testAddToList1 ()
+    {
+        p.setS("()())()");   
+        List<String> result =new ArrayList<String>();
+        p.addToList("()())()",result, p.getMinNumber("()())()"));
+        List<String> expected = new ArrayList<String>(Arrays.asList("()()()", "(())()"));
+        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+    }
+    
+    public void testAddToList2 ()
+    {
+        p.setS("");   
+        List<String> result =new ArrayList<String>();
+        p.addToList("",result, p.getMinNumber(""));
+        List<String> expected = new ArrayList<String>(Arrays.asList(""));
+        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+    }
+    
+    public void testAddToList3 ()
+    {
+        p.setS("(");   
+        List<String> result =new ArrayList<String>();
+        p.addToList("(",result, p.getMinNumber("("));
+        List<String> expected = new ArrayList<String>(Arrays.asList(""));
+        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+    }
+    
+    public void testAddToList4 () //brutal
+    {
+        p.setS("((())())()))");   
+        List<String> result =new ArrayList<String>();
+        p.addToList(p.getS(),result, p.getMinNumber(p.getS()));
+        List<String> expected = new ArrayList<String>(Arrays.asList("((())())()","((()())()))","(((())()))","((()())())","((())()())"));
+        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+    }
+    */
             
     public void testParentheses1 ()
     {
