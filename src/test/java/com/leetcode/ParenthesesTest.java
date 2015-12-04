@@ -33,6 +33,20 @@ public class ParenthesesTest
 
     Parentheses p = new Parentheses();
     
+    public void testCountLeft1 ()
+    {
+        int result = p.countLeft("(()())(()");
+        int expected = 5;
+        assertEquals(expected, result);
+    }
+    
+    public void testCountLeft2 ()
+    {
+        int result = p.countLeft("");
+        int expected = 0;
+        assertEquals(expected, result);
+    }
+    
     public void testParentheses1 ()
     {
         List<String> result = p.removeInvalidParentheses("()())()");
