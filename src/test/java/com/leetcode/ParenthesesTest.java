@@ -3,6 +3,7 @@ package com.leetcode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -103,6 +104,13 @@ public class ParenthesesTest
         assertEquals(expected, result);
     }
     
+     public void testGetMinNumber4 ()
+    {
+        int result = p.getMinNumber("((())())()))");
+        int expected = 2;
+        assertEquals(expected, result);
+    }
+     
     public void testGetExceedingParenthesis ()
     {
         char result =p.getExceedingParenthesis("()())()");
@@ -116,7 +124,7 @@ public class ParenthesesTest
         String expected = "()()()";
         assertEquals(expected, result);
     }
-    /*
+
     public void testAddToList1 ()
     {
         p.setS("()())()");   
@@ -149,45 +157,44 @@ public class ParenthesesTest
         p.setS("((())())()))");   
         List<String> result =new ArrayList<String>();
         p.addToList(p.getS(),result, p.getMinNumber(p.getS()));
-        List<String> expected = new ArrayList<String>(Arrays.asList("((())())()","((()())()))","(((())()))","((()())())","((())()())"));
+        List<String> expected = new ArrayList<String>(Arrays.asList("((())())()","((()()()))","(((())()))","((()())())","((())()())","((())(()))"));
         assertTrue(expected.containsAll(result) && result.containsAll(expected));
     }
-    */
     
-    public void testGetPositions()
+    public void testAddToList5 () //brutal
     {
-        p.setS("()())()");
-        List<Integer> result = p.getPositions(p.getS(), ')');
-        List<Integer> expected = Arrays.asList(1,3,4,6);
-        assertEquals(expected, result);
+        p.setS(")(");   
+        List<String> result =new ArrayList<String>();
+        p.addToList(p.getS(),result, p.getMinNumber(p.getS()));
+        List<String> expected = new ArrayList<String>(Arrays.asList(""));
+        assertTrue(expected.containsAll(result) && result.containsAll(expected));
     }
-    /*       
-    public void testParentheses1 ()
+      
+    public void testRemoveParentheses1 ()
     {
         List<String> result = p.removeInvalidParentheses("()())()");
         List<String> expected = new ArrayList<String>(Arrays.asList("()()()", "(())()"));
-        assertEquals(expected, result);
+        assertTrue(expected.containsAll(result) && result.containsAll(expected));
     }
     
-    public void testParentheses2 ()
+    public void testRemoveParentheses2 ()
     {
         List<String> result = p.removeInvalidParentheses("(a)())()");
         List<String> expected = new ArrayList<String>(Arrays.asList("(a)()()", "(a())()"));
-        assertEquals(expected, result);
+        assertTrue(expected.containsAll(result) && result.containsAll(expected));
     }
     
-    public void testParentheses3 ()
+    public void testRemoveParentheses3 ()
     {
         List<String> result = p.removeInvalidParentheses(")(");
         List<String> expected = new ArrayList<String>(Arrays.asList(""));
-        assertEquals(expected, result);
+        assertTrue(expected.containsAll(result) && result.containsAll(expected));
     }
     
-    public void testParentheses4 ()
+    public void testRemoveParentheses4 ()
     {
         List<String> result = p.removeInvalidParentheses("()()))()");
         List<String> expected = new ArrayList<String>(Arrays.asList("()()()", "(())()"));
-        assertEquals(expected, result);
+        assertTrue(expected.containsAll(result) && result.containsAll(expected));
     }
-    */
 }

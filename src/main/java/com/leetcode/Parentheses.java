@@ -2,7 +2,9 @@ package com.leetcode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Removes the minimum number of invalid parentheses in order to make the input string valid. 
@@ -65,21 +67,12 @@ public class Parentheses
         sb.replace(index,index+1,"");
         return sb.toString();
     }
-    
-    public List<Integer> getPositions(String s,char c){
-        //treba este vymysliet co ked s.equals("");
-        List<Integer> result = new ArrayList<Integer>();
-        for(int i=0;i<s.length();i++){
-            if (s.charAt(i)==c) result.add(i);
-        }
-        return result;
-    }
-    /*
-    public void addToList(String s,List<String> solutions,int minNumber){ //((())())())),null,2//
-        if ("".equals(s)) solutions.add("");
+ 
+    public void addToList(String s,List<String> solutions,int minNumber){
+        if ("".equals(s) || ")(".equals(s)) solutions.add("");
         else{
             String original =s;
-            char parenthesis=getExceedingParenthesis(getS());
+            char parenthesis=getExceedingParenthesis(s);
         
             for(int i=0;i<s.length();i++){
                 if(s.charAt(i)==parenthesis){
@@ -90,13 +83,12 @@ public class Parentheses
                     else{
                     if(isValid(s) && solutions.contains(s)!=true)
                         solutions.add(s);
-                    s=original;
                     }
+                    s=original;
                 }
             }
         }
     }
-    */
             
     public List<String> removeInvalidParentheses(String s){
         List<String> solutions =new ArrayList<String>();
@@ -104,12 +96,8 @@ public class Parentheses
         if(isValid(s)) return Arrays.asList(s); 
         //some parentheses have to be removed
         else{ 
-            //addToList(s,solutions,getMinNumber(this.s));
+            addToList(s,solutions,getMinNumber(s));
             return solutions;
         }
-    }
-    
-    public static void main(String[] args) {
-        
     }
 }
