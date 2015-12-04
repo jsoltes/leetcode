@@ -14,6 +14,14 @@ import java.util.List;
 public class Parentheses 
 {  
     private String s;
+
+    public String getS() {
+        return s;
+    }
+
+    public void setS(String s) {
+        this.s = s;
+    }
     //count left parentheses
     public int countLeft(String s){
         int numLeft=0; 
