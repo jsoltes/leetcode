@@ -82,6 +82,27 @@ public class ParenthesesTest
         assertEquals(expected, result);
     }
     
+    public void testGetMinNumber1 ()
+    {
+        int result = p.getMinNumber("()())()");
+        int expected = 1;
+        assertEquals(expected, result);
+    }
+    
+    public void testGetMinNumber2 ()
+    {
+        int result = p.getMinNumber("))))))))");
+        int expected = 8;
+        assertEquals(expected, result);
+    }
+    
+    public void testGetMinNumber3 ()
+    {
+        int result = p.getMinNumber("");
+        int expected = 0;
+        assertEquals(expected, result);
+    }
+    
     public void testParentheses1 ()
     {
         List<String> result = p.removeInvalidParentheses("()())()");
