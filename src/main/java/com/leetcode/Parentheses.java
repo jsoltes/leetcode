@@ -56,36 +56,32 @@ public class Parentheses
         return sb.toString();
     }
     
-    private List<String> addToList(String s,List<String> solutions,int number){
+    private void addToList(String s,List<String> solutions,int minNumber){
         String original =this.s;
-        int minNumber=getMinNumber(original);
         char parenthesis=getExceedingParenthesis(original);
         
         for(int i=0;i<s.length();i++){
             if(s.charAt(i)==parenthesis){
-                s=removeParenthesis(s,i);        
-                if(number<minNumber) return addToList(s,solutions,number-1);
+                s=removeParenthesis(s,i);
+                if(minNumber>1)
+                    addToList(s,solutions,minNumber-1);
                 else{
-                  if(isValid(s)) solutions.add(s);
+                  if(isValid(s) && solutions.contains(s)!=true)
+                      solutions.add(s);
                   s=original;
                 }
             }
         }
-        return solutions;
     }
-            
             
     public List<String> removeInvalidParentheses(String s){
         List<String> solutions =new ArrayList<String>();
-        
-        if(isValid(s)) return Arrays.asList(s);
-        //removes minimum number of the exceeding parentheses, checks if the solution is valid, if yes, adds it to the list
-        else return addToList(s,solutions,getMinNumber(this.s));
-    }
-    
-    public static void main(String[] args) {
-        List<String> result = new ArrayList(Arrays.asList("()()()", "(())()"));
-        List<String> expected = new ArrayList(Arrays.asList("()()()", "(())()"));
-        System.out.println(result.equals(expected));
+        //the input String is already ok
+        if(isValid(s)) return Arrays.asList(s); 
+        //some parentheses have to be removed
+        else{ 
+            addToList(s,solutions,getMinNumber(this.s));
+            return solutions;
+        }
     }
 }
