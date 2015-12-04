@@ -47,6 +47,20 @@ public class ParenthesesTest
         assertEquals(expected, result);
     }
     
+     public void testCountRight1 ()
+    {
+        int result = p.countRight("(()())(()");
+        int expected = 4;
+        assertEquals(expected, result);
+    }
+    
+    public void testCountRight2 ()
+    {
+        int result = p.countRight("");
+        int expected = 0;
+        assertEquals(expected, result);
+    }
+    
     public void testParentheses1 ()
     {
         List<String> result = p.removeInvalidParentheses("()())()");
