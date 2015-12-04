@@ -153,6 +153,14 @@ public class ParenthesesTest
         assertTrue(expected.containsAll(result) && result.containsAll(expected));
     }
     */
+    
+    public void testGetPositions()
+    {
+        p.setS("()())()");
+        int[] result = p.getPositions(p.getS(), ')');
+        int[] expected = {1,3,4,6};
+        assertEquals(expected, result);
+    }
             
     public void testParentheses1 ()
     {
