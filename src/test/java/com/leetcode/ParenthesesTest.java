@@ -103,6 +103,20 @@ public class ParenthesesTest
         assertEquals(expected, result);
     }
     
+    public void testGetExceedingParenthesis ()
+    {
+        char result =p.getExceedingParenthesis("()())()");
+        char expected=')';
+        assertEquals(expected, result);
+    }
+    
+    public void testRemoveParenthesis ()
+    {
+        String result = p.removeParenthesis("()())()", 3);
+        String expected = "()()()";
+        assertEquals(expected, result);
+    }
+            
     public void testParentheses1 ()
     {
         List<String> result = p.removeInvalidParentheses("()())()");
