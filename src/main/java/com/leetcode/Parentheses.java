@@ -72,9 +72,6 @@ public class Parentheses
         if ("".equals(s) || ")(".equals(s)) solutions.add("");
         else{
             String original =s;
-            //removes stupid parenthesis at the beginning or at the end 
-            if(original.charAt(0)==')') original=removeParenthesis(original, 0);
-            if(original.charAt(original.length()-1)=='(') original=removeParenthesis(original, original.length()-1);
             
             char parenthesis=getExceedingParenthesis(s);
         
@@ -106,6 +103,6 @@ public class Parentheses
     }
     public static void main(String[] args) {
         Parentheses p =new Parentheses();
-        System.out.println(p.removeInvalidParentheses("())((((((((((b))("));
+        System.out.println(p.removeInvalidParentheses("))"));
     }
 }
