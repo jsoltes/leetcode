@@ -52,6 +52,9 @@ public class Parentheses
 
     //returns minimum number of invalid parentheses
     public int getMinNumber(String s){
+        //removes stupid parentheses at the beginning or the end
+        while(!"".equals(s) && s.charAt(0)==')') s=removeParenthesis(s,0);
+        while(!"".equals(s) && s.charAt(s.length()-1)=='(') s=removeParenthesis(s,s.length()-1);
         return Math.abs(countLeft(s)-countRight(s));
     }
     
@@ -101,7 +104,7 @@ public class Parentheses
         if(isValid(s)) return Arrays.asList(s); 
         //some parentheses have to be removed
         else{ 
-            addToList(s,solutions,getMinNumber(s));
+            addToList(s,solutions,getMinNumber(s));//getMinNumber=
             return solutions;
         }
     }
