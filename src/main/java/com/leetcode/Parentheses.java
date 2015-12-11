@@ -39,13 +39,25 @@ public class Parentheses
     }
     
     //decide if the string contains invalid parentheses
-    public boolean isValid(String s){     
+    public boolean isValid(String s){ // @TODO update to exclude ["())(()"] 
         //the empty string is valid
         if ("".equals(s)) return true;
         //the lonely character is valid
         if (s.length()==1 && s.charAt(0)!='(' && s.charAt(0)!=')') return true;
-        
-        //novy algoritmus - prva zatvorka zo zaciatku musi byt (, prva z konca musi byt ) a pocet sa musi 
+        //expressions like this a invalid ())(()
+        int balance =0;
+        for(int i=0;i<s.length();i++){
+            if(s.charAt(i)=='(') balance++;
+            if(s.charAt(i)==')') balance--;
+            if(balance<0) return false;
+        }
+        balance=0;
+        for(int i=s.length()-1;i>=0;i--){
+            if(s.charAt(i)==')') balance++;
+            if(s.charAt(i)=='(') balance--;
+            if(balance<0) return false;
+        }       
+        //besides it has to start and end with () or characters and the number of left must be the same as the number of right
         if (((s.charAt(0)=='(' || s.charAt(0)!=')') && (s.charAt(s.length()-1)==')' || s.charAt(s.length()-1)!='(')) && countLeft(s) == countRight(s)) return true;
         else return false;
     }
@@ -65,6 +77,7 @@ public class Parentheses
     
     //returns minimum number of invalid parentheses
     public int getMinNumber(String s){
+        s=removeBeginningEnd(s);
         return Math.abs(countLeft(s)-countRight(s));
     }
     
@@ -82,7 +95,7 @@ public class Parentheses
     }
  
     public void addToList(String s,List<String> solutions,int minNumber){
-            
+        s=removeBeginningEnd(s);
         if ("".equals(s)) solutions.add("");
         else{
             String original =s;  
