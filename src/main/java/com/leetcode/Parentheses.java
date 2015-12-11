@@ -69,10 +69,14 @@ public class Parentheses
     }
  
     public void addToList(String s,List<String> solutions,int minNumber){
-        if ("".equals(s) || ")(".equals(s)) solutions.add("");
-        else{
-            String original =s;
+        //removes stupid parentheses at the beginning or the end
+        while(!"".equals(s) && s.charAt(0)==')') s=removeParenthesis(s,0);
+        while(!"".equals(s) && s.charAt(s.length()-1)=='(') s=removeParenthesis(s,s.length()-1);
             
+        if ("".equals(s)) solutions.add("");
+        else{
+            String original =s;  
+        
             char parenthesis=getExceedingParenthesis(s);
         
             for(int i=0;i<s.length();i++){
@@ -103,6 +107,6 @@ public class Parentheses
     }
     public static void main(String[] args) {
         Parentheses p =new Parentheses();
-        System.out.println(p.removeInvalidParentheses("))"));
+        System.out.println(p.removeInvalidParentheses("()()))()("));
     }
 }
