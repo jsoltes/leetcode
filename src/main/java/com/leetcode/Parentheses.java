@@ -42,6 +42,8 @@ public class Parentheses
     public boolean isValid(String s){     
         //the empty string is valid
         if ("".equals(s)) return true;
+        //the lonely character is valid
+        if (s.length()==1 && s.charAt(0)!='(' && s.charAt(0)!=')') return true;
         //start and end characters have to be '(' and ')'
         if (s.charAt(0)!='(' || s.charAt(s.length()-1)!=')') return false;
         //number of left and right parentheses has to be equal
@@ -50,8 +52,12 @@ public class Parentheses
     
     //removes stupid parentheses at the beginning or the end
     public String removeBeginningEnd(String s){
-        while(!"".equals(s) && s.charAt(0)!='(') s=removeParenthesis(s,0);
-        while(!"".equals(s) && s.charAt(s.length()-1)!=')') s=removeParenthesis(s,s.length()-1);
+        while(!"".equals(s) && s.charAt(0)!='(') {
+            s=removeParenthesis(s,0);
+        }
+        while(!"".equals(s) && s.charAt(s.length()-1)!=')') {
+            s=removeParenthesis(s,s.length()-1);
+        }
         return s;
     }
     
