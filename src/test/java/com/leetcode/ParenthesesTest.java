@@ -93,7 +93,7 @@ public class ParenthesesTest
     public void testGetMinNumber2 ()
     {
         int result = p.getMinNumber("))))))))");
-        int expected = 0;
+        int expected = 8;
         assertEquals(expected, result);
     }
     
@@ -161,15 +161,6 @@ public class ParenthesesTest
         assertTrue(expected.containsAll(result) && result.containsAll(expected));
     }
     
-    public void testAddToList5 () //brutal
-    {
-        p.setS(")(");   
-        List<String> result =new ArrayList<String>();
-        p.addToList(p.getS(),result, p.getMinNumber(p.getS()));
-        List<String> expected = new ArrayList<String>(Arrays.asList(""));
-        assertTrue(expected.containsAll(result) && result.containsAll(expected));
-    }
-    
     public void testRemoveParentheses1 ()
     {
         List<String> result = p.removeInvalidParentheses("()())()");
@@ -216,6 +207,26 @@ public class ParenthesesTest
     {
         List<String> result = p.removeInvalidParentheses("n");
         List<String> expected = new ArrayList<String>(Arrays.asList("n"));
+        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+    }
+    public void testRemoveParentheses8 ()
+    {
+        List<String> result = p.removeInvalidParentheses("(()");
+        List<String> expected = new ArrayList<String>(Arrays.asList("()"));
+        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+    }
+    
+    public void testRemoveParentheses9 ()
+    {
+        List<String> result = p.removeInvalidParentheses(")(f");
+        List<String> expected = new ArrayList<String>(Arrays.asList("f"));
+        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+    }
+    
+    public void testRemoveParentheses10 ()
+    {
+        List<String> result = p.removeInvalidParentheses("x(");
+        List<String> expected = new ArrayList<String>(Arrays.asList("x"));
         assertTrue(expected.containsAll(result) && result.containsAll(expected));
     }
 }

@@ -44,20 +44,20 @@ public class Parentheses
         if ("".equals(s)) return true;
         //the lonely character is valid
         if (s.length()==1 && s.charAt(0)!='(' && s.charAt(0)!=')') return true;
-        //start and end characters have to be '(' and ')'
-        if (s.charAt(0)!='(' || s.charAt(s.length()-1)!=')') return false;
-        //number of left and right parentheses has to be equal
-        return countLeft(s) == countRight(s);
+        
+        //novy algoritmus - prva zatvorka zo zaciatku musi byt (, prva z konca musi byt ) a pocet sa musi 
+        if (((s.charAt(0)=='(' || s.charAt(0)!=')') && (s.charAt(s.length()-1)==')' || s.charAt(s.length()-1)!='(')) && countLeft(s) == countRight(s)) return true;
+        else return false;
     }
     
     //removes stupid parentheses at the beginning or the end
-    public String removeBeginningEnd(String s){
+    public String removeBeginningEnd(String s){//")(f"
         while(!"".equals(s) && s.charAt(0)!='(') {
             if (s.charAt(0)!=')') break;
-            else s=removeParenthesis(s,0);
+            else s=removeParenthesis(s,0);//(f
         }
         while(!"".equals(s) && s.charAt(s.length()-1)!=')') {
-            if (s.charAt(0)!='(') break;
+            if (s.charAt(s.length()-1)!='(') break;
             else s=removeParenthesis(s,s.length()-1);
         }
         return s;
@@ -65,7 +65,6 @@ public class Parentheses
     
     //returns minimum number of invalid parentheses
     public int getMinNumber(String s){
-        s=removeBeginningEnd(s);
         return Math.abs(countLeft(s)-countRight(s));
     }
     
@@ -83,7 +82,6 @@ public class Parentheses
     }
  
     public void addToList(String s,List<String> solutions,int minNumber){
-        s=removeBeginningEnd(s);
             
         if ("".equals(s)) solutions.add("");
         else{
@@ -94,7 +92,7 @@ public class Parentheses
             for(int i=0;i<s.length();i++){
                 if(s.charAt(i)==parenthesis){
                     //if the char at the previous index was the same, we would just generate more of the same solutions
-                    if(i-1>=0 && s.charAt(i)!=s.charAt(i-1)){
+                    if(i==0 || s.charAt(i)!=s.charAt(i-1)){
                         s=removeParenthesis(s,i);
                     
                         if(minNumber>1){
@@ -113,6 +111,7 @@ public class Parentheses
             
     public List<String> removeInvalidParentheses(String s){
         List<String> solutions =new ArrayList<String>();
+        s=removeBeginningEnd(s);
         //the input String is already ok
         if(isValid(s)) return Arrays.asList(s); 
         //some parentheses have to be removed
@@ -121,4 +120,9 @@ public class Parentheses
             return solutions;
         }
     }
+    public static void main(String[] args) {
+        Parentheses p =new Parentheses();
+        System.out.println(p.removeBeginningEnd("p(r)"));
+    }
+            
 }
