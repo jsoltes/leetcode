@@ -2,9 +2,7 @@ package com.leetcode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Removes the minimum number of invalid parentheses in order to make the input string valid. 
@@ -49,12 +47,17 @@ public class Parentheses
         //number of left and right parentheses has to be equal
         return countLeft(s) == countRight(s);
     }
-
-    //returns minimum number of invalid parentheses
-    public int getMinNumber(String s){
-        //removes stupid parentheses at the beginning or the end
+    
+    //removes stupid parentheses at the beginning or the end
+    public String removeBeginningEnd(String s){
         while(!"".equals(s) && s.charAt(0)!='(') s=removeParenthesis(s,0);
         while(!"".equals(s) && s.charAt(s.length()-1)!=')') s=removeParenthesis(s,s.length()-1);
+        return s;
+    }
+    
+    //returns minimum number of invalid parentheses
+    public int getMinNumber(String s){
+        s=removeBeginningEnd(s);
         return Math.abs(countLeft(s)-countRight(s));
     }
     
@@ -72,9 +75,7 @@ public class Parentheses
     }
  
     public void addToList(String s,List<String> solutions,int minNumber){
-        //removes stupid parentheses at the beginning or the end
-        while(!"".equals(s) && s.charAt(0)!='(') s=removeParenthesis(s,0);
-        while(!"".equals(s) && s.charAt(s.length()-1)!=')') s=removeParenthesis(s,s.length()-1);
+        s=removeBeginningEnd(s);
             
         if ("".equals(s)) solutions.add("");
         else{
@@ -84,15 +85,19 @@ public class Parentheses
         
             for(int i=0;i<s.length();i++){
                 if(s.charAt(i)==parenthesis){
-                    s=removeParenthesis(s,i);
-                    if(minNumber>1){
-                        addToList(s,solutions,minNumber-1);
+                    //if the char at the previous index was the same, we would just generate more of the same solutions
+                    if(i-1>=0 && s.charAt(i)!=s.charAt(i-1)){
+                        s=removeParenthesis(s,i);
+                    
+                        if(minNumber>1){
+                            addToList(s,solutions,minNumber-1);
+                        }
+                        else{
+                        if(isValid(s) && solutions.contains(s)!=true)
+                            solutions.add(s);
+                        }
+                        s=original;
                     }
-                    else{
-                    if(isValid(s) && solutions.contains(s)!=true)
-                        solutions.add(s);
-                    }
-                    s=original;
                 }
             }
         }
@@ -104,12 +109,8 @@ public class Parentheses
         if(isValid(s)) return Arrays.asList(s); 
         //some parentheses have to be removed
         else{ 
-            addToList(s,solutions,getMinNumber(s));//getMinNumber=
+            addToList(s,solutions,getMinNumber(s));
             return solutions;
         }
-    }
-    public static void main(String[] args) {
-        Parentheses p =new Parentheses();
-        System.out.println(p.removeInvalidParentheses("()()))()("));
     }
 }
