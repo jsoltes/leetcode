@@ -53,10 +53,12 @@ public class Parentheses
     //removes stupid parentheses at the beginning or the end
     public String removeBeginningEnd(String s){
         while(!"".equals(s) && s.charAt(0)!='(') {
-            s=removeParenthesis(s,0);
+            if (s.charAt(0)!=')') break;
+            else s=removeParenthesis(s,0);
         }
         while(!"".equals(s) && s.charAt(s.length()-1)!=')') {
-            s=removeParenthesis(s,s.length()-1);
+            if (s.charAt(0)!='(') break;
+            else s=removeParenthesis(s,s.length()-1);
         }
         return s;
     }
