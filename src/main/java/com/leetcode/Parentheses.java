@@ -78,7 +78,7 @@ public class Parentheses
                 right++;
             }
             if (left>0 && right>0 && s.charAt(j)!='(' && s.charAt(j)!=')') break;
-            if (left>1 && right >1 ) break;
+            if (left>1 && right >1 && s.charAt(j)!=s.charAt(j-1)) break; //breaks for this: ()(), but doesn't for this: (())
             if (i<0){
                 s=removeParenthesis(s, j);
                 i++;
@@ -100,7 +100,7 @@ public class Parentheses
                 left++;
             }
             if (left>0 && right>0 && s.charAt(j)!='(' && s.charAt(j)!=')') break;
-            if (left>1 && right >1 ) break;
+            if (left>1 && right >1 && s.charAt(j)!=s.charAt(j+1)) break; //breaks for this: ()(), but doesn't for this: (())
             if (i<0){
                 s=removeParenthesis(s, j);
                 i++;
@@ -166,7 +166,8 @@ public class Parentheses
     }
     public static void main(String[] args) {
         Parentheses p =new Parentheses();
-        System.out.println(p.removeInvalidParentheses("()v)(()(())"));
+        System.out.println(p.prepare("())v)(()(((((())"));
+        System.out.println(p.removeInvalidParentheses("())v)(()(((((())"));
                 
     }
             
