@@ -85,6 +85,7 @@ public class Parentheses
             }
         }
         //from end to beginning
+        
         i=0;
         left=0;
         right=0;
@@ -95,6 +96,10 @@ public class Parentheses
             }
             if(s.charAt(j)=='(') {
                 i--;
+                left++;
+            }
+            if(s.charAt(j)!='(' && s.charAt(j)!=')'){
+                right++;
                 left++;
             }
             if (left>1 && right>1) break;
@@ -155,7 +160,7 @@ public class Parentheses
             
     public List<String> removeInvalidParentheses(String s){
         List<String> solutions =new ArrayList<String>();
-        s=prepare(s);
+        s=prepare(s); //r(p()q)ux)((()
         //the input String is already ok
         if(isValid(s)) return Arrays.asList(s); 
         //some parentheses have to be removed
@@ -166,7 +171,7 @@ public class Parentheses
     }
     public static void main(String[] args) {
         Parentheses p =new Parentheses();
-        System.out.println(p.prepare(")(()c))("));
+        System.out.println(p.prepare("())v)(()(((((())"));
     }
             
 }
