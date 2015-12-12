@@ -93,7 +93,7 @@ public class ParenthesesTest
     public void testGetMinNumber2 ()
     {
         int result = p.getMinNumber("))))))))");
-        int expected = 0;
+        int expected = 8;
         assertEquals(expected, result);
     }
     

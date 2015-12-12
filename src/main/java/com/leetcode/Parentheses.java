@@ -37,7 +37,7 @@ public class Parentheses
             if(s.charAt(i)==')') numRight++;
         return numRight;
     }
-    
+            
     //decide if the string contains invalid parentheses
     public boolean isValid(String s){ // @TODO update to exclude ["())(()"] 
         //the empty string is valid
@@ -77,7 +77,8 @@ public class Parentheses
                 i--;
                 right++;
             }
-            if (left>1 && right>1) break;
+            if (left>0 && right>0 && s.charAt(j)!='(' && s.charAt(j)!=')') break;
+            if (left>1 && right >1 ) break;
             if (i<0){
                 s=removeParenthesis(s, j);
                 i++;
@@ -85,7 +86,7 @@ public class Parentheses
             }
         }
         //from end to beginning
-        
+  
         i=0;
         left=0;
         right=0;
@@ -98,11 +99,8 @@ public class Parentheses
                 i--;
                 left++;
             }
-            if(s.charAt(j)!='(' && s.charAt(j)!=')'){
-                right++;
-                left++;
-            }
-            if (left>1 && right>1) break;
+            if (left>0 && right>0 && s.charAt(j)!='(' && s.charAt(j)!=')') break;
+            if (left>1 && right >1 ) break;
             if (i<0){
                 s=removeParenthesis(s, j);
                 i++;
@@ -114,7 +112,6 @@ public class Parentheses
     
     //returns minimum number of invalid parentheses
     public int getMinNumber(String s){
-        s=prepare(s);
         return Math.abs(countLeft(s)-countRight(s));
     }
     
@@ -135,7 +132,7 @@ public class Parentheses
         if ("".equals(s)) solutions.add("");
         else{
             String original =s;  
-        
+            if (minNumber==0) minNumber=2; //because of this: ()v)(()(())
             for(int i=0;i<s.length();i++){
                 if(s.charAt(i)=='(' || s.charAt(i)==')'){
                     //if the char at the previous index was the same, we would just generate more of the same solutions
@@ -169,7 +166,8 @@ public class Parentheses
     }
     public static void main(String[] args) {
         Parentheses p =new Parentheses();
-        System.out.println(p.isValid("(v)()(())"));
+        System.out.println(p.removeInvalidParentheses("()v)(()(())"));
+                
     }
             
 }
