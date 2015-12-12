@@ -156,7 +156,7 @@ public class ParenthesesTest
     {
         p.setS("((())())()))");   
         List<String> result =new ArrayList<String>();
-        p.addToList(p.getS(),result, p.getMinNumber(p.getS()));
+        p.addToList(p.getS(),result, 2);
         List<String> expected = new ArrayList<String>(Arrays.asList("((())())()","((()()()))","(((())()))","((()())())","((())()())","((())(()))"));
         assertTrue(expected.containsAll(result) && result.containsAll(expected));
     }
@@ -244,4 +244,10 @@ public class ParenthesesTest
         assertTrue(expected.containsAll(result) && result.containsAll(expected));
     }
     
+    public void testRemoveParentheses13 ()
+    {
+        List<String> result = p.removeInvalidParentheses("())(((()m)(");
+        List<String> expected = new ArrayList<String>(Arrays.asList("()(()m)"));
+        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+    }
 }

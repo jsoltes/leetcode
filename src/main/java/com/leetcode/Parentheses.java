@@ -62,26 +62,46 @@ public class Parentheses
         else return false;
     }
     
-    //removes stupid parentheses at the beginning or the end
-    public String removeBeginningEnd(String s){//")(f"
-        while(!"".equals(s) && s.charAt(0)!='(') {
-            if (s.charAt(0)!=')')
-                if (s.length()>=2 && s.charAt(1)==')') s=removeParenthesis(s, 1);
-                else break;
-            else s=removeParenthesis(s,0);//(f
+    //removes all parentheses that would have to be removed in all cases
+    public String prepare(String s){
+        //from beginning to end
+        int i=0;
+        int left=0;
+        for(int j=0;j<s.length();j++){
+            if(s.charAt(j)=='(') {
+                i++;
+                left++;
+            }
+            if(s.charAt(j)==')') i--;
+            if (s.charAt(j)=='(' && left>1 && i==1) break;
+            if (i<0){
+                s=removeParenthesis(s, j);
+                i++;
+                j--;
+            }
         }
-        while(!"".equals(s) && s.charAt(s.length()-1)!=')') {
-            if (s.charAt(s.length()-1)!='(')
-                if (s.length()>=2 && s.charAt(s.length()-2)=='(') s=removeParenthesis(s, s.length()-2);
-                else break;
-            else s=removeParenthesis(s,s.length()-1);
+        //from end to beginning
+        i=0;
+        int right=0;
+        for(int j=s.length()-1;j>0;j--){
+            if(s.charAt(j)==')') {
+                i++;
+                right++;
+            }
+            if(s.charAt(j)=='(') i--;
+            if (s.charAt(j)==')' && right>1 && i==1) break;
+            if (i<0){
+                s=removeParenthesis(s, j);
+                i++;
+            }
         }
+        
         return s;
     }
     
     //returns minimum number of invalid parentheses
     public int getMinNumber(String s){
-        s=removeBeginningEnd(s);
+        s=prepare(s);
         return Math.abs(countLeft(s)-countRight(s));
     }
     
@@ -98,13 +118,12 @@ public class Parentheses
         return sb.toString();
     }
  
-    public void addToList(String s,List<String> solutions,int minNumber){//2
-        s=removeBeginningEnd(s);
+    public void addToList(String s,List<String> solutions,int minNumber){
         if ("".equals(s)) solutions.add("");
         else{
             String original =s;  
         
-            char parenthesis=getExceedingParenthesis(s);//)
+            char parenthesis=getExceedingParenthesis(s);
         
             for(int i=0;i<s.length();i++){
                 if(s.charAt(i)==parenthesis){
@@ -128,7 +147,7 @@ public class Parentheses
             
     public List<String> removeInvalidParentheses(String s){
         List<String> solutions =new ArrayList<String>();
-        s=removeBeginningEnd(s);
+        s=prepare(s);
         //the input String is already ok
         if(isValid(s)) return Arrays.asList(s); 
         //some parentheses have to be removed
@@ -139,8 +158,10 @@ public class Parentheses
     }
     public static void main(String[] args) {
         Parentheses p =new Parentheses();
-        System.out.println(p.removeBeginningEnd("())))()v(k"));
-        System.out.println(p.removeInvalidParentheses("())))()v(k"));
+        System.out.println(p.prepare("((())())()))"));
+        List<String> result =new ArrayList<String>();
+        p.addToList("((())())()))",result, 2);
+        System.out.println(result);
     }
             
 }
