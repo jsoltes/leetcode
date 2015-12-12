@@ -132,7 +132,7 @@ public class Parentheses
         if ("".equals(s)) solutions.add("");
         else{
             String original =s;  
-            if (minNumber==0) minNumber=2; //because of this: ()v)(()(())
+            //if (minNumber==0) minNumber=2; 
             for(int i=0;i<s.length();i++){
                 if(s.charAt(i)=='(' || s.charAt(i)==')'){
                     //if the char at the previous index was the same, we would just generate more of the same solutions
@@ -159,15 +159,20 @@ public class Parentheses
         //the input String is already ok
         if(isValid(s)) return Arrays.asList(s); 
         //some parentheses have to be removed
-        else{ 
-            addToList(s,solutions,getMinNumber(s));
+        else{
+            int minNumber=getMinNumber(s);
+            addToList(s,solutions,minNumber);
+            //because of this: ()v)(()(()) and this ()m)(((()() there has to be a while loop
+            while(solutions.isEmpty() && minNumber+2<=s.length()){
+                addToList(s,solutions,minNumber+2);
+            }
             return solutions;
         }
     }
     public static void main(String[] args) {
         Parentheses p =new Parentheses();
-        System.out.println(p.prepare("())v)(()(((((())"));
-        System.out.println(p.removeInvalidParentheses("())v)(()(((((())"));
+        System.out.println(p.prepare(")()m)(((()((()(((("));
+        System.out.println(p.removeInvalidParentheses(")()m)(((()((()(((("));
                 
     }
             
