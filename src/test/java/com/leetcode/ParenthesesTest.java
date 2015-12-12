@@ -250,4 +250,11 @@ public class ParenthesesTest
         List<String> expected = new ArrayList<String>(Arrays.asList("()(()m)"));
         assertTrue(expected.containsAll(result) && result.containsAll(expected));
     }
+    
+    public void testRemoveParentheses14 ()
+    {
+        List<String> result = p.removeInvalidParentheses(")(()c))(");
+        List<String> expected = new ArrayList<String>(Arrays.asList("((c))","(()c)"));
+        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+    }
 }

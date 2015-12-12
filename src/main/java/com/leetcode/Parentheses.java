@@ -67,13 +67,17 @@ public class Parentheses
         //from beginning to end
         int i=0;
         int left=0;
+        int right=0;
         for(int j=0;j<s.length();j++){
             if(s.charAt(j)=='(') {
                 i++;
                 left++;
             }
-            if(s.charAt(j)==')') i--;
-            if (s.charAt(j)=='(' && left>1 && i==1) break;
+            if(s.charAt(j)==')') {
+                i--;
+                right++;
+            }
+            if (left>1 && right>1) break;
             if (i<0){
                 s=removeParenthesis(s, j);
                 i++;
@@ -82,14 +86,18 @@ public class Parentheses
         }
         //from end to beginning
         i=0;
-        int right=0;
+        left=0;
+        right=0;
         for(int j=s.length()-1;j>0;j--){
             if(s.charAt(j)==')') {
                 i++;
                 right++;
             }
-            if(s.charAt(j)=='(') i--;
-            if (s.charAt(j)==')' && right>1 && i==1) break;
+            if(s.charAt(j)=='(') {
+                i--;
+                left++;
+            }
+            if (left>1 && right>1) break;
             if (i<0){
                 s=removeParenthesis(s, j);
                 i++;
@@ -158,10 +166,7 @@ public class Parentheses
     }
     public static void main(String[] args) {
         Parentheses p =new Parentheses();
-        System.out.println(p.prepare("((())())()))"));
-        List<String> result =new ArrayList<String>();
-        p.addToList("((())())()))",result, 2);
-        System.out.println(result);
+        System.out.println(p.prepare(")(()c))("));
     }
             
 }
