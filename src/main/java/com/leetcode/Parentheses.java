@@ -136,10 +136,8 @@ public class Parentheses
         else{
             String original =s;  
         
-            char parenthesis=getExceedingParenthesis(s);
-        
             for(int i=0;i<s.length();i++){
-                if(s.charAt(i)==parenthesis){
+                if(s.charAt(i)=='(' || s.charAt(i)==')'){
                     //if the char at the previous index was the same, we would just generate more of the same solutions
                     if(i==0 || s.charAt(i)!=s.charAt(i-1)){
                         s=removeParenthesis(s,i);
@@ -171,7 +169,7 @@ public class Parentheses
     }
     public static void main(String[] args) {
         Parentheses p =new Parentheses();
-        System.out.println(p.prepare("())v)(()(((((())"));
+        System.out.println(p.isValid("(v)()(())"));
     }
             
 }
