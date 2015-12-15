@@ -145,6 +145,13 @@ public class Parentheses
         }
         return solutions;
     }
+    
+    public boolean containsOnlyParentheses(String s){
+        for(int i=0;i<s.length();i++){
+            if(s.charAt(i)!=')'&&s.charAt(i)!='(') return false;
+        }
+        return true;
+    }
             
     public List<String> removeInvalidParentheses(String s){
         s=prepare(s); //
