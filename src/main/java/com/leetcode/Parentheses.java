@@ -13,15 +13,6 @@ import java.util.List;
  */
 public class Parentheses 
 {  
-    private String s;
-
-    public String getS() {
-        return s;
-    }
-
-    public void setS(String s) {
-        this.s = s;
-    }
     //count left parentheses
     public int countLeft(String s){
         int numLeft=0; 
@@ -58,8 +49,7 @@ public class Parentheses
             if(balance<0) return false;
         }       
         //besides it has to start and end with () or characters and the number of left must be the same as the number of right
-        if (((s.charAt(0)=='(' || s.charAt(0)!=')') && (s.charAt(s.length()-1)==')' || s.charAt(s.length()-1)!='(')) && countLeft(s) == countRight(s)) return true;
-        else return false;
+        return ((s.charAt(0)=='(' || s.charAt(0)!=')') && (s.charAt(s.length()-1)==')' || s.charAt(s.length()-1)!='(')) && countLeft(s) == countRight(s);
     }
     
     //removes all parentheses that would have to be removed in all cases
