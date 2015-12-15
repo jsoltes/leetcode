@@ -132,13 +132,6 @@ public class ParenthesesTest
         assertTrue(expected.containsAll(result) && result.containsAll(expected));
     }
     
-    public void testAddToList2 ()
-    { 
-        Set<String> result = p.addToList("",p.getMinNumber(""));
-        List<String> expected = new ArrayList<String>(Arrays.asList(""));
-        assertTrue(expected.containsAll(result) && result.containsAll(expected));
-    }
-    
     public void testAddToList3 ()
     { 
         Set<String> result =p.addToList("(",p.getMinNumber("("));

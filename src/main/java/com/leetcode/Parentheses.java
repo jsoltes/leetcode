@@ -66,7 +66,7 @@ public class Parentheses
                 right++;
             }
             if (left>0 && right>0 && s.charAt(j)!='(' && s.charAt(j)!=')') break;
-            if (left>1 && right >1 && s.charAt(j)!=s.charAt(j-1)) break; //breaks for this: ()(), but doesn't for this: (())
+            if (left>1 && right >1 && s.charAt(j)!=s.charAt(j-1)) break; //breaks for this: ()()), but doesn't for this: (()))
             if (i<0){
                 s=removeParenthesis(s, j);
                 i++;
@@ -116,17 +116,27 @@ public class Parentheses
         return sb.toString();
     }
     
-    public Set<String> addToList(String s,int minNumber){
+    public Set<String> addToList(String s,int minNumber){ //"()(((()m)"
         Set<String> solutions=new HashSet<String>();
-        if ("".equals(s)) solutions.add("");
+        
+        String p=prepare(s);
+        if(s.length()-p.length()>minNumber) return solutions;//this means we don't have any valid solutions with this one
+        minNumber-=s.length()-p.length();
+        System.out.println(minNumber);
+        s=p; //()(()m), 0
+        
+        
+        if (isValid(p)) solutions.add(p);
         else{
             String original =s;  
-            for(int i=0;i<s.length();i++){ //())v)(()(((((())
+            for(int i=0;i<s.length();i++){ 
                 if(s.charAt(i)=='(' || s.charAt(i)==')'){
                     //if the char at the previous index was the same, we would just generate more of the same solutions
                     if(i==0 || s.charAt(i)!=s.charAt(i-1)){
                         s=removeParenthesis(s,i);
                         if(minNumber>1){
+                            
+                            //we use prepare to have less cycles
                             solutions.addAll(addToList(s,minNumber-1));
                         }
                         else{
@@ -151,7 +161,7 @@ public class Parentheses
     public List<String> removeInvalidParentheses(String s){
         s=prepare(s); //
         //the input String is already ok
-        if(isValid(s)) return Arrays.asList(s); 
+        if(isValid(s)) return Arrays.asList(s);
         //some parentheses have to be removed
         else{
             int minNumber=getMinNumber(s);
@@ -162,5 +172,12 @@ public class Parentheses
             }
             return new ArrayList(solutions);
         }
-    }       
+    }
+    public static void main(String[] args) {
+        Parentheses p = new Parentheses();
+        //System.out.println(p.prepare("()(((()m)"));
+        //System.out.println(p.getMinNumber("()(((()m)"));
+        //System.out.println(p.getMinNumber("())(((()m)("));
+        System.out.println(p.removeInvalidParentheses("())(((()m)("));
+    }
 }
