@@ -52,52 +52,55 @@ public class Parentheses
     
     //removes all parentheses that would have to be removed in all cases
     public String prepare(String s){
-        //from beginning to end
-        int i=0;
+        String original=s;
+        //at the beginning
+        int open=0;
         int left=0;
         int right=0;
         for(int j=0;j<s.length();j++){
             if(s.charAt(j)=='(') {
-                i++;
+                open++;
                 left++;
             }
             if(s.charAt(j)==')') {
-                i--;
+                open--;
                 right++;
             }
-            if (left>0 && right>0 && s.charAt(j)!='(' && s.charAt(j)!=')') break;
-            if (left>1 && right >1 && s.charAt(j)!=s.charAt(j-1)) break; //breaks for this: ()()), but doesn't for this: (()))
-            if (i<0){
+            //breaks so that it won't remove the parenthesis after the symbol: ()a)
+            if (left>=1 && right>=1 && s.charAt(j)!='(' && s.charAt(j)!=')') break;
+            //breaks for this: ()()), but doesn't for this: (()))
+            if (left>=2 && right >=2 && s.charAt(j)!=s.charAt(j-1)) break; 
+            //removes this parenthesis ())
+            if (open<0){
                 s=removeParenthesis(s, j);
-                i++;
-                j--;
+                open++;
+                j--; //because the string is then shorter
             }
         }
-        //from end to beginning
-  
-        i=0;
+        //at the end
+        open=0;
         left=0;
         right=0;
         for(int j=s.length()-1;j>0;j--){
             if(s.charAt(j)==')') {
-                i++;
+                open++;
                 right++;
             }
             if(s.charAt(j)=='(') {
-                i--;
+                open--;
                 left++;
             }
             if (left>0 && right>0 && s.charAt(j)!='(' && s.charAt(j)!=')') break;
             if (left>1 && right >1 && s.charAt(j)!=s.charAt(j+1)) break; //breaks for this: ()(), but doesn't for this: (())
-            if (i<0){
+            if (open<0){
                 s=removeParenthesis(s, j);
-                i++;
+                open++;
             }
         }
-        
-        return s;
+        if(!original.equals(s)) return prepare(s);
+        else return s;
     }
-    
+            
     //returns minimum number of invalid parentheses
     public int getMinNumber(String s){
         return Math.abs(countLeft(s)-countRight(s));
@@ -175,9 +178,7 @@ public class Parentheses
     }
     public static void main(String[] args) {
         Parentheses p = new Parentheses();
-        //System.out.println(p.prepare("()(((()m)"));
-        //System.out.println(p.getMinNumber("()(((()m)"));
-        //System.out.println(p.getMinNumber("())(((()m)("));
-        System.out.println(p.removeInvalidParentheses("())(((()m)("));
+        System.out.println(p.prepare(")(((()(y((u()(z()()"));
+        System.out.println(p.removeInvalidParentheses(")(((()(y((u()(z()()"));
     }
 }

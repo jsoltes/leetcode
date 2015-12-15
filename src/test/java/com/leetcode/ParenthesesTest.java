@@ -270,5 +270,4 @@ public class ParenthesesTest
         List<String> expected = new ArrayList<String>(Arrays.asList("(m)()()","(m)(())","()m()()","()m(())"));
         assertTrue(expected.containsAll(result) && result.containsAll(expected));
     }
-    
 }
