@@ -117,12 +117,12 @@ public class Parentheses
         sb.replace(index,index+1,"");
         return sb.toString();
     }
- 
-    public void addToList(String s,List<String> solutions,int minNumber){
+    
+    public List<String> addToList(String s,int minNumber){
+        List<String> solutions=new ArrayList<String>();
         if ("".equals(s)) solutions.add("");
         else{
             String original =s;  
-            //if (minNumber==0) minNumber=2; 
             for(int i=0;i<s.length();i++){
                 if(s.charAt(i)=='(' || s.charAt(i)==')'){
                     //if the char at the previous index was the same, we would just generate more of the same solutions
@@ -130,7 +130,7 @@ public class Parentheses
                         s=removeParenthesis(s,i);
                     
                         if(minNumber>1){
-                            addToList(s,solutions,minNumber-1);
+                            solutions.addAll(addToList(s,minNumber-1));
                         }
                         else{
                         if(isValid(s) && solutions.contains(s)!=true)
@@ -141,20 +141,20 @@ public class Parentheses
                 }
             }
         }
+        return solutions;
     }
             
     public List<String> removeInvalidParentheses(String s){
-        List<String> solutions =new ArrayList<String>();
-        s=prepare(s); //r(p()q)ux)((()
+        s=prepare(s); //
         //the input String is already ok
         if(isValid(s)) return Arrays.asList(s); 
         //some parentheses have to be removed
         else{
             int minNumber=getMinNumber(s);
-            addToList(s,solutions,minNumber);
+            List<String> solutions=addToList(s,minNumber);
             //because of this: ()v)(()(()) and this ()m)(((()() there has to be a while loop
             while(solutions.isEmpty() && minNumber+2<=s.length()){
-                addToList(s,solutions,minNumber+2);
+                solutions.addAll(addToList(s,minNumber+2));
             }
             return solutions;
         }

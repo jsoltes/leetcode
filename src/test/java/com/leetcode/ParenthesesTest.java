@@ -127,32 +127,28 @@ public class ParenthesesTest
 
     public void testAddToList1 ()
     { 
-        List<String> result =new ArrayList<String>();
-        p.addToList("()())()",result, p.getMinNumber("()())()"));
+        List<String> result = p.addToList("()())()",p.getMinNumber("()())()"));
         List<String> expected = new ArrayList<String>(Arrays.asList("()()()", "(())()"));
         assertTrue(expected.containsAll(result) && result.containsAll(expected));
     }
     
     public void testAddToList2 ()
     { 
-        List<String> result =new ArrayList<String>();
-        p.addToList("",result, p.getMinNumber(""));
+        List<String> result = p.addToList("",p.getMinNumber(""));
         List<String> expected = new ArrayList<String>(Arrays.asList(""));
         assertTrue(expected.containsAll(result) && result.containsAll(expected));
     }
     
     public void testAddToList3 ()
     { 
-        List<String> result =new ArrayList<String>();
-        p.addToList("(",result, p.getMinNumber("("));
+        List<String> result =p.addToList("(",p.getMinNumber("("));
         List<String> expected = new ArrayList<String>(Arrays.asList(""));
         assertTrue(expected.containsAll(result) && result.containsAll(expected));
     }
     
     public void testAddToList4 () //brutal
     {
-        List<String> result =new ArrayList<String>();
-        p.addToList("((())())()))",result, 2);
+        List<String> result = p.addToList("((())())()))",2);
         List<String> expected = new ArrayList<String>(Arrays.asList("((())())()","((()()()))","(((())()))","((()())())","((())()())","((())(()))"));
         assertTrue(expected.containsAll(result) && result.containsAll(expected));
     }
