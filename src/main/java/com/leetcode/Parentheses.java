@@ -2,7 +2,9 @@ package com.leetcode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Removes the minimum number of invalid parentheses in order to make the input string valid. 
@@ -118,8 +120,8 @@ public class Parentheses
         return sb.toString();
     }
     
-    public List<String> addToList(String s,int minNumber){
-        List<String> solutions=new ArrayList<String>();
+    public Set<String> addToList(String s,int minNumber){
+        Set<String> solutions=new HashSet<String>();
         if ("".equals(s)) solutions.add("");
         else{
             String original =s;  
@@ -151,19 +153,12 @@ public class Parentheses
         //some parentheses have to be removed
         else{
             int minNumber=getMinNumber(s);
-            List<String> solutions=addToList(s,minNumber);
+            Set<String> solutions=addToList(s,minNumber);
             //because of this: ()v)(()(()) and this ()m)(((()() there has to be a while loop
             while(solutions.isEmpty() && minNumber+2<=s.length()){
                 solutions.addAll(addToList(s,minNumber+2));
             }
-            return solutions;
+            return new ArrayList(solutions);
         }
-    }
-    public static void main(String[] args) {
-        Parentheses p =new Parentheses();
-        System.out.println(p.prepare(")()m)(((()((()(((("));
-        System.out.println(p.removeInvalidParentheses(")()m)(((()((()(((("));
-                
-    }
-            
+    }       
 }
