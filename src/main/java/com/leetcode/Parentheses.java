@@ -32,24 +32,20 @@ public class Parentheses
     }
             
     //decide if the string contains invalid parentheses
-    public boolean isValid(String s){ // @TODO update to exclude ["())(()"] 
+    public boolean isValid(String s){
         //the empty string is valid
         if ("".equals(s)) return true;
         //the lonely character is valid
         if (s.length()==1 && s.charAt(0)!='(' && s.charAt(0)!=')') return true;
-        //expressions like this a invalid ())(()
+        //expressions like this are invalid ())(()
         int balance =0;
         for(int i=0;i<s.length();i++){
             if(s.charAt(i)=='(') balance++;
             if(s.charAt(i)==')') balance--;
             if(balance<0) return false;
         }
-        balance=0;
-        for(int i=s.length()-1;i>=0;i--){
-            if(s.charAt(i)==')') balance++;
-            if(s.charAt(i)=='(') balance--;
-            if(balance<0) return false;
-        }       
+        if (balance>0) return false;
+        
         //besides it has to start and end with () or characters and the number of left must be the same as the number of right
         return ((s.charAt(0)=='(' || s.charAt(0)!=')') && (s.charAt(s.length()-1)==')' || s.charAt(s.length()-1)!='(')) && countLeft(s) == countRight(s);
     }
@@ -125,12 +121,11 @@ public class Parentheses
         if ("".equals(s)) solutions.add("");
         else{
             String original =s;  
-            for(int i=0;i<s.length();i++){
+            for(int i=0;i<s.length();i++){ //())v)(()(((((())
                 if(s.charAt(i)=='(' || s.charAt(i)==')'){
                     //if the char at the previous index was the same, we would just generate more of the same solutions
                     if(i==0 || s.charAt(i)!=s.charAt(i-1)){
                         s=removeParenthesis(s,i);
-                    
                         if(minNumber>1){
                             solutions.addAll(addToList(s,minNumber-1));
                         }
@@ -148,7 +143,7 @@ public class Parentheses
     
     public boolean containsOnlyParentheses(String s){
         for(int i=0;i<s.length();i++){
-            if(s.charAt(i)!=')'&&s.charAt(i)!='(') return false;
+            if(s.charAt(i)!=')'&& s.charAt(i)!='(') return false;
         }
         return true;
     }
@@ -162,7 +157,7 @@ public class Parentheses
             int minNumber=getMinNumber(s);
             Set<String> solutions=addToList(s,minNumber);
             //because of this: ()v)(()(()) and this ()m)(((()() there has to be a while loop
-            while(solutions.isEmpty() && minNumber+2<=s.length()){
+            while(!containsOnlyParentheses(s) && solutions.isEmpty() && minNumber+2<=s.length()){
                 solutions.addAll(addToList(s,minNumber+2));
             }
             return new ArrayList(solutions);
