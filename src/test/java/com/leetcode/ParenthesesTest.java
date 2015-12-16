@@ -108,7 +108,7 @@ public class ParenthesesTest
         assertEquals(expected2,result2);
         //indexes
         List<Integer> result3 = (List<Integer>) info[3];
-        List<Integer> expected3 = Arrays.asList(3);
+        List<Integer> expected3 = Arrays.asList(1,7,9,10,12);
         assertEquals(expected3,result3);
     }
     
