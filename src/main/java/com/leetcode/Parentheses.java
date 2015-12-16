@@ -15,22 +15,78 @@ import java.util.Set;
  */
 public class Parentheses 
 {  
-    //count left parentheses
-    public int countLeft(String s){
-        int numLeft=0; 
-        for(int i=0;i<s.length();i++) 
-            if(s.charAt(i)=='(') numLeft++;
-        return numLeft;
+    //removes all parentheses that would have to be removed in all cases
+    //returns prepared string,  minNumber and type of the parenthesis to be removed
+    public Object[] prepare(String s){
+        
+        Object[] info = new Object[4];
+        
+        StringBuilder sb = new StringBuilder(s);
+        int minNumber=0;
+        char type='n';
+        List<Integer> indexes=new ArrayList<Integer>();
+        
+        int balance=0;
+        int left=0;
+        
+        for(int i=0;i<s.length()-1;i++){
+            if(sb.charAt(i)=='(') {
+                balance++;
+                left++;
+            }
+            if(sb.charAt(i)==')') {
+                balance--;
+            }
+            if(balance<0){
+                //in these cases we remove:((((()))))), )(), ()),)a)() in these cases not: ()()),()a)()
+                //odstranit - ak left =0; ak left=1 a na i-1 pozicii nie je symbol; ak left je viac ako 1 a na i-1 pozicii je to iste ako na i-2
+                if((left==0) || (left==1 && (sb.charAt(i-1)=='(' || sb.charAt(i-1)==')')) || (left>=2 && sb.charAt(i-1)==sb.charAt(i-2))){
+                    sb.deleteCharAt(i);
+                    i--; //because otherways we would skip one character
+                    
+                } else {
+                    minNumber++; //()a)() this case we still have to count in minNumber
+                    type=')';
+                    indexes.add(i);
+                } 
+                balance=0;
+            }
+        }
+        //if at the end there are extra left parentheses to be removed... 
+        if(balance>0){
+            balance=0;
+            int right=0;
+            
+            for(int i=sb.length()-1;i>=0;i--){
+                if(sb.charAt(i)==')') {
+                    balance++;
+                    right++;
+                }
+                if(sb.charAt(i)=='(') {
+                    balance--;
+                }
+                if(balance<0){
+                    //odstranit - ak right =0; ak right=1 a na i+1 pozicii nie je symbol; ak right je viac ako 1 a na i+1 pozicii je to iste ako na i+2
+                    if((right==0) || (right==1 && (sb.charAt(i+1)=='(' || sb.charAt(i+1)==')')) || (right>=2 && sb.charAt(i+1)==sb.charAt(i+2))){
+                        sb.deleteCharAt(i);
+                    } else {
+                        minNumber++;
+                        if(type=='n') type='(';
+                        if(type==')') type='b';
+                        indexes.add(i);
+                    } 
+                    balance=0;
+                }
+            }
+        }
+        info[0]=sb.toString();
+        info[1]=minNumber;
+        info[2]=type;
+        info[3]=indexes;
+        return info;
     }
     
-    //count right parentheses
-    public int countRight(String s){
-        int numRight=0;
-        for(int i=0;i<s.length();i++) 
-            if(s.charAt(i)==')') numRight++;
-        return numRight;
-    }
-            
+ /*   
     //decide if the string contains invalid parentheses
     public boolean isValid(String s){
         //the empty string is valid
@@ -50,75 +106,7 @@ public class Parentheses
         return ((s.charAt(0)=='(' || s.charAt(0)!=')') && (s.charAt(s.length()-1)==')' || s.charAt(s.length()-1)!='(')) && countLeft(s) == countRight(s);
     }
   
-    //removes all parentheses that would have to be removed in all cases
-    public String prepare(String s){ //())(((()m)( -> ()(()m)
-        //at the beginning
-        int open=0;
-        int left=0;
-        int right=0;
-        for(int j=0;j<s.length();j++){
-            if(s.charAt(j)=='(') {
-                open++;
-                left++;
-            }
-            if(s.charAt(j)==')') {
-                open--;
-                right++;
-            }
-            //breaks so that it won't remove the parenthesis after the symbol: ()a)
-            if (left>=1 && right>=1 && s.charAt(j)!='(' && s.charAt(j)!=')') break;
-            //breaks for this: ()()), but doesn't for this: (()))
-            if (left>=2 && right >=2 && s.charAt(j)!=s.charAt(j-1)) break; 
-            //removes this parenthesis ())
-            if (open<0){
-                s=removeParenthesis(s, j);
-                open++;
-                j--; //because the string is then shorter
-            }
-        }
-        //at the end
-        open=0;
-        left=0;
-        right=0;
-        for(int j=s.length()-1;j>0;j--){
-            if(s.charAt(j)==')') {
-                open++;
-                right++;
-            }
-            if(s.charAt(j)=='(') {
-                open--;
-                left++;
-            }
-            if (left>0 && right>0 && s.charAt(j)!='(' && s.charAt(j)!=')') break;
-            if (left>1 && right >1 && s.charAt(j)!=s.charAt(j+1)) break; //breaks for this: ()(), but doesn't for this: (())
-            if (open<0){
-                s=removeParenthesis(s, j);
-                open++;
-            }
-        }
-        return s;
-    }
-    
-    public String removeAllSymbols(String s){
-        for(int i=0;i<s.length();i++){
-            if(s.charAt(i)!=')' && s.charAt(i)!='(') s=removeParenthesis(s, i);
-        }
-        return s;
-    }
-    
-    //returns minimum number of invalid parentheses
-    public int getMinNumber(String s){ //(()c)), n((i() robia problem
-        //in these cases: ()v)(()(()), ()m)(((()(), ()((()))x)(v()h we have to add +2
-        int add=0;
-        
-        return Math.abs(countLeft(s)-countRight(s))+add;
-    }
-    
-    //returns the exceeding parenthesis
-    public char getExceedingParenthesis(String s){
-        if(countLeft(s)>countRight(s)) return '(';
-        return ')';
-    }
+
     
     //removes next parentesis of particular type from the given position
     public String removeParenthesis(String s, int index){
@@ -179,9 +167,8 @@ public class Parentheses
             return new ArrayList(solutions);
         }
     }
+    */
     public static void main(String[] args) {
         Parentheses p = new Parentheses();
-        System.out.println(p.prepare("())((()))x)(v()(h"));
-        System.out.println(p.getMinNumber("()((()))x)(v()h"));
     }
 }

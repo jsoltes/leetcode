@@ -34,19 +34,26 @@ public class ParenthesesTest
 
     Parentheses p = new Parentheses();
     
-    public void testGetMinNumber1(){
-        int result=p.getMinNumber("(()c))");
-        int expected=1;
-        assertEquals(result,expected);
-              
+    public void testPrepare1(){
+        Object[] info = p.prepare("())(((()m)(");
+        //string
+        String result0 = (String) info[0];
+        String expected0 = "()(()m)";
+        assertEquals(expected0,result0);
+        //minNumber
+        Integer result1 = (Integer) info[1];
+        Integer expected1 = 0;
+        assertEquals(expected1,result1);
+        //type
+        char result2 = (Character) info[2];
+        char expected2 = 'n';
+        assertEquals(expected2,result2);
+        //indexes
+        List<Integer> result3 = (List<Integer>) info[3];
+        assertTrue(result3.isEmpty());
     }
     
-    public void testGetMinNumber2(){
-        int result=p.getMinNumber("n((i()");
-        int expected= 2;
-        assertEquals(expected,result);
-    }
-    
+    /*
     public void testRemoveParentheses1 ()
     {
         List<String> result = p.removeInvalidParentheses("()())()");
@@ -192,5 +199,6 @@ public class ParenthesesTest
         List<String> expected = new ArrayList<String>(Arrays.asList("(((()))x)v()h","(((()))x)(v)h","()((())x)v()h","()((())x)(v)h","()((()))xv()h","()((()))x(v)h"));
         assertTrue(expected.containsAll(result) && result.containsAll(expected));
     }
+    */
        
 }
