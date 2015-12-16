@@ -53,6 +53,85 @@ public class ParenthesesTest
         assertTrue(result3.isEmpty());
     }
     
+    public void testPrepare2(){
+        Object[] info = p.prepare("((((())))))");
+        //string
+        String result0 = (String) info[0];
+        String expected0 = "((((()))))";
+        assertEquals(expected0,result0);
+        //minNumber
+        Integer result1 = (Integer) info[1];
+        Integer expected1 = 0;
+        assertEquals(expected1,result1);
+        //type
+        char result2 = (Character) info[2];
+        char expected2 = 'n';
+        assertEquals(expected2,result2);
+        //indexes
+        List<Integer> result3 = (List<Integer>) info[3];
+        assertTrue(result3.isEmpty());
+    }
+       
+    public void testPrepare3(){
+        Object[] info = p.prepare("()a)()");
+        //string
+        String result0 = (String) info[0];
+        String expected0 = "()a)()";
+        assertEquals(expected0,result0);
+        //minNumber
+        Integer result1 = (Integer) info[1];
+        Integer expected1 = 1;
+        assertEquals(expected1,result1);
+        //type
+        char result2 = (Character) info[2];
+        char expected2 = ')';
+        assertEquals(expected2,result2);
+        //indexes
+        List<Integer> result3 = (List<Integer>) info[3];
+        List<Integer> expected3 = Arrays.asList(1,3);
+        assertEquals(expected3,result3);
+    }
+        
+    public void testPrepare4(){
+        Object[] info = p.prepare("())((()))x)(v()(h");
+        //string
+        String result0 = (String) info[0];
+        String expected0 = "()((()))x)(v()h";
+        assertEquals(expected0,result0);
+        //minNumber
+        Integer result1 = (Integer) info[1];
+        Integer expected1 = 2;
+        assertEquals(expected1,result1);
+        //type
+        char result2 = (Character) info[2];
+        char expected2 = 'b';
+        assertEquals(expected2,result2);
+        //indexes
+        List<Integer> result3 = (List<Integer>) info[3];
+        List<Integer> expected3 = Arrays.asList(3);
+        assertEquals(expected3,result3);
+    }
+    
+    public void testPrepare5(){
+        Object[] info = p.prepare("()()))()(");
+        //string
+        String result0 = (String) info[0];
+        String expected0 = "()())()";
+        assertEquals(expected0,result0);
+        //minNumber
+        Integer result1 = (Integer) info[1];
+        Integer expected1 = 1;
+        assertEquals(expected1,result1);
+        //type
+        char result2 = (Character) info[2];
+        char expected2 = ')';
+        assertEquals(expected2,result2);
+        //indexes
+        List<Integer> result3 = (List<Integer>) info[3];
+        List<Integer> expected3 = Arrays.asList(1,4);
+        assertEquals(expected3,result3);
+    }
+    
     /*
     public void testRemoveParentheses1 ()
     {

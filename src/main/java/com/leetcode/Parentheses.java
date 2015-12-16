@@ -2,6 +2,7 @@ package com.leetcode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,7 +30,7 @@ public class Parentheses
         int balance=0;
         int left=0;
         
-        for(int i=0;i<s.length()-1;i++){
+        for(int i=0;i<sb.length();i++){
             if(sb.charAt(i)=='(') {
                 balance++;
                 left++;
@@ -52,6 +53,8 @@ public class Parentheses
                 balance=0;
             }
         }
+        int lastRightIndex=0;
+        if(!indexes.isEmpty()) lastRightIndex=indexes.get(indexes.size()-1);
         //if at the end there are extra left parentheses to be removed... 
         if(balance>0){
             balance=0;
@@ -79,6 +82,29 @@ public class Parentheses
                 }
             }
         }
+        //adds other possible indexes
+        if(type==')'){
+            for(int i=sb.indexOf("(")+1;i<indexes.get(indexes.size()-1);i++){
+                if(sb.charAt(i)==')' && !indexes.contains(i) && sb.charAt(i+1)!=')') indexes.add(i);
+            }
+        }
+        if(type=='('){
+            for(int i=sb.lastIndexOf(")")-1;i>indexes.get(0);i--){
+                if(sb.charAt(i)=='(' && !indexes.contains(i) && sb.charAt(i-1)!='(') indexes.add(i);
+            }            
+        }
+        //if type is b, last index in indexes will be for the first '(' and first index for first ')' 
+        //however we need first '(' and last ')' so for this we use lastRightIndex
+        if(type=='b'){
+            for(int i=sb.indexOf("(")+1;i<lastRightIndex;i++){
+                if(sb.charAt(i)==')' && !indexes.contains(i) && sb.charAt(i+1)!=')') indexes.add(i);
+            }
+            for(int i=sb.lastIndexOf(")")-1;i>indexes.get(indexes.size()-1);i--){
+                if(sb.charAt(i)=='(' && !indexes.contains(i) && sb.charAt(i-1)!='(') indexes.add(i);
+            } 
+        }
+        Collections.sort(indexes);
+            
         info[0]=sb.toString();
         info[1]=minNumber;
         info[2]=type;
@@ -170,5 +196,8 @@ public class Parentheses
     */
     public static void main(String[] args) {
         Parentheses p = new Parentheses();
+        String s = (String)p.prepare("()()))()(")[0];
+        Integer minNumber=(Integer)p.prepare("()a)()")[1];
+        System.out.println(s);
     }
 }
