@@ -17,19 +17,18 @@ import java.util.Set;
 public class Parentheses 
 {  
     //removes all parentheses that would have to be removed in all cases
-    //returns prepared string,  minNumber and type of the parenthesis to be removed
+    //returns prepared string,  leftMinNumber, rightMinNumber and all possible leftIndexes and rightIndexes for removal
     public Object[] prepare(String s){
         
-        Object[] info = new Object[4];
+        Object[] info = new Object[5];
         
         StringBuilder sb = new StringBuilder(s);
-        int minNumber=0;
-        char type='n';
-        List<Integer> indexes=new ArrayList<Integer>();
+        List<Integer> rightIndexes=new ArrayList<Integer>();
+        int rightMinNumber=0;
         
         int balance=0;
         int left=0;
-        
+        //gets indexes of wrong right parentheses (from which you can get rightMinNumber and all possible removal of right parentheses)
         for(int i=0;i<sb.length();i++){
             char currentChar=sb.charAt(i);
             if(currentChar=='(') {
@@ -48,20 +47,28 @@ public class Parentheses
                     i--; //because otherways we would skip one character
                     
                 } else {
-                    minNumber++; //()a)() this case we still have to count in minNumber
-                    type=')';
-                    indexes.add(i);
+                    rightIndexes.add(i);
+                    rightMinNumber++;
                 } 
                 balance=0;
             }
         }
-        int lastRightIndex=0;
-        if(!indexes.isEmpty()) lastRightIndex=indexes.get(indexes.size()-1);
+
+        if(rightMinNumber>0){
+            //adds other possible right indexes
+            for(int i=sb.indexOf("(")+1;i<rightIndexes.get(rightIndexes.size()-1);i++){
+                if(sb.charAt(i)==')' && !rightIndexes.contains(i) && sb.charAt(i+1)!=')') rightIndexes.add(i);
+            }
+        }
+        
+        
         //if at the end there are extra left parentheses to be removed... 
+        List<Integer> leftIndexes=new ArrayList<Integer>();
+        int leftMinNumber=0;
         if(balance>0){
             balance=0;
             int right=0;
-            
+            //for loop for getting indexes of wrong left parentheses (from which you can get leftMinNumber and all possible removals of left indexes)
             for(int i=sb.length()-1;i>=0;i--){
                 char currentChar=sb.charAt(i);
                 if(currentChar==')') {
@@ -78,42 +85,25 @@ public class Parentheses
                     if((right==0) || (right==1 && (nextChar=='(' || nextChar==')')) || (right>=2 && nextChar==sb.charAt(i+2))){
                         sb.deleteCharAt(i);
                     } else {
-                        minNumber++;
-                        if(type=='n') type='(';
-                        if(type==')') type='b';
-                        indexes.add(i);
+                        leftIndexes.add(i);
                     } 
                     balance=0;
                 }
             }
-        }
-        //adds other possible indexes
-        if(type==')'){
-            for(int i=sb.indexOf("(")+1;i<indexes.get(indexes.size()-1);i++){
-                if(sb.charAt(i)==')' && !indexes.contains(i) && sb.charAt(i+1)!=')') indexes.add(i);
+        if(leftMinNumber>0){
+            //adds other possible left indexes
+        for(int i=sb.lastIndexOf(")")-1;i>leftIndexes.get(0);i--){
+                if(sb.charAt(i)=='(' && !leftIndexes.contains(i) && sb.charAt(i-1)!='(') leftIndexes.add(i);
             }
         }
-        if(type=='('){
-            for(int i=sb.lastIndexOf(")")-1;i>indexes.get(0);i--){
-                if(sb.charAt(i)=='(' && !indexes.contains(i) && sb.charAt(i-1)!='(') indexes.add(i);
-            }            
         }
-        //if type is b, last index in indexes will be for the first '(' and first index for first ')' 
-        //however we need first '(' and last ')' so for this we use lastRightIndex
-        if(type=='b'){
-            for(int i=sb.indexOf("(")+1;i<lastRightIndex;i++){
-                if(sb.charAt(i)==')' && !indexes.contains(i) && sb.charAt(i+1)!=')') indexes.add(i);
-            }
-            for(int i=sb.lastIndexOf(")")-1;i>indexes.get(indexes.size()-1);i--){
-                if(sb.charAt(i)=='(' && !indexes.contains(i) && sb.charAt(i-1)!='(') indexes.add(i);
-            } 
-        }
-        Collections.sort(indexes);
-            
+        Collections.sort(leftIndexes);
+        Collections.sort(rightIndexes);
         info[0]=sb.toString();
-        info[1]=minNumber;
-        info[2]=type;
-        info[3]=indexes;
+        info[1]=rightIndexes;
+        info[2]=leftIndexes;
+        info[3]=rightMinNumber;
+        info[4]=leftMinNumber;
         return info;
     }
     /*
@@ -165,8 +155,10 @@ public class Parentheses
     */
     public static void main(String[] args) {
         Parentheses p = new Parentheses();
-        String s = (String)p.prepare("()()))()(")[0];
-        Integer minNumber=(Integer)p.prepare("()a)()")[1];
-        System.out.println(s);
+        Object[] info = p.prepare("((((())))))");
+        String s = (String)p.prepare("((((())))))")[0];
+        List<Integer> result1 = (List<Integer>) info[1];
+        List<Integer> result2 = (List<Integer>) info[2];
+        System.out.println(result2);
     }
 }

@@ -40,17 +40,12 @@ public class ParenthesesTest
         String result0 = (String) info[0];
         String expected0 = "()(()m)";
         assertEquals(expected0,result0);
-        //minNumber
-        Integer result1 = (Integer) info[1];
-        Integer expected1 = 0;
-        assertEquals(expected1,result1);
-        //type
-        char result2 = (Character) info[2];
-        char expected2 = 'n';
-        assertEquals(expected2,result2);
-        //indexes
-        List<Integer> result3 = (List<Integer>) info[3];
-        assertTrue(result3.isEmpty());
+        //rightIndexes
+        List<Integer> result1 = (List<Integer>) info[1];
+        assertTrue(result1.isEmpty());
+        //leftIndexes
+        List<Integer> result2 = (List<Integer>) info[2];
+        assertTrue(result2.isEmpty());
     }
     
     public void testPrepare2(){
@@ -59,17 +54,12 @@ public class ParenthesesTest
         String result0 = (String) info[0];
         String expected0 = "((((()))))";
         assertEquals(expected0,result0);
-        //minNumber
-        Integer result1 = (Integer) info[1];
-        Integer expected1 = 0;
-        assertEquals(expected1,result1);
-        //type
-        char result2 = (Character) info[2];
-        char expected2 = 'n';
-        assertEquals(expected2,result2);
-        //indexes
-        List<Integer> result3 = (List<Integer>) info[3];
-        assertTrue(result3.isEmpty());
+       //rightIndexes
+        List<Integer> result1 = (List<Integer>) info[1];
+        assertTrue(result1.isEmpty());
+        //leftIndexes
+        List<Integer> result2 = (List<Integer>) info[2];
+        assertTrue(result2.isEmpty());
     }
        
     public void testPrepare3(){
@@ -78,18 +68,13 @@ public class ParenthesesTest
         String result0 = (String) info[0];
         String expected0 = "()a)()";
         assertEquals(expected0,result0);
-        //minNumber
-        Integer result1 = (Integer) info[1];
-        Integer expected1 = 1;
+        //rightIndexes
+        List<Integer> result1 = (List<Integer>) info[1];
+        List<Integer> expected1 = Arrays.asList(1,3);
         assertEquals(expected1,result1);
-        //type
-        char result2 = (Character) info[2];
-        char expected2 = ')';
-        assertEquals(expected2,result2);
-        //indexes
-        List<Integer> result3 = (List<Integer>) info[3];
-        List<Integer> expected3 = Arrays.asList(1,3);
-        assertEquals(expected3,result3);
+        //leftIndexes
+        List<Integer> result2 = (List<Integer>) info[2];
+        assertTrue(result2.isEmpty());
     }
         
     public void testPrepare4(){
