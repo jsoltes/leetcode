@@ -49,10 +49,9 @@ public class Parentheses
         //besides it has to start and end with () or characters and the number of left must be the same as the number of right
         return ((s.charAt(0)=='(' || s.charAt(0)!=')') && (s.charAt(s.length()-1)==')' || s.charAt(s.length()-1)!='(')) && countLeft(s) == countRight(s);
     }
-    
+  
     //removes all parentheses that would have to be removed in all cases
-    public String prepare(String s){
-        String original=s;
+    public String prepare(String s){ //())(((()m)( -> ()(()m)
         //at the beginning
         int open=0;
         int left=0;
@@ -97,13 +96,22 @@ public class Parentheses
                 open++;
             }
         }
-        if(!original.equals(s)) return prepare(s);
-        else return s;
+        return s;
     }
-            
+    
+    public String removeAllSymbols(String s){
+        for(int i=0;i<s.length();i++){
+            if(s.charAt(i)!=')' && s.charAt(i)!='(') s=removeParenthesis(s, i);
+        }
+        return s;
+    }
+    
     //returns minimum number of invalid parentheses
-    public int getMinNumber(String s){
-        return Math.abs(countLeft(s)-countRight(s));
+    public int getMinNumber(String s){ //(()c)), n((i() robia problem
+        //in these cases: ()v)(()(()), ()m)(((()(), ()((()))x)(v()h we have to add +2
+        int add=0;
+        
+        return Math.abs(countLeft(s)-countRight(s))+add;
     }
     
     //returns the exceeding parenthesis
@@ -125,7 +133,6 @@ public class Parentheses
         String p=prepare(s);
         if(s.length()-p.length()>minNumber) return solutions;//this means we don't have any valid solutions with this one
         minNumber-=s.length()-p.length();
-        System.out.println(minNumber);
         s=p; //()(()m), 0
         
         
@@ -169,16 +176,12 @@ public class Parentheses
         else{
             int minNumber=getMinNumber(s);
             Set<String> solutions=addToList(s,minNumber);
-            //because of this: ()v)(()(()) and this ()m)(((()() there has to be a while loop
-            while(!containsOnlyParentheses(s) && solutions.isEmpty() && minNumber+2<=s.length()){
-                solutions.addAll(addToList(s,minNumber+2));
-            }
             return new ArrayList(solutions);
         }
     }
     public static void main(String[] args) {
         Parentheses p = new Parentheses();
-        System.out.println(p.prepare(")(((()(y((u()(z()()"));
-        System.out.println(p.removeInvalidParentheses(")(((()(y((u()(z()()"));
+        System.out.println(p.prepare("())((()))x)(v()(h"));
+        System.out.println(p.getMinNumber("()((()))x)(v()h"));
     }
 }

@@ -34,116 +34,17 @@ public class ParenthesesTest
 
     Parentheses p = new Parentheses();
     
-    public void testCountLeft1 ()
-    {
-        int result = p.countLeft("(()())(()");
-        int expected = 5;
-        assertEquals(expected, result);
+    public void testGetMinNumber1(){
+        int result=p.getMinNumber("(()c))");
+        int expected=1;
+        assertEquals(result,expected);
+              
     }
     
-    public void testCountLeft2 ()
-    {
-        int result = p.countLeft("");
-        int expected = 0;
-        assertEquals(expected, result);
-    }
-    
-     public void testCountRight1 ()
-    {
-        int result = p.countRight("(()())(()");
-        int expected = 4;
-        assertEquals(expected, result);
-    }
-    
-    public void testCountRight2 ()
-    {
-        int result = p.countRight("");
-        int expected = 0;
-        assertEquals(expected, result);
-    }
-    
-    public void testIsValid1 ()
-    {
-        boolean result = p.isValid("(()()(()))");
-        boolean expected = true;
-        assertEquals(expected, result);
-    }
-    
-    public void testIsValid2 ()
-    {
-        boolean result = p.isValid("((()()(()))");
-        boolean expected = false;
-        assertEquals(expected, result);
-    }
-    
-    public void testIsValid3 ()
-    {
-        boolean result = p.isValid("");
-        boolean expected = true;
-        assertEquals(expected, result);
-    }
-    
-    public void testGetMinNumber1 ()
-    {
-        int result = p.getMinNumber("()())()");
-        int expected = 1;
-        assertEquals(expected, result);
-    }
-    
-    public void testGetMinNumber2 ()
-    {
-        int result = p.getMinNumber("))))))))");
-        int expected = 8;
-        assertEquals(expected, result);
-    }
-    
-    public void testGetMinNumber3 ()
-    {
-        int result = p.getMinNumber("");
-        int expected = 0;
-        assertEquals(expected, result);
-    }
-    
-     public void testGetMinNumber4 ()
-    {
-        int result = p.getMinNumber("((())())()))");
-        int expected = 2;
-        assertEquals(expected, result);
-    }
-     
-    public void testGetExceedingParenthesis ()
-    {
-        char result =p.getExceedingParenthesis("()())()");
-        char expected=')';
-        assertEquals(expected, result);
-    }
-    
-    public void testRemoveParenthesis ()
-    {
-        String result = p.removeParenthesis("()())()", 3);
-        String expected = "()()()";
-        assertEquals(expected, result);
-    }
-
-    public void testAddToList1 ()
-    { 
-        Set<String> result = p.addToList("()())()",p.getMinNumber("()())()"));
-        List<String> expected = new ArrayList<String>(Arrays.asList("()()()", "(())()"));
-        assertTrue(expected.containsAll(result) && result.containsAll(expected));
-    }
-    
-    public void testAddToList3 ()
-    { 
-        Set<String> result =p.addToList("(",p.getMinNumber("("));
-        List<String> expected = new ArrayList<String>(Arrays.asList(""));
-        assertTrue(expected.containsAll(result) && result.containsAll(expected));
-    }
-    
-    public void testAddToList4 () //brutal
-    {
-        Set<String> result = p.addToList("((())())()))",2);
-        List<String> expected = new ArrayList<String>(Arrays.asList("((())())()","((()()()))","(((())()))","((()())())","((())()())","((())(()))"));
-        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+    public void testGetMinNumber2(){
+        int result=p.getMinNumber("n((i()");
+        int expected= 2;
+        assertEquals(expected,result);
     }
     
     public void testRemoveParentheses1 ()
@@ -270,4 +171,26 @@ public class ParenthesesTest
         List<String> expected = new ArrayList<String>(Arrays.asList("(m)()()","(m)(())","()m()()","()m(())"));
         assertTrue(expected.containsAll(result) && result.containsAll(expected));
     }
+    
+      public void testRemoveParentheses19 ()
+    {
+        List<String> result = p.removeInvalidParentheses("()v)(()(())");
+        List<String> expected = new ArrayList<String>(Arrays.asList("()v()(())","(v)()(())","()v(()())","(v)(()())"));
+        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+    }
+      
+       public void testRemoveParentheses20 ()
+    {
+        List<String> result = p.removeInvalidParentheses("()m)(((()()");
+        List<String> expected = new ArrayList<String>(Arrays.asList("(m)()()","(m)(())","()m()()","()m(())"));
+        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+    }
+       
+    public void testRemoveParentheses21 ()
+    {
+        List<String> result = p.removeInvalidParentheses("())((()))x)(v()(h");
+        List<String> expected = new ArrayList<String>(Arrays.asList("(((()))x)v()h","(((()))x)(v)h","()((())x)v()h","()((())x)(v)h","()((()))xv()h","()((()))x(v)h"));
+        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+    }
+       
 }
