@@ -223,7 +223,32 @@ public class ParenthesesTest
         List<Integer> result4 = (List<Integer>) info[2];
         assertTrue(result4.isEmpty());
     }
-    
+
+    public void testPrepare9(){
+        Object[] info = p.prepare(")(()())())r())");
+        //string
+        String result0 = (String) info[0];
+        String expected0 = "(()())())r())";
+        assertEquals(expected0,result0);
+        
+        //rightMinNumber
+        int result1=(Integer) info[3];
+        int expected1=2;
+        assertEquals(expected1,result1);
+        //leftMinNumber
+        int result2=(Integer) info[4];
+        int expected2=0;
+        assertEquals(expected2,result2);
+        
+        //rightIndexes
+        List<Integer> result3 = (List<Integer>) info[1];
+        List<Integer> expected3 = Arrays.asList(2,5,8,12);
+        assertEquals(expected3,result3);
+        //leftIndexes
+        List<Integer> result4 = (List<Integer>) info[2];
+        assertTrue(result4.isEmpty());
+        
+    }
     
     public void testRemoveParentheses1 ()
     {

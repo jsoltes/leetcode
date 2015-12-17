@@ -120,18 +120,25 @@ public class Parentheses
 
     public List<String> generate(StringBuilder sb,List<Integer> rightIndexes, List<Integer> leftIndexes, int rightMinNumber, int leftMinNumber){
         List<String> solutions=new ArrayList<String>(); 
-        //prepared="()((()))x)(v()h"
-        //rightMinNumber=1
-        //leftMinNumber=1
-        //rightIndexes=1,7,9
-        //leftIndexes=10,12
+        //prepared="(()())())r())"
+        //rightMinNumber=2
+        //leftMinNumber=0
+        //rightIndexes=2,5,8,12
+        //leftIndexes=empty
 
         //side of the solution with right parentheses
         for(int i:rightIndexes){
+            System.out.println(sb);
             sb.deleteCharAt(i);
             //if there are 2 and more to be removed, we have to go deeeper
             if(rightMinNumber>1){
-                solutions.addAll(generate(sb,rightIndexes, leftIndexes, rightMinNumber-1, leftMinNumber));
+                //everytime we go deeper, we have to decrease indexes, because the string shortenes
+                //also it is enough to go through the sublist of right indexes
+                List<Integer> sublist=rightIndexes.subList(rightIndexes.indexOf(i)+1, rightIndexes.size());
+                for(int j=0;j<sublist.size();j++){
+                    sublist.set(j, sublist.get(j)-1);
+                }
+                solutions.addAll(generate(sb,sublist, leftIndexes, rightMinNumber-1, leftMinNumber));
             }
             else{
                 solutions.add(sb.toString());
@@ -145,6 +152,12 @@ public class Parentheses
                     sb.deleteCharAt(j);
                     //if there are 2 and more to be removed, we have to go deeeper
                     if(leftMinNumber>1){
+                        //everytime we go deeper, we have to decrease indexes, because the string shortenes
+                        //also it is enough to go through the sublist of left indexes
+                        List<Integer> sublist=rightIndexes.subList(rightIndexes.indexOf(j)+1, rightIndexes.size());
+                        for(int i=0;j<sublist.size();i++){
+                            sublist.set(i, sublist.get(i)-1);
+                        }
                         solutions.addAll(generate(sb,rightIndexes, leftIndexes, rightMinNumber, leftMinNumber-1));
                     }
                     else{
@@ -160,6 +173,12 @@ public class Parentheses
                         sb2.deleteCharAt(j);
                         //if there are 2 and more to be removed, we have to go deeeper
                         if(leftMinNumber>1){
+                            //everytime we go deeper, we have to decrease indexes, because the string shortenes
+                            //also it is enough to go through the sublist of left indexes
+                            List<Integer> sublist=rightIndexes.subList(rightIndexes.indexOf(j)+1, rightIndexes.size());
+                                for(int i=0;j<sublist.size();i++){
+                                    sublist.set(i, sublist.get(i)-1);
+                                }
                             solutions.addAll(generate(sb2,rightIndexes, leftIndexes, rightMinNumber, leftMinNumber-1));
                         }
                         else{
@@ -197,7 +216,7 @@ public class Parentheses
     
     public static void main(String[] args) {
         Parentheses p = new Parentheses();
-        List<String> result = p.removeInvalidParentheses("())((()))x)(v()(h");
+        List<String> result = p.removeInvalidParentheses(")(()())())r())");
         
         System.out.println(result);
         
