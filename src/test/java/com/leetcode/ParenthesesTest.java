@@ -101,7 +101,7 @@ public class ParenthesesTest
         assertEquals(expected4,result4);
     }
         
-    public void testPrepare4(){
+    public void testPrepare21(){
         Object[] info = p.prepare("())((()))x)(v()(h");
         //string
         String result0 = (String) info[0];
@@ -224,7 +224,7 @@ public class ParenthesesTest
         assertTrue(result4.isEmpty());
     }
     
-    /*
+    
     public void testRemoveParentheses1 ()
     {
         List<String> result = p.removeInvalidParentheses("()())()");
@@ -273,6 +273,7 @@ public class ParenthesesTest
         List<String> expected = new ArrayList<String>(Arrays.asList("n"));
         assertTrue(expected.containsAll(result) && result.containsAll(expected));
     }
+    
     public void testRemoveParentheses8 ()
     {
         List<String> result = p.removeInvalidParentheses("(()");
@@ -369,7 +370,5 @@ public class ParenthesesTest
         List<String> result = p.removeInvalidParentheses("())((()))x)(v()(h");
         List<String> expected = new ArrayList<String>(Arrays.asList("(((()))x)v()h","(((()))x)(v)h","()((())x)v()h","()((())x)(v)h","()((()))xv()h","()((()))x(v)h"));
         assertTrue(expected.containsAll(result) && result.containsAll(expected));
-    }
-    */
-       
+    }   
 }

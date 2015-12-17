@@ -1,6 +1,7 @@
 package com.leetcode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -40,7 +41,8 @@ public class Parentheses
             if(balance<0){
                 //in these cases we remove:((((()))))), )(), ()),)a)() in these cases not: ()()),()a)()
                 //odstranit - ak left =0; ak left=1 a na i-1 pozicii nie je symbol; ak left je viac ako 1 a na i-1 pozicii je to iste ako na i-2
-                char previousChar=sb.charAt(i-1);
+                char previousChar=0;
+                if(left>=1) previousChar=sb.charAt(i-1);
                 if((left==0) || (left==1 && (previousChar=='(' || previousChar==')')) || (left>=2 && previousChar==sb.charAt(i-2))){
                     sb.deleteCharAt(i);
                     i--; //because otherways we would skip one character
@@ -63,7 +65,6 @@ public class Parentheses
         
         
         //if at the end there are extra left parentheses to be removed... 
-        System.out.println(sb);
         List<Integer> leftIndexes=new ArrayList<Integer>();
         int leftMinNumber=0;
         if(balance>0){
@@ -116,59 +117,89 @@ public class Parentheses
         
         return info;
     }
-    /*
-    public Set<String> addToList(String s,int minNumber){ //"()(((()m)"
-        Set<String> solutions=new HashSet<String>();
-        
-        String p=prepare(s);
-        if(s.length()-p.length()>minNumber) return solutions;//this means we don't have any valid solutions with this one
-        minNumber-=s.length()-p.length();
-        s=p; //()(()m), 0
-        
-        
-        if (isValid(p)) solutions.add(p);
-        else{
-            String original =s;  
-            for(int i=0;i<s.length();i++){ 
-                if(s.charAt(i)=='(' || s.charAt(i)==')'){
-                    //if the char at the previous index was the same, we would just generate more of the same solutions
-                    if(i==0 || s.charAt(i)!=s.charAt(i-1)){
-                        s=removeParenthesis(s,i);
-                        if(minNumber>1){
-                            
-                            //we use prepare to have less cycles
-                            solutions.addAll(addToList(s,minNumber-1));
+
+    public List<String> generate(StringBuilder sb,List<Integer> rightIndexes, List<Integer> leftIndexes, int rightMinNumber, int leftMinNumber){
+        List<String> solutions=new ArrayList<String>(); 
+        //prepared="()((()))x)(v()h"
+        //rightMinNumber=1
+        //leftMinNumber=1
+        //rightIndexes=1,7,9
+        //leftIndexes=10,12
+
+        //side of the solution with right parentheses
+        for(int i:rightIndexes){
+            sb.deleteCharAt(i);
+            //if there are 2 and more to be removed, we have to go deeeper
+            if(rightMinNumber>1){
+                solutions.addAll(generate(sb,rightIndexes, leftIndexes, rightMinNumber-1, leftMinNumber));
+            }
+            else{
+                solutions.add(sb.toString());
+            }
+            sb.insert(i,")");//returns stringbuilder into the original state
+            }
+        //side of the solution with left parentheses
+        if(leftMinNumber>0){
+            if(solutions.isEmpty())
+                for(int j:leftIndexes){
+                    sb.deleteCharAt(j);
+                    //if there are 2 and more to be removed, we have to go deeeper
+                    if(leftMinNumber>1){
+                        solutions.addAll(generate(sb,rightIndexes, leftIndexes, rightMinNumber, leftMinNumber-1));
+                    }
+                    else{
+                        solutions.add(sb.toString());
+                    }
+                    sb.insert(j,"(");
+                }
+            else {
+                List<String> solutions2=new ArrayList<String>();
+                for(String s:solutions){
+                    StringBuilder sb2=new StringBuilder(s);
+                    for(int j:leftIndexes){
+                        sb2.deleteCharAt(j);
+                        //if there are 2 and more to be removed, we have to go deeeper
+                        if(leftMinNumber>1){
+                            solutions.addAll(generate(sb2,rightIndexes, leftIndexes, rightMinNumber, leftMinNumber-1));
                         }
                         else{
-                        if(isValid(s) && solutions.contains(s)!=true)
-                            solutions.add(s);
+                            solutions2.add(sb2.toString());
                         }
-                        s=original;
+                        sb2.insert(j,"(");
                     }
                 }
+                return solutions2;
             }
         }
         return solutions;
     }
-            
+    
     public List<String> removeInvalidParentheses(String s){
-        s=prepare(s); //
-        //the input String is already ok
-        if(isValid(s)) return Arrays.asList(s);
-        //some parentheses have to be removed
-        else{
-            int minNumber=getMinNumber(s);
-            Set<String> solutions=addToList(s,minNumber);
-            return new ArrayList(solutions);
-        }
+        Object[] info=prepare(s);
+        
+        String prepared=(String) info[0];
+        
+        List<Integer> rightIndexes=(List<Integer>) info[1];
+        List<Integer> leftIndexes=(List<Integer>) info[2];
+        int rightMinNumber = (Integer) info[3];
+        int leftMinNumber = (Integer) info[4];
+        
+        if(rightMinNumber==0 && leftMinNumber==0) return Arrays.asList(prepared);
+        //if we are gonna delete right parentheses we need to decrease index for left parentheses
+        if(leftMinNumber>0 && rightMinNumber>0){
+                for(int j=0;j<leftIndexes.size();j++){
+                    leftIndexes.set(j, leftIndexes.get(j)-rightMinNumber);
+                }
+            }
+        StringBuilder sb=new StringBuilder(prepared);
+        return generate(sb,rightIndexes,leftIndexes,rightMinNumber,leftMinNumber);
     }
-    */
+    
     public static void main(String[] args) {
         Parentheses p = new Parentheses();
-        Object[] info = p.prepare("((((())))))");
-        String s = (String)p.prepare("((((())))))")[0];
-        List<Integer> result1 = (List<Integer>) info[1];
-        List<Integer> result2 = (List<Integer>) info[2];
-        System.out.println(result2);
+        List<String> result = p.removeInvalidParentheses("())((()))x)(v()(h");
+        
+        System.out.println(result);
+        
     }
 }
