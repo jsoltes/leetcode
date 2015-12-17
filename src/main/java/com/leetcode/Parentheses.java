@@ -19,7 +19,7 @@ public class Parentheses
     public Object[] prepare(String s){
         Object[] info = new Object[5];
         StringBuilder sb = new StringBuilder(s);
-        List<Integer> rightIndexes=new ArrayList<Integer>();
+        List<Integer> rightMinIndexes=new ArrayList<Integer>();
         int rightMinNumber=0;
         int balance=0;
         int left=0;
@@ -42,18 +42,22 @@ public class Parentheses
                     i--; //because otherways we would skip one character
                     sblength--;
                 } else {
-                    rightIndexes.add(i);
+                    rightMinIndexes.add(i);
                     rightMinNumber++;
                 } 
                 balance=0;
             }
         }
+        List<Integer> rightIndexes=new ArrayList<Integer>();
         if(rightMinNumber>0){
             //adds other possible right indexes
             int start=sb.indexOf("(")+1;
-            int end=rightIndexes.get(rightIndexes.size()-1); 
-            for(int i=start;i<end;i++){
-                if(sb.charAt(i)==')' && !rightIndexes.contains(i) && sb.charAt(i+1)!=')') rightIndexes.add(i);
+            for(int rightMinIndex:rightMinIndexes){
+                for(int i=start;i<rightMinIndex;i++){
+                    if(sb.charAt(i)==')' && sb.charAt(i+1)!=')') rightIndexes.add(i);
+                }
+                rightIndexes.add(rightMinIndex);
+                start=rightMinIndex+1;
             }
         }
         //if at the end there are extra left parentheses to be removed... 
@@ -100,7 +104,6 @@ public class Parentheses
         }
     }
     Collections.sort(leftIndexes);
-    Collections.sort(rightIndexes);
         
     info[0]=sb.toString();
     info[1]=rightIndexes;
