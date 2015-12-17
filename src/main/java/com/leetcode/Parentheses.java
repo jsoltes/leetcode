@@ -1,11 +1,8 @@
 package com.leetcode;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Removes the minimum number of invalid parentheses in order to make the input string valid. 
@@ -23,7 +20,9 @@ public class Parentheses
         Object[] info = new Object[5];
         
         StringBuilder sb = new StringBuilder(s);
+
         List<Integer> rightIndexes=new ArrayList<Integer>();
+        
         int rightMinNumber=0;
         
         int balance=0;
@@ -53,23 +52,26 @@ public class Parentheses
                 balance=0;
             }
         }
-
         if(rightMinNumber>0){
             //adds other possible right indexes
-            for(int i=sb.indexOf("(")+1;i<rightIndexes.get(rightIndexes.size()-1);i++){
+            int start=sb.indexOf("(")+1;
+            int end=rightIndexes.get(rightIndexes.size()-1);
+            for(int i=start;i<end;i++){
                 if(sb.charAt(i)==')' && !rightIndexes.contains(i) && sb.charAt(i+1)!=')') rightIndexes.add(i);
             }
         }
         
         
         //if at the end there are extra left parentheses to be removed... 
+        System.out.println(sb);
         List<Integer> leftIndexes=new ArrayList<Integer>();
         int leftMinNumber=0;
         if(balance>0){
             balance=0;
             int right=0;
             //for loop for getting indexes of wrong left parentheses (from which you can get leftMinNumber and all possible removals of left indexes)
-            for(int i=sb.length()-1;i>=0;i--){
+            int start=sb.length()-1;
+            for(int i=start;i>=0;i--){
                 char currentChar=sb.charAt(i);
                 if(currentChar==')') {
                     balance++;
@@ -84,26 +86,34 @@ public class Parentheses
                     if(right>=1) nextChar=sb.charAt(i+1);
                     if((right==0) || (right==1 && (nextChar=='(' || nextChar==')')) || (right>=2 && nextChar==sb.charAt(i+2))){
                         sb.deleteCharAt(i);
+                        //everytime we delete we have to decrement all left indexes
+                        for(int j=0;j<leftIndexes.size();j++){
+                            leftIndexes.set(j, leftIndexes.get(j)-1);
+                        }
                     } else {
                         leftIndexes.add(i);
+                        leftMinNumber++;
                     } 
                     balance=0;
                 }
             }
         if(leftMinNumber>0){
             //adds other possible left indexes
-        for(int i=sb.lastIndexOf(")")-1;i>leftIndexes.get(0);i--){
+            int firstLeftIndex=leftIndexes.get(0);
+            for(int i=sb.lastIndexOf(")")-1;i>firstLeftIndex;i--){
                 if(sb.charAt(i)=='(' && !leftIndexes.contains(i) && sb.charAt(i-1)!='(') leftIndexes.add(i);
             }
         }
         }
         Collections.sort(leftIndexes);
         Collections.sort(rightIndexes);
+        
         info[0]=sb.toString();
         info[1]=rightIndexes;
         info[2]=leftIndexes;
         info[3]=rightMinNumber;
         info[4]=leftMinNumber;
+        
         return info;
     }
     /*
