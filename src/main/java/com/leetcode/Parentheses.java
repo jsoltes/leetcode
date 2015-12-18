@@ -18,14 +18,15 @@ public class Parentheses
         List<String> solutions=new ArrayList<String>(); 
         
         int isize=indexes.size();
-        for (int i=0;i<isize;i++){
+        for (int i=0;i<isize;i++){ //iterates through indexes of indexes!
             side.deleteCharAt(indexes.get(i));
             if (minNumber>1){
                 isize--;
+                indexes=indexes.subList(i, indexes.size());
                 for(int j=0;j<isize;j++){
                     indexes.set(j, indexes.get(j)-1);
                 }
-                solutions.addAll(generate(side,minNumber-1,indexes,parenthesis));
+                solutions.addAll(generate(side,minNumber--,indexes,parenthesis));
             }
             else solutions.add(side.toString());
             side.insert(i, parenthesis);
