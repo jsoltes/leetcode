@@ -17,13 +17,14 @@ public class Parentheses
     public List<String> generate(StringBuilder side,int minNumber, List<Integer> indexes, char parenthesis){//
         List<String> solutions=new ArrayList<String>(); 
         
-        int isize=indexes.size();
+        int isize=indexes.size();//3
         for (int i=0;i<isize;i++){ //iterates through indexes of indexes! 0,
-            int position = indexes.get(i);
+            int position = indexes.get(i);//0
+            
             side.deleteCharAt(position);
-            if (minNumber>1){
+            if (minNumber>1){        
                 isize--;
-                indexes=indexes.subList(i, indexes.size());
+                indexes=indexes.subList(i+1, indexes.size());
                 for(int j=0;j<isize;j++){
                     indexes.set(j, indexes.get(j)-1);
                 }
@@ -142,6 +143,7 @@ public class Parentheses
             List<String> leftSideList = generate(sb,rightMinNumber,rightIndexes,')');
             //if there are also left parentheses to be removed
             if(leftMinNumber!=0){
+                Collections.sort(leftIndexes);
                 List<String> rightSideList = generate(sb,leftMinNumber,leftIndexes,'(');
                 Collections.sort(leftIndexes); //TODO zistit ci to tu potrebujem
                 int smallestLeftIndex=leftIndexes.get(0);
@@ -161,13 +163,14 @@ public class Parentheses
             return leftSideList; 
         } 
         //third case - there are only left parentheses to be removed
+        Collections.sort(leftIndexes);
         List<String> rightSideList = generate(sb,leftMinNumber,leftIndexes,'(');
         return rightSideList;
     }
     
     public static void main(String[] args) {
         Parentheses p = new Parentheses();
-        List<String> result = p.removeInvalidParentheses("())((()))x)(v()(h");
+        List<String> result = p.removeInvalidParentheses("(r(()()(");
         System.out.println("result "+result);
     }
 }
