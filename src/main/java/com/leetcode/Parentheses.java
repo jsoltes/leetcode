@@ -103,7 +103,6 @@ public class Parentheses
             }
         }
     }
-    Collections.sort(leftIndexes);
         
     info[0]=sb.toString();
     info[1]=rightIndexes;
@@ -190,29 +189,108 @@ public class Parentheses
     }
     
     public List<String> removeInvalidParentheses(String s){
-        Object[] info=prepare(s);
-        
-        String prepared=(String) info[0];
-        
-        List<Integer> rightIndexes=(List<Integer>) info[1];
-        List<Integer> leftIndexes=(List<Integer>) info[2];
-        int rightMinNumber = (Integer) info[3];
-        int leftMinNumber = (Integer) info[4];
-        
-        if(rightMinNumber==0 && leftMinNumber==0) return Arrays.asList(prepared);
+   ////////////firstly we get rightMinNumber and rightMinIndexes/////////////////////// 
+        StringBuilder sb = new StringBuilder(s);
+        List<Integer> rightMinIndexes=new ArrayList<Integer>();
+        int rightMinNumber=0;
+        int balance=0;
+        int left=0;
+        //gets indexes of wrong right parentheses (from which you can get all possible removals of right parentheses)
+        int sblength=sb.length();
+        for(int i=0;i<sblength;i++){
+            char currentChar=sb.charAt(i);
+            if(currentChar=='(') {
+                balance++;
+                left++;
+            }
+            if(currentChar==')') balance--;
+            if(balance<0){
+                //in these cases we remove:((((()))))), )(), ()),)a)() in these cases not: ()()),()a)()
+                //odstranit - ak left =0; ak left=1 a na i-1 pozicii nie je symbol; ak left je viac ako 1 a na i-1 pozicii je to iste ako na i-2
+                char previousChar=0;
+                if(left>=1) previousChar=sb.charAt(i-1);
+                if((left==0) || (left==1 && (previousChar=='(' || previousChar==')')) || (left>=2 && previousChar==sb.charAt(i-2))){
+                    sb.deleteCharAt(i); //after this cursor goes on the next character so we have to decrease it
+                    i--; //because otherways we would skip one character
+                    sblength--;
+                } else {
+                    rightMinIndexes.add(i);
+                    rightMinNumber++;
+                } 
+                balance=0;
+            }
+        }
+////////then we add all other possible indexes to rightMinIndexes and we create rightIndexes/////////
+        List<Integer> rightIndexes=new ArrayList<Integer>();
+        if(rightMinNumber>0){
+            //adds other possible right indexes
+            int start=sb.indexOf("(")+1;
+            for(int rightMinIndex:rightMinIndexes){
+                for(int i=start;i<rightMinIndex;i++){
+                    if(sb.charAt(i)==')' && sb.charAt(i+1)!=')') rightIndexes.add(i);
+                }
+                rightIndexes.add(rightMinIndex);
+                start=rightMinIndex+1;
+            }
+        }
+ ///////////if balance>0 there are extra left parentheses to be removed and we get leftMinNumber and leftIndexes////////
+        List<Integer> leftIndexes=new ArrayList<Integer>();
+        int leftMinNumber=0;
+        if(balance>0){
+            balance=0;
+            int right=0;
+            //for loop for getting indexes of wrong left parentheses (from which you can get all possible removals of left indexes)
+            int start=sb.length()-1;
+            for(int i=start;i>=0;i--){
+                char currentChar=sb.charAt(i);
+                if(currentChar==')') {
+                    balance++;
+                    right++;
+                }
+                if(currentChar=='(') {
+                    balance--;
+                }
+                if(balance<0){
+                    //odstranit - ak right =0; ak right=1 a na i+1 pozicii nie je symbol; ak right je viac ako 1 a na i+1 pozicii je to iste ako na i+2
+                    char nextChar = 0;
+                    if(right>=1) nextChar=sb.charAt(i+1);
+                    if((right==0) || (right==1 && (nextChar=='(' || nextChar==')')) || (right>=2 && nextChar==sb.charAt(i+2))){
+                        sb.deleteCharAt(i);
+                        //everytime we delete we have to decrement all left indexes
+                        int size=leftIndexes.size();
+                        for(int j=0;j<size;j++){
+                            leftIndexes.set(j, leftIndexes.get(j)-1);
+                        }
+                    } else {
+                        leftIndexes.add(i);
+                        leftMinNumber++;
+                    } 
+                    balance=0;
+                }
+            }
+//////if still after we prepare the string from the right side there are some parentheses to be removed we add also other possible indexes/////
+        if(leftMinNumber>0){
+            //adds other possible left indexes
+            int firstLeftIndex=leftIndexes.get(0);
+            for(int i=sb.lastIndexOf(")")-1;i>firstLeftIndex;i--){
+                if(sb.charAt(i)=='(' && !leftIndexes.contains(i) && sb.charAt(i-1)!='(') leftIndexes.add(i);
+            }
+        }
+    }
+///////////we use rightMinNumber and leftMinNumber to manage the flow of the program////////////////////
+        if(rightMinNumber==0 && leftMinNumber==0) return Arrays.asList(sb.toString());
         //if we are gonna delete right parentheses we need to decrease index for left parentheses
         if(leftMinNumber>0 && rightMinNumber>0){
                 for(int j=0;j<leftIndexes.size();j++){
                     leftIndexes.set(j, leftIndexes.get(j)-rightMinNumber);
                 }
             }
-        StringBuilder sb=new StringBuilder(prepared);
         return generate(sb,rightIndexes,leftIndexes,rightMinNumber,leftMinNumber);
     }
     
     public static void main(String[] args) {
         Parentheses p = new Parentheses();
-        List<String> result = p.removeInvalidParentheses(")(()())())r())");
+        List<String> result = p.removeInvalidParentheses(")(((()(y((u()(z()()");
         System.out.println(result);
     }
 }
