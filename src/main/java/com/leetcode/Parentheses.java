@@ -32,7 +32,7 @@ public class Parentheses
         return solutions;
     }
     
-    public List<String> connect(List<String> rightSideList,String middle,List<String> leftSideList){
+    public List<String> connect(List<String> leftSideList,String middle,List<String> rightSideList){
         List<String> solutions=new ArrayList<String>();
         for(String r:rightSideList){
             for(String l:leftSideList){
@@ -66,7 +66,7 @@ public class Parentheses
                 if((left==0) || (left==1 && (previousChar=='(' || previousChar==')')) || (left>=2 && previousChar==sb.charAt(i-2))){
                     sb.deleteCharAt(i); //after this cursor goes on the next character so we have to decrease it
                     i--; //because otherways we would skip one character
-                    sblength--;
+                    sblength--; //because the string is now shorter
                 } else {
                     rightMinIndexes.add(i);
                     rightMinNumber++;
@@ -124,9 +124,9 @@ public class Parentheses
             }
 //////if still after we prepare the string from the right side there are some parentheses to be removed we add also other possible indexes/////
         if(leftMinNumber>0){
-            //adds other possible left indexes
             int firstLeftIndex=leftIndexes.get(0);
-            for(int i=sb.lastIndexOf(")")-1;i>firstLeftIndex;i--){
+            int start2=sb.lastIndexOf(")")-1;
+            for(int i=start2;i>firstLeftIndex;i--){
                 if(sb.charAt(i)=='(' && !leftIndexes.contains(i) && sb.charAt(i-1)!='(') leftIndexes.add(i);
             }
         }
@@ -144,10 +144,11 @@ public class Parentheses
                 for(int j=0;j<leftIndexes.size();j++){
                     leftIndexes.set(j, leftIndexes.get(j)-rightMinNumber);
                 }
+                Collections.sort(leftIndexes);
                 int firstLeftIndex=leftIndexes.get(0);
                 List<String> rightSideList = generate(sb,leftMinNumber,leftIndexes,'(',firstLeftIndex+1, sb.length());
                 String middle = sb.substring(lastRightIndex+1,firstLeftIndex);
-                return connect(rightSideList,middle,leftSideList);
+                return connect(leftSideList.subList(0, lastRightIndex+1),middle,rightSideList.subList(firstLeftIndex+1, sb.length()));
             }
             //there are only right parentheses to be removed
             return leftSideList; 
