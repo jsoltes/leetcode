@@ -136,8 +136,8 @@ public class Parentheses
         if(rightMinNumber==0 && leftMinNumber==0) return Arrays.asList(sb.toString());
         //second case - there are at least right parentheses to be removed
         if(rightMinNumber!=0) {
-            int lastRightIndex=rightIndexes.get(rightIndexes.size()-1);
-            List<String> leftSideList = generate(sb,rightMinNumber,rightIndexes,')',0,lastRightIndex+1);
+            int biggestRightIndex=rightIndexes.get(rightIndexes.size()-1);
+            List<String> leftSideList = generate(sb,rightMinNumber,rightIndexes,')',0,biggestRightIndex+1);
             //there are also left parentheses to be removed
             if(leftMinNumber!=0){
                 //decrements the left indexes fro a number of right parentheses removed
@@ -145,10 +145,10 @@ public class Parentheses
                     leftIndexes.set(j, leftIndexes.get(j)-rightMinNumber);
                 }
                 Collections.sort(leftIndexes);
-                int firstLeftIndex=leftIndexes.get(0);
-                List<String> rightSideList = generate(sb,leftMinNumber,leftIndexes,'(',firstLeftIndex+1, sb.length());
-                String middle = sb.substring(lastRightIndex+1,firstLeftIndex);
-                return connect(leftSideList.subList(0, lastRightIndex+1),middle,rightSideList.subList(firstLeftIndex+1, sb.length()));
+                int smallestLeftIndex=leftIndexes.get(0);
+                List<String> rightSideList = generate(sb,leftMinNumber,leftIndexes,'(',smallestLeftIndex+1, sb.length());
+                String middle = sb.substring(biggestRightIndex+1,smallestLeftIndex);
+                return connect(leftSideList.subList(0, biggestRightIndex+1),middle,rightSideList.subList(smallestLeftIndex+1, sb.length()));
             }
             //there are only right parentheses to be removed
             return leftSideList; 
