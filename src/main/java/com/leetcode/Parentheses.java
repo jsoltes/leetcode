@@ -14,81 +14,35 @@ import java.util.List;
  */
 public class Parentheses 
 {  
-    public List<String> generate(StringBuilder sb,List<Integer> rightIndexes, List<Integer> leftIndexes, int rightMinNumber, int leftMinNumber){
+    public List<String> generate(StringBuilder side,int minNumber, List<Integer> indexes, char parenthesis){
         List<String> solutions=new ArrayList<String>(); 
-        //prepared="(()())())r())"
-        //rightMinNumber=2
-        //leftMinNumber=0
-        //rightIndexes=2,5,8,12
-        //leftIndexes=empty
-
-        //side of the solution with right parentheses
-        for(int i:rightIndexes){
-            System.out.println(sb);
-            sb.deleteCharAt(i);
-            //if there are 2 and more to be removed, we have to go deeeper
-            if(rightMinNumber>1){
-                //everytime we go deeper, we have to decrease indexes, because the string shortenes
-                //also it is enough to go through the sublist of right indexes
-                List<Integer> sublist=rightIndexes.subList(rightIndexes.indexOf(i)+1, rightIndexes.size());
-                for(int j=0;j<sublist.size();j++){
-                    sublist.set(j, sublist.get(j)-1);
+        
+        int isize=indexes.size();
+        for (int i=0;i<isize;i++){
+            side.deleteCharAt(indexes.get(i));
+            if (minNumber>1){
+                indexes=indexes.subList(i+1, isize);
+                for(int j=0;j<indexes.size();j++){
+                    indexes.set(j, indexes.get(j)-1);
                 }
-                solutions.addAll(generate(sb,sublist, leftIndexes, rightMinNumber-1, leftMinNumber));
+                solutions.addAll(generate(side,minNumber-1,indexes,parenthesis));
             }
-            else{
-                solutions.add(sb.toString());
-            }
-            sb.insert(i,")");//returns stringbuilder into the original state
-            }
-        //side of the solution with left parentheses
-        if(leftMinNumber>0){
-            if(solutions.isEmpty())
-                for(int j:leftIndexes){
-                    sb.deleteCharAt(j);
-                    //if there are 2 and more to be removed, we have to go deeeper
-                    if(leftMinNumber>1){
-                        //everytime we go deeper, we have to decrease indexes, because the string shortenes
-                        //also it is enough to go through the sublist of left indexes
-                        List<Integer> sublist=rightIndexes.subList(rightIndexes.indexOf(j)+1, rightIndexes.size());
-                        for(int i=0;j<sublist.size();i++){
-                            sublist.set(i, sublist.get(i)-1);
-                        }
-                        solutions.addAll(generate(sb,rightIndexes, leftIndexes, rightMinNumber, leftMinNumber-1));
-                    }
-                    else{
-                        solutions.add(sb.toString());
-                    }
-                    sb.insert(j,"(");
-                }
-            else {
-                List<String> solutions2=new ArrayList<String>();
-                for(String s:solutions){
-                    StringBuilder sb2=new StringBuilder(s);
-                    for(int j:leftIndexes){
-                        sb2.deleteCharAt(j);
-                        //if there are 2 and more to be removed, we have to go deeeper
-                        if(leftMinNumber>1){
-                            //everytime we go deeper, we have to decrease indexes, because the string shortenes
-                            //also it is enough to go through the sublist of left indexes
-                            List<Integer> sublist=rightIndexes.subList(rightIndexes.indexOf(j)+1, rightIndexes.size());
-                                for(int i=0;j<sublist.size();i++){
-                                    sublist.set(i, sublist.get(i)-1);
-                                }
-                            solutions.addAll(generate(sb2,rightIndexes, leftIndexes, rightMinNumber, leftMinNumber-1));
-                        }
-                        else{
-                            solutions2.add(sb2.toString());
-                        }
-                        sb2.insert(j,"(");
-                    }
-                }
-                return solutions2;
-            }
+            else solutions.add(side.toString());
+            side.insert(i, parenthesis);
         }
         return solutions;
     }
     
+    public List<String> connect(List<String> rightSideList,String middle,List<String> leftSideList){
+        List<String> solutions=new ArrayList<String>();
+        for(String r:rightSideList){
+            for(String l:leftSideList){
+                solutions.add(r+middle+l);
+            }
+        }
+        return solutions;
+    }
+            
     public List<String> removeInvalidParentheses(String s){
    ////////////firstly we get rightMinNumber and rightMinIndexes/////////////////////// 
         StringBuilder sb = new StringBuilder(s);
@@ -184,12 +138,12 @@ public class Parentheses
         //second case - there are at least right parentheses to be removed
         if(rightMinNumber!=0) {
             int lastRightIndex=rightIndexes.get(rightIndexes.size()-1);
-            String leftSide=sb.substring(0, lastRightIndex+1);
-            List<String> leftSideList = generate(leftSide,rightMinNumber,rightIndexes,')'); //generate to be rewritten
+            StringBuilder leftSide=new StringBuilder(sb.substring(0, lastRightIndex+1));
+            List<String> leftSideList = generate(leftSide,rightMinNumber,rightIndexes,')');
             //there are also left parentheses to be removed
             if(leftMinNumber!=0){
                 int firstLeftIndex=leftIndexes.get(0);
-                String rightSide=sb.substring(firstLeftIndex+1, sb.length());
+                StringBuilder rightSide=new StringBuilder(sb.substring(firstLeftIndex+1, sb.length()));
                 List<String> rightSideList = generate(rightSide,leftMinNumber,leftIndexes,'(');
                 String middle = sb.substring(lastRightIndex+1,firstLeftIndex);
                 return connect(rightSideList,middle,leftSideList);
@@ -198,12 +152,10 @@ public class Parentheses
             return leftSideList; 
         } 
         //third case - there are only left parentheses to be removed
-        if(rightMinNumber==0){
-            int firstLeftIndex=leftIndexes.get(0);
-            String rightSide=sb.substring(firstLeftIndex+1, sb.length());
-            List<String> rightSideList = generate(rightSide,leftMinNumber,leftIndexes,'(');
-            return rightSideList;
-        }
+        int firstLeftIndex=leftIndexes.get(0);
+        StringBuilder rightSide=new StringBuilder(sb.substring(firstLeftIndex+1, sb.length()));
+        List<String> rightSideList = generate(rightSide,leftMinNumber,leftIndexes,'(');
+        return rightSideList;
     }
     
     public static void main(String[] args) {
