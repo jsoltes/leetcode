@@ -139,23 +139,20 @@ public class Parentheses
         if(rightMinNumber==0 && leftMinNumber==0) return Arrays.asList(sb.toString());
         //second case - there are at least right parentheses to be removed
         if(rightMinNumber!=0) { //
-            System.out.println("sb "+sb);
             List<String> leftSideList = generate(sb,rightMinNumber,rightIndexes,')');
-            System.out.println("leftSideList "+ leftSideList);
             //if there are also left parentheses to be removed
             if(leftMinNumber!=0){
                 List<String> rightSideList = generate(sb,leftMinNumber,leftIndexes,'(');
-                
                 Collections.sort(leftIndexes); //TODO zistit ci to tu potrebujem
                 int smallestLeftIndex=leftIndexes.get(0);
                 int biggestRightIndex=rightIndexes.get(rightIndexes.size()-1);
                 String middle = sb.substring(biggestRightIndex+1,smallestLeftIndex);
-                //every element in rightSideList and leftSideList have to be substringed so that we can connect them
+                //every element in rightSideList and leftSideList have to be trimmed so that we can connect them
                 for(int j=0;j<leftSideList.size();j++){
-                    leftSideList.set(j, leftSideList.get(j).substring(0, biggestRightIndex+1));
+                    leftSideList.set(j, leftSideList.get(j).substring(0, biggestRightIndex+1-rightMinNumber));
                 }
                 for(int j=0;j<rightSideList.size();j++){
-                    rightSideList.set(j, rightSideList.get(j).substring(smallestLeftIndex+1, sb.length()-rightMinNumber));
+                    rightSideList.set(j, rightSideList.get(j).substring(smallestLeftIndex+1-rightMinNumber, sb.length()-rightMinNumber));
                 }
                 //tu miesam hrusky s jablkami robim s listom to, co som chcel sobit so stringami, ktore ten list obsahuje - opravit
                 return connect(leftSideList,middle,rightSideList);
@@ -170,7 +167,7 @@ public class Parentheses
     
     public static void main(String[] args) {
         Parentheses p = new Parentheses();
-        List<String> result = p.removeInvalidParentheses("())v)(()(((((())");
-        System.out.println(result);
+        List<String> result = p.removeInvalidParentheses("())((()))x)(v()(h");
+        System.out.println("result "+result);
     }
 }
