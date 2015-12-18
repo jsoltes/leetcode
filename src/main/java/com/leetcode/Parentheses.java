@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class Parentheses 
 {  
-    public List<String> generate(StringBuilder side,int minNumber, List<Integer> indexes, char parenthesis){
+    public List<String> generate(StringBuilder side,int minNumber, List<Integer> indexes, char parenthesis){//
         List<String> solutions=new ArrayList<String>(); 
         
         int isize=indexes.size();
@@ -39,7 +39,7 @@ public class Parentheses
         List<String> solutions=new ArrayList<String>();
         for(String r:rightSideList){
             for(String l:leftSideList){
-                solutions.add(r+middle+l);
+                solutions.add(l+middle+r);
             }
         }
         return solutions;
@@ -139,19 +139,26 @@ public class Parentheses
         if(rightMinNumber==0 && leftMinNumber==0) return Arrays.asList(sb.toString());
         //second case - there are at least right parentheses to be removed
         if(rightMinNumber!=0) { //
-            List<String> leftSideList = generate(sb,rightMinNumber,rightIndexes,')');//()())(),1,{1,4},')'
-            //there are also left parentheses to be removed
+            System.out.println("sb "+sb);
+            List<String> leftSideList = generate(sb,rightMinNumber,rightIndexes,')');
+            System.out.println("leftSideList "+ leftSideList);
+            //if there are also left parentheses to be removed
             if(leftMinNumber!=0){
-                //decrements the left indexes fro a number of right parentheses removed
-                for(int j=0;j<leftIndexes.size();j++){
-                    leftIndexes.set(j, leftIndexes.get(j)-rightMinNumber);
-                }
-                Collections.sort(leftIndexes); //TODO zistit ci to tu potrebujem
                 List<String> rightSideList = generate(sb,leftMinNumber,leftIndexes,'(');
+                
+                Collections.sort(leftIndexes); //TODO zistit ci to tu potrebujem
                 int smallestLeftIndex=leftIndexes.get(0);
                 int biggestRightIndex=rightIndexes.get(rightIndexes.size()-1);
                 String middle = sb.substring(biggestRightIndex+1,smallestLeftIndex);
-                return connect(leftSideList.subList(0, biggestRightIndex+1),middle,rightSideList.subList(smallestLeftIndex+1, sb.length()));
+                //every element in rightSideList and leftSideList have to be substringed so that we can connect them
+                for(int j=0;j<leftSideList.size();j++){
+                    leftSideList.set(j, leftSideList.get(j).substring(0, biggestRightIndex+1));
+                }
+                for(int j=0;j<rightSideList.size();j++){
+                    rightSideList.set(j, rightSideList.get(j).substring(smallestLeftIndex+1, sb.length()-rightMinNumber));
+                }
+                //tu miesam hrusky s jablkami robim s listom to, co som chcel sobit so stringami, ktore ten list obsahuje - opravit
+                return connect(leftSideList,middle,rightSideList);
             }
             //there are only right parentheses to be removed
             return leftSideList; 
@@ -163,7 +170,7 @@ public class Parentheses
     
     public static void main(String[] args) {
         Parentheses p = new Parentheses();
-        List<String> result = p.removeInvalidParentheses("()()))()");
+        List<String> result = p.removeInvalidParentheses("())v)(()(((((())");
         System.out.println(result);
     }
 }
