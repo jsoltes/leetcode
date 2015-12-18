@@ -18,8 +18,9 @@ public class Parentheses
         List<String> solutions=new ArrayList<String>(); 
         
         int isize=indexes.size();
-        for (int i=0;i<isize;i++){ //iterates through indexes of indexes!
-            side.deleteCharAt(indexes.get(i));
+        for (int i=0;i<isize;i++){ //iterates through indexes of indexes! 0,
+            int position = indexes.get(i);
+            side.deleteCharAt(position);
             if (minNumber>1){
                 isize--;
                 indexes=indexes.subList(i, indexes.size());
@@ -29,7 +30,7 @@ public class Parentheses
                 solutions.addAll(generate(side,minNumber--,indexes,parenthesis));
             }
             else solutions.add(side.toString());
-            side.insert(i, parenthesis);
+            side.insert(position, parenthesis);
         }
         return solutions;
     }
@@ -79,7 +80,7 @@ public class Parentheses
 /////////then we add all other possible indexes to rightMinIndexes and we create rightIndexes/////////
         List<Integer> rightIndexes=new ArrayList<Integer>();
         if(rightMinNumber>0){
-            //adds other possible right indexes
+            //adds other possible right indexes 
             int start=sb.indexOf("(")+1;
             for(int rightMinIndex:rightMinIndexes){
                 for(int i=start;i<rightMinIndex;i++){
@@ -137,8 +138,8 @@ public class Parentheses
         //first case - the string is already prepared - so the program has only one solution
         if(rightMinNumber==0 && leftMinNumber==0) return Arrays.asList(sb.toString());
         //second case - there are at least right parentheses to be removed
-        if(rightMinNumber!=0) {
-            List<String> leftSideList = generate(sb,rightMinNumber,rightIndexes,')');
+        if(rightMinNumber!=0) { //
+            List<String> leftSideList = generate(sb,rightMinNumber,rightIndexes,')');//()())(),1,{1,4},')'
             //there are also left parentheses to be removed
             if(leftMinNumber!=0){
                 //decrements the left indexes fro a number of right parentheses removed
@@ -162,7 +163,7 @@ public class Parentheses
     
     public static void main(String[] args) {
         Parentheses p = new Parentheses();
-        List<String> result = p.removeInvalidParentheses(")(((()(y((u()(z()()");
+        List<String> result = p.removeInvalidParentheses("()()))()");
         System.out.println(result);
     }
 }
