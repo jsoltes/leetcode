@@ -14,21 +14,24 @@ import java.util.List;
  */
 public class Parentheses 
 {  
-    public List<String> generate(StringBuilder side,int minNumber, List<Integer> indexes, char parenthesis){//
+    public List<String> generate(StringBuilder side,int minNumber, List<Integer> indexes, char parenthesis){
         List<String> solutions=new ArrayList<String>(); 
         
-        int isize=indexes.size();//3
-        for (int i=0;i<isize;i++){ //iterates through indexes of indexes! 0,
-            int position = indexes.get(i);//0
-            
+        System.out.println("indexes: "+indexes);
+        
+        int isize=indexes.size();
+        for (int i=0;i<isize;i++){ //iterates through indexes of indexes! 
+            int position = indexes.get(i);
             side.deleteCharAt(position);
             if (minNumber>1){        
                 isize--;
                 indexes=indexes.subList(i+1, indexes.size());
+                isize=indexes.size();
                 for(int j=0;j<isize;j++){
                     indexes.set(j, indexes.get(j)-1);
+                    
                 }
-                solutions.addAll(generate(side,minNumber--,indexes,parenthesis));
+                solutions.addAll(generate(side,minNumber-1,indexes,parenthesis));
             }
             else solutions.add(side.toString());
             side.insert(position, parenthesis);
@@ -170,7 +173,7 @@ public class Parentheses
     
     public static void main(String[] args) {
         Parentheses p = new Parentheses();
-        List<String> result = p.removeInvalidParentheses("(r(()()(");
+        List<String> result = p.removeInvalidParentheses("()())())))())(()");
         System.out.println("result "+result);
     }
 }
