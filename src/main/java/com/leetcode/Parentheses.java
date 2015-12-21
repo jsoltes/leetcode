@@ -93,7 +93,7 @@ public class Parentheses
                 //odstranit - ak left =0; ak left=1 a na i-1 pozicii nie je symbol; ak left je viac ako 1 a na i-1 pozicii je to iste ako na i-2
                 char previousChar=0;
                 if(left>=1) previousChar=sb.charAt(i-1);
-                if((left==0) || (left==1 && (previousChar=='(' || previousChar==')')) || (left>=2 && previousChar==sb.charAt(i-2))){
+                if((left==0) || (left==1 && (previousChar=='(' || previousChar==')')) || (left==2 && previousChar==sb.charAt(i-2))){
                     sb.deleteCharAt(i); //after this cursor goes on the next character so we have to decrease it
                     i--; //because otherways we would skip one character
                     sblength--; //because the string is now shorter
@@ -138,7 +138,7 @@ public class Parentheses
                     //odstranit - ak right =0; ak right=1 a na i+1 pozicii nie je symbol; ak right je viac ako 1 a na i+1 pozicii je to iste ako na i+2
                     char nextChar = 0;
                     if(right>=1) nextChar=sb.charAt(i+1);
-                    if((right==0) || (right==1 && (nextChar=='(' || nextChar==')')) || (right>=2 && nextChar==sb.charAt(i+2))){
+                    if((right==0) || (right==1 && (nextChar=='(' || nextChar==')')) || (right==2 && nextChar==sb.charAt(i+2))){
                         sb.deleteCharAt(i);
                         //everytime we delete we have to decrement all left indexes
                         int size=leftIndexes.size();
@@ -222,7 +222,7 @@ public class Parentheses
     
     public static void main(String[] args) {
         Parentheses p = new Parentheses();
-        List<String> result = p.removeInvalidParentheses("(r(()()(");
+        List<String> result = p.removeInvalidParentheses("((()())p");
         System.out.println("result "+result);
     }
 }
