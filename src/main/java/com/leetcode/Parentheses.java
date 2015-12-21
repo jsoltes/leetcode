@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class Parentheses 
 {  
-    public List<String> generate(StringBuilder sb,int minNumber, List<Integer> indexes, char parenthesis){
+    public List<String> generate(StringBuilder sb,int minNumber, List<Integer> indexes, char parenthesis){//
         List<String> solutions=new ArrayList<String>();
         StringBuilder original=new StringBuilder(sb);
         int isize=indexes.size();
@@ -161,7 +161,6 @@ public class Parentheses
             }
         }
     }
-
         System.out.println("sb "+sb);
         System.out.println("rightMinNumber "+rightMinNumber);
         System.out.println("leftMinNumber "+leftMinNumber);
@@ -222,7 +221,7 @@ public class Parentheses
     
     public static void main(String[] args) {
         Parentheses p = new Parentheses();
-        List<String> result = p.removeInvalidParentheses("((()())p");
+        List<String> result = p.removeInvalidParentheses("((()))))())(");
         System.out.println("result "+result);
     }
 }
