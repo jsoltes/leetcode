@@ -15,24 +15,24 @@ import java.util.List;
 public class Parentheses 
 {  
     public List<String> generate(StringBuilder sb,int minNumber, List<Integer> indexes, char parenthesis){//(r(()(),2,[0, 2, 5]
-        List<String> solutions=new ArrayList<String>(); 
-        
+        List<String> solutions=new ArrayList<String>();
+        StringBuilder original=new StringBuilder(sb);
         int isize=indexes.size();
-        for (int i=0;i<isize;i++){ //iterates through indexes of the indexes! 
-            int position = indexes.get(i);
-            sb.deleteCharAt(indexes.get(i));
+        for (int i=0;i<isize;i++){
+            int position = indexes.get(i);//0;
+            sb.deleteCharAt(indexes.get(i));//r(()();
+            //////recursive case//////
             if (minNumber>1){ 
-                indexes=indexes.subList(i+1,isize);
-                isize--;
+                indexes=indexes.subList(i+1,isize);//[2,5]
+                isize--;//2
                 for(int j=0;j<isize;j++){
                     indexes.set(j, indexes.get(j)-1);
-                }
-                //solutions.addAll(generate(sb,minNumber-1,indexes,parenthesis));
-                //return solutions;
-                System.out.println("recursive case call");
-                return generate(sb,minNumber-1,indexes,parenthesis);
+                }//[1,4]
+                solutions.addAll(generate(sb,minNumber-1,indexes,parenthesis));//[r()(),r(())]
+                return solutions;
             }
-            else solutions.add(sb.toString());
+            //////end of recursive case//////
+            solutions.add(sb.toString());
             sb.insert(position, parenthesis);
         }
         return solutions;
@@ -137,13 +137,13 @@ public class Parentheses
             }
         }
     }
-        /*
+
         System.out.println("sb "+sb);
         System.out.println("rightMinNumber "+rightMinNumber);
         System.out.println("leftMinNumber "+leftMinNumber);
         System.out.println("leftIndexes " +leftIndexes);
         System.out.println("rightIndexes "+rightIndexes);
-        */
+
 ///////////we use rightMinNumber and leftMinNumber to manage the flow of the program////////////////////
         //first case - the string is already prepared - so the program has only one solution
         if(rightMinNumber==0 && leftMinNumber==0) return Arrays.asList(sb.toString());
