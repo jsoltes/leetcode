@@ -180,4 +180,12 @@ public class ParenthesesTest
         List<String> expected = new ArrayList<String>(Arrays.asList("(((()))x)v()h","(((()))x)(v)h","()((())x)v()h","()((())x)(v)h","()((()))xv()h","()((()))x(v)h"));
         assertTrue(expected.containsAll(result) && result.containsAll(expected));
     }   
+    
+    public void testRemoveParentheses22 ()
+    {
+        List<String> result = p.removeInvalidParentheses("(r(()()(");
+        List<String> expected = new ArrayList<String>(Arrays.asList("r()()","r(())","(r)()","(r())"));
+        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+    } 
+            
 }

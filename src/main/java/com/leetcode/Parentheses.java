@@ -14,27 +14,26 @@ import java.util.List;
  */
 public class Parentheses 
 {  
-    public List<String> generate(StringBuilder side,int minNumber, List<Integer> indexes, char parenthesis){
+    public List<String> generate(StringBuilder sb,int minNumber, List<Integer> indexes, char parenthesis){//(r(()(),2,[0, 2, 5]
         List<String> solutions=new ArrayList<String>(); 
         
-        System.out.println("indexes: "+indexes);
-        
         int isize=indexes.size();
-        for (int i=0;i<isize;i++){ //iterates through indexes of indexes! 
+        for (int i=0;i<isize;i++){ //iterates through indexes of the indexes! 
             int position = indexes.get(i);
-            side.deleteCharAt(position);
-            if (minNumber>1){        
+            sb.deleteCharAt(indexes.get(i));
+            if (minNumber>1){ 
+                indexes=indexes.subList(i+1,isize);
                 isize--;
-                indexes=indexes.subList(i+1, indexes.size());
-                isize=indexes.size();
                 for(int j=0;j<isize;j++){
                     indexes.set(j, indexes.get(j)-1);
-                    
                 }
-                solutions.addAll(generate(side,minNumber-1,indexes,parenthesis));
+                //solutions.addAll(generate(sb,minNumber-1,indexes,parenthesis));
+                //return solutions;
+                System.out.println("recursive case call");
+                return generate(sb,minNumber-1,indexes,parenthesis);
             }
-            else solutions.add(side.toString());
-            side.insert(position, parenthesis);
+            else solutions.add(sb.toString());
+            sb.insert(position, parenthesis);
         }
         return solutions;
     }
@@ -138,11 +137,19 @@ public class Parentheses
             }
         }
     }
+        /*
+        System.out.println("sb "+sb);
+        System.out.println("rightMinNumber "+rightMinNumber);
+        System.out.println("leftMinNumber "+leftMinNumber);
+        System.out.println("leftIndexes " +leftIndexes);
+        System.out.println("rightIndexes "+rightIndexes);
+        */
 ///////////we use rightMinNumber and leftMinNumber to manage the flow of the program////////////////////
         //first case - the string is already prepared - so the program has only one solution
         if(rightMinNumber==0 && leftMinNumber==0) return Arrays.asList(sb.toString());
         //second case - there are at least right parentheses to be removed
         if(rightMinNumber!=0) { //
+            
             List<String> leftSideList = generate(sb,rightMinNumber,rightIndexes,')');
             //if there are also left parentheses to be removed
             if(leftMinNumber!=0){
@@ -159,21 +166,90 @@ public class Parentheses
                 for(int j=0;j<rightSideList.size();j++){
                     rightSideList.set(j, rightSideList.get(j).substring(smallestLeftIndex+1-rightMinNumber, sb.length()-rightMinNumber));
                 }
-                //tu miesam hrusky s jablkami robim s listom to, co som chcel sobit so stringami, ktore ten list obsahuje - opravit
+                //for this case (r(()()->(r)() we have to add this special case:
+                left=0;
+                if(leftMinNumber>=2){
+                    StringBuilder original=new StringBuilder(sb);
+                    for(int i=0;i<sb.length();i++){
+                        if(sb.charAt(i)=='(') left++;
+                        if(sb.charAt(i)!='('){
+                            if(left==leftMinNumber) {
+                            sb.delete(i-left, i);
+                            rightSideList.add(sb.toString());
+                            sb=original;
+                            }
+                            left=0;
+                        }
+                    }
+                }
+                int right=0;
+                if(rightMinNumber>=2){
+                    StringBuilder original=new StringBuilder(sb);
+                    for(int i=0;i<sb.length();i++){
+                        if(sb.charAt(i)==')') left++;
+                        if(sb.charAt(i)!=')'){
+                            if(left==leftMinNumber) {
+                            sb.delete(i-left, i);
+                            leftSideList.add(sb.toString());
+                            sb=original;
+                            }
+                            left=0;
+                        }
+                    }
+                }
+                //end of the special case
                 return connect(leftSideList,middle,rightSideList);
             }
             //there are only right parentheses to be removed
+            //for this case (r(()()->(r)() we have to add this special case:
+                int right=0;
+                if(rightMinNumber>=2){
+                    StringBuilder original=new StringBuilder(sb);
+                    for(int i=0;i<sb.length();i++){
+                        if(sb.charAt(i)==')') left++;
+                        if(sb.charAt(i)!=')'){
+                            if(left==leftMinNumber) {
+                            sb.delete(i-left, i);
+                            leftSideList.add(sb.toString());
+                            sb=original;
+                            }
+                            left=0;
+                        }
+                    }
+                }
+            //end of the special case
             return leftSideList; 
         } 
         //third case - there are only left parentheses to be removed
         Collections.sort(leftIndexes);
         List<String> rightSideList = generate(sb,leftMinNumber,leftIndexes,'(');
+        //for this case (r(()()->(r)() we have to add this special case:
+                left=0;
+                if(leftMinNumber>=2){
+                    StringBuilder original=new StringBuilder(sb);
+                    for(int i=0;i<sb.length();i++){
+                        if(sb.charAt(i)=='(') left++;
+                        if(sb.charAt(i)!='('){
+                            if(left==leftMinNumber) {
+                            sb.delete(i-left, i);
+                            rightSideList.add(sb.toString());
+                            sb=original;
+                            }
+                            left=0;
+                        }
+                    }
+                }
+                //end of the special case
         return rightSideList;
     }
     
     public static void main(String[] args) {
         Parentheses p = new Parentheses();
-        List<String> result = p.removeInvalidParentheses("()())())))())(()");
+        List<String> result = p.removeInvalidParentheses("(r(()()(");
         System.out.println("result "+result);
+        StringBuilder sb =new StringBuilder("ab");
+        StringBuilder original =new StringBuilder(sb);
+        sb.deleteCharAt(1);
+        System.out.println("original "+original);
     }
 }
