@@ -191,56 +191,20 @@ public class Parentheses
                 for(int j=0;j<rightSideList.size();j++){
                     rightSideList.set(j, rightSideList.get(j).substring(smallestLeftIndex+1-rightMinNumber, sb.length()-rightMinNumber));
                 }
-                //for this case (r(()()->(r)() we have to add this special case:
-                left=0;
+                //for this case (r(()()->(r)() we have to add another special cases:
                 if(leftMinNumber>=2){
-                    sb=original;
-                    for(int i=0;i<sb.length();i++){
-                        if(sb.charAt(i)=='(') left++;
-                        if(sb.charAt(i)!='('){
-                            if(left==leftMinNumber) {
-                            sb.delete(i-left, i);
-                            rightSideList.add(sb.toString());
-                            sb=original;
-                            }
-                            left=0;
-                        }
-                    }
+                    rightSideList.addAll(generateSpecial(original,leftMinNumber,'('));
                 }
-                int right=0;
                 if(rightMinNumber>=2){
-                    sb=original;
-                    for(int i=0;i<sb.length();i++){
-                        if(sb.charAt(i)==')') left++;
-                        if(sb.charAt(i)!=')'){
-                            if(left==leftMinNumber) {
-                            sb.delete(i-right, i);
-                            leftSideList.add(sb.toString());
-                            sb=original;
-                            }
-                            left=0;
-                        }
-                    }
+                    leftSideList.addAll(generateSpecial(original,rightMinNumber,')'));
                 }
-                //end of the special case
+                //end of the special cases
                 return connect(leftSideList,middle,rightSideList);
             }
             //there are only right parentheses to be removed
             //for this case (r(()()->(r)() we have to add this special case:
-                int right=0;
                 if(rightMinNumber>=2){
-                    sb=original;
-                    for(int i=0;i<sb.length();i++){
-                        if(sb.charAt(i)==')') left++;
-                        if(sb.charAt(i)!=')'){
-                            if(left==leftMinNumber) {
-                            sb.delete(i-right, i);
-                            leftSideList.add(sb.toString());
-                            sb=original;
-                            }
-                            left=0;
-                        }
-                    }
+                    leftSideList.addAll(generateSpecial(original,rightMinNumber,')'));
                 }
             //end of the special case
             return leftSideList; 
@@ -249,23 +213,10 @@ public class Parentheses
         Collections.sort(leftIndexes);
         List<String> rightSideList = generate(sb,leftMinNumber,leftIndexes,'(');
         //for this case (r(()()->(r)() we have to add this special case:
-                left=0;
-                if(leftMinNumber>=2){
-                    //StringBuilder original=new StringBuilder(sb);
-                    sb=original;
-                    for(int i=0;i<sb.length();i++){
-                        if(sb.charAt(i)=='(') left++;
-                        if(sb.charAt(i)!='('){
-                            if(left==leftMinNumber) {
-                            sb.delete(i-left, i);
-                            rightSideList.add(sb.toString());
-                            sb=original;
-                            }
-                            left=0;
-                        }
-                    }
-                }
-                //end of the special case
+        if(leftMinNumber>=2){
+            rightSideList.addAll(generateSpecial(original,leftMinNumber,'('));
+        }
+        //end of the special case
         return rightSideList;
     }
     
