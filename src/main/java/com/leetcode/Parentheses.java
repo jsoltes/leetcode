@@ -30,7 +30,6 @@ public class Parentheses
                     indexes.set(j, indexes.get(j)-1);
                 }
                 solutions.addAll(generate(sb,minNumber-1,indexes,parenthesis));
-                System.out.println("solutions "+solutions);
                 if(isize>=minNumber){
                     if(position+1==indexes2.get(i)){
                         indexes2=indexes2.subList(1,indexes2.size());
@@ -56,18 +55,23 @@ public class Parentheses
         return solutions;
     }
     //for special cases like this (r(()()->(r)() we have to generate extra solutions
-    public List<String> generateSpecial(StringBuilder sb,int minNumber,char parenthesis){//((())(()()
+    public List<String> generateSpecial(StringBuilder sb,int minNumber,char parenthesis){//l(((())((z))
         List<String> specialSolutions=new ArrayList<String>();
         int count=0;
+        boolean canRemove=false;
+        char otherParenthesis=0;
+        if(parenthesis=='(') otherParenthesis=')';
+        else otherParenthesis='(';
         StringBuilder original=new StringBuilder(sb);
         for(int i=0;i<sb.length();i++){
             if(sb.charAt(i)==parenthesis) count++;
             if(sb.charAt(i)!=parenthesis){
-                if(count>=minNumber && i-count!=0) {
+                if(count>=minNumber && canRemove) {
                     sb.delete(i-minNumber, i);
                     specialSolutions.add(sb.toString());
                     sb=original;
                 }
+                if(count!=0 || sb.charAt(i)==otherParenthesis) canRemove=true;
                 count=0;
             }
         }
@@ -226,7 +230,7 @@ public class Parentheses
     
     public static void main(String[] args) {
         Parentheses p = new Parentheses();
-        List<String> result = p.removeInvalidParentheses("l(((())((z))((");
+        List<String> result = p.removeInvalidParentheses("((()))))())(");
         System.out.println("result "+result);
     }
 }
