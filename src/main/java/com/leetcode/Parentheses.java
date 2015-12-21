@@ -52,21 +52,19 @@ public class Parentheses
         return solutions;
     }
     //for special cases like this (r(()()->(r)() we have to generate extra solutions
-    public List<String> generateSpecial(StringBuilder sb,int minNumber,char parenthesis){
+    public List<String> generateSpecial(StringBuilder sb,int minNumber,char parenthesis){//((())(()()
         List<String> specialSolutions=new ArrayList<String>();
         int count=0;
-        if(minNumber>=2){
-            StringBuilder original=new StringBuilder(sb);
-            for(int i=0;i<sb.length();i++){
-                if(sb.charAt(i)==parenthesis) count++;
-                if(sb.charAt(i)!=parenthesis){
-                    if(count>=minNumber) {
-                        sb.delete(i-minNumber, i);
-                        specialSolutions.add(sb.toString());
-                        sb=original;
-                    }
-                    count=0;
+        StringBuilder original=new StringBuilder(sb);
+        for(int i=0;i<sb.length();i++){
+            if(sb.charAt(i)==parenthesis) count++;
+            if(sb.charAt(i)!=parenthesis){
+                if(count>=minNumber && i-count!=0) {
+                    sb.delete(i-minNumber, i);
+                    specialSolutions.add(sb.toString());
+                    sb=original;
                 }
+                count=0;
             }
         }
         return specialSolutions;
@@ -200,6 +198,7 @@ public class Parentheses
                 //end of the special cases
                 return connect(leftSideList,middle,rightSideList);
             }
+            
             //there are only right parentheses to be removed
             //for this case (r(()()->(r)() we have to add this special case:
                 if(rightMinNumber>=2){
@@ -211,6 +210,7 @@ public class Parentheses
         //third case - there are only left parentheses to be removed
         Collections.sort(leftIndexes);
         List<String> rightSideList = generate(sb,leftMinNumber,leftIndexes,'(');
+        System.out.println("before special "+rightSideList);
         //for this case (r(()()->(r)() we have to add this special case:
         if(leftMinNumber>=2){
             rightSideList.addAll(generateSpecial(original,leftMinNumber,'('));
@@ -221,7 +221,7 @@ public class Parentheses
     
     public static void main(String[] args) {
         Parentheses p = new Parentheses();
-        List<String> result = p.removeInvalidParentheses("((()))))())(");
+        List<String> result = p.removeInvalidParentheses("((())(()(()(");
         System.out.println("result "+result);
     }
 }
