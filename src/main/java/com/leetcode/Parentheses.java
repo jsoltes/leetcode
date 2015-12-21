@@ -51,6 +51,26 @@ public class Parentheses
         }
         return solutions;
     }
+    //for special cases like this (r(()()->(r)() we have to generate extra solutions
+    public List<String> generateSpecial(StringBuilder sb,int minNumber,char parenthesis){
+        List<String> specialSolutions=new ArrayList<String>();
+        int count=0;
+        if(minNumber>=2){
+            StringBuilder original=new StringBuilder(sb);
+            for(int i=0;i<sb.length();i++){
+                if(sb.charAt(i)==parenthesis) count++;
+                if(sb.charAt(i)!=parenthesis){
+                    if(count==minNumber) {
+                        sb.delete(i-count, i);
+                        specialSolutions.add(sb.toString());
+                        sb=original;
+                    }
+                    count=0;
+                }
+            }
+        }
+        return specialSolutions;
+    }
             
     public List<String> removeInvalidParentheses(String s){
    ////////////firstly we get rightMinNumber and rightMinIndexes/////////////////////// 
@@ -194,7 +214,7 @@ public class Parentheses
                         if(sb.charAt(i)==')') left++;
                         if(sb.charAt(i)!=')'){
                             if(left==leftMinNumber) {
-                            sb.delete(i-left, i);
+                            sb.delete(i-right, i);
                             leftSideList.add(sb.toString());
                             sb=original;
                             }
@@ -214,7 +234,7 @@ public class Parentheses
                         if(sb.charAt(i)==')') left++;
                         if(sb.charAt(i)!=')'){
                             if(left==leftMinNumber) {
-                            sb.delete(i-left, i);
+                            sb.delete(i-right, i);
                             leftSideList.add(sb.toString());
                             sb=original;
                             }
