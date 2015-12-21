@@ -14,21 +14,25 @@ import java.util.List;
  */
 public class Parentheses 
 {  
-    public List<String> generate(StringBuilder sb,int minNumber, List<Integer> indexes, char parenthesis){//(r(()(),2,[0, 2, 5]
+    public List<String> generate(StringBuilder sb,int minNumber, List<Integer> indexes, char parenthesis){
         List<String> solutions=new ArrayList<String>();
         StringBuilder original=new StringBuilder(sb);
         int isize=indexes.size();
         for (int i=0;i<isize;i++){
-            int position = indexes.get(i);//0;
-            sb.deleteCharAt(indexes.get(i));//r(()();
+            int position = indexes.get(i);
+            sb.deleteCharAt(indexes.get(i));
             //////recursive case//////
-            if (minNumber>1){ 
-                indexes=indexes.subList(i+1,isize);//[2,5]
-                isize--;//2
+            if (minNumber>1){
+                indexes=indexes.subList(i+1,isize);
+                List<Integer> indexes2=new ArrayList<Integer>(indexes);
+                isize--;
                 for(int j=0;j<isize;j++){
                     indexes.set(j, indexes.get(j)-1);
-                }//[1,4]
-                solutions.addAll(generate(sb,minNumber-1,indexes,parenthesis));//[r()(),r(())]
+                }
+                solutions.addAll(generate(sb,minNumber-1,indexes,parenthesis));
+                if(isize>=minNumber){
+                    solutions.addAll(generate(original,minNumber,indexes2,parenthesis));
+                }
                 return solutions;
             }
             //////end of recursive case//////
