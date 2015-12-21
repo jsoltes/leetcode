@@ -268,5 +268,14 @@ public class ParenthesesTest
         Collections.sort(expected);
         assertEquals(expected,result);
     }
+    
+    public void testRemoveParentheses27 ()
+    {
+        List<String> result = p.removeInvalidParentheses(")(v)((m(())()(");
+        List<String> expected = new ArrayList<String>(Arrays.asList("(v)m(())()","(v)(m())()","(v)(m(()))","(v)((m))()","(v)((m()))"));
+        Collections.sort(result);
+        Collections.sort(expected);
+        assertEquals(expected,result);
+    }
             
 }
