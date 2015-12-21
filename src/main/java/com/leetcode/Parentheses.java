@@ -152,6 +152,7 @@ public class Parentheses
         //first case - the string is already prepared - so the program has only one solution
         if(rightMinNumber==0 && leftMinNumber==0) return Arrays.asList(sb.toString());
         //second case - there are at least right parentheses to be removed
+        StringBuilder original=new StringBuilder(sb);
         if(rightMinNumber!=0) { //
             
             List<String> leftSideList = generate(sb,rightMinNumber,rightIndexes,')');
@@ -173,7 +174,7 @@ public class Parentheses
                 //for this case (r(()()->(r)() we have to add this special case:
                 left=0;
                 if(leftMinNumber>=2){
-                    StringBuilder original=new StringBuilder(sb);
+                    sb=original;
                     for(int i=0;i<sb.length();i++){
                         if(sb.charAt(i)=='(') left++;
                         if(sb.charAt(i)!='('){
@@ -188,7 +189,7 @@ public class Parentheses
                 }
                 int right=0;
                 if(rightMinNumber>=2){
-                    StringBuilder original=new StringBuilder(sb);
+                    sb=original;
                     for(int i=0;i<sb.length();i++){
                         if(sb.charAt(i)==')') left++;
                         if(sb.charAt(i)!=')'){
@@ -208,7 +209,7 @@ public class Parentheses
             //for this case (r(()()->(r)() we have to add this special case:
                 int right=0;
                 if(rightMinNumber>=2){
-                    StringBuilder original=new StringBuilder(sb);
+                    sb=original;
                     for(int i=0;i<sb.length();i++){
                         if(sb.charAt(i)==')') left++;
                         if(sb.charAt(i)!=')'){
@@ -230,7 +231,8 @@ public class Parentheses
         //for this case (r(()()->(r)() we have to add this special case:
                 left=0;
                 if(leftMinNumber>=2){
-                    StringBuilder original=new StringBuilder(sb);
+                    //StringBuilder original=new StringBuilder(sb);
+                    sb=original;
                     for(int i=0;i<sb.length();i++){
                         if(sb.charAt(i)=='(') left++;
                         if(sb.charAt(i)!='('){
@@ -251,9 +253,5 @@ public class Parentheses
         Parentheses p = new Parentheses();
         List<String> result = p.removeInvalidParentheses("(r(()()(");
         System.out.println("result "+result);
-        StringBuilder sb =new StringBuilder("ab");
-        StringBuilder original =new StringBuilder(sb);
-        sb.deleteCharAt(1);
-        System.out.println("original "+original);
     }
 }
