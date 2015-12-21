@@ -30,8 +30,12 @@ public class Parentheses
                     indexes.set(j, indexes.get(j)-1);
                 }
                 solutions.addAll(generate(sb,minNumber-1,indexes,parenthesis));
+                System.out.println("solutions "+solutions);
                 if(isize>=minNumber){
-                    solutions.addAll(generate(original,minNumber,indexes2,parenthesis));
+                    if(position+1==indexes2.get(i)){
+                        indexes2=indexes2.subList(1,indexes2.size());
+                    }
+                    solutions.addAll(generate(original,minNumber,indexes2,parenthesis));//l(((())((z)),2,[2,7]
                 }
                 return solutions;
             }
@@ -210,8 +214,9 @@ public class Parentheses
         //third case - there are only left parentheses to be removed
         Collections.sort(leftIndexes);
         List<String> rightSideList = generate(sb,leftMinNumber,leftIndexes,'(');
-        System.out.println("before special "+rightSideList);
+        //System.out.println("before special "+rightSideList);
         //for this case (r(()()->(r)() we have to add this special case:
+        System.out.println("before special "+rightSideList);
         if(leftMinNumber>=2){
             rightSideList.addAll(generateSpecial(original,leftMinNumber,'('));
         }
@@ -221,7 +226,7 @@ public class Parentheses
     
     public static void main(String[] args) {
         Parentheses p = new Parentheses();
-        List<String> result = p.removeInvalidParentheses("((())(()(()(");
+        List<String> result = p.removeInvalidParentheses("l(((())((z))((");
         System.out.println("result "+result);
     }
 }

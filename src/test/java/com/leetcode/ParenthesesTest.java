@@ -2,6 +2,7 @@ package com.leetcode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import junit.framework.Test;
@@ -38,175 +39,234 @@ public class ParenthesesTest
     {
         List<String> result = p.removeInvalidParentheses("()())()");
         List<String> expected = new ArrayList<String>(Arrays.asList("()()()", "(())()"));
-        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+        Collections.sort(result);
+        Collections.sort(expected);
+        assertEquals(expected,result);
     }
     
     public void testRemoveParentheses2 ()
     {
         List<String> result = p.removeInvalidParentheses("(a)())()");
         List<String> expected = new ArrayList<String>(Arrays.asList("(a)()()", "(a())()"));
-        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+        Collections.sort(result);
+        Collections.sort(expected);
+        assertEquals(expected,result);
     }
     
     public void testRemoveParentheses3 ()
     {
         List<String> result = p.removeInvalidParentheses(")(");
         List<String> expected = new ArrayList<String>(Arrays.asList(""));
-        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+        Collections.sort(result);
+        Collections.sort(expected);
+        assertEquals(expected,result);
     }
     
     public void testRemoveParentheses4 ()
     {
         List<String> result = p.removeInvalidParentheses("((");
         List<String> expected = new ArrayList<String>(Arrays.asList(""));
-        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+        Collections.sort(result);
+        Collections.sort(expected);
+        assertEquals(expected,result);
     }
     
     public void testRemoveParentheses5 ()
     {
         List<String> result = p.removeInvalidParentheses("()()))()");
         List<String> expected = new ArrayList<String>(Arrays.asList("()()()", "(())()"));
-        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+        Collections.sort(result);
+        Collections.sort(expected);
+        assertEquals(expected,result);
     }
     
     public void testRemoveParentheses6 ()
     {
         List<String> result = p.removeInvalidParentheses("()()))()(");
         List<String> expected = new ArrayList<String>(Arrays.asList("()()()", "(())()"));
-        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+        Collections.sort(result);
+        Collections.sort(expected);
+        assertEquals(expected,result);
     }
     
     public void testRemoveParentheses7 ()
     {
         List<String> result = p.removeInvalidParentheses("n");
         List<String> expected = new ArrayList<String>(Arrays.asList("n"));
-        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+        Collections.sort(result);
+        Collections.sort(expected);
+        assertEquals(expected,result);
     }
     
     public void testRemoveParentheses8 ()
     {
         List<String> result = p.removeInvalidParentheses("(()");
         List<String> expected = new ArrayList<String>(Arrays.asList("()"));
-        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+        Collections.sort(result);
+        Collections.sort(expected);
+        assertEquals(expected,result);
     }
     
     public void testRemoveParentheses9 ()
     {
         List<String> result = p.removeInvalidParentheses(")(f");
         List<String> expected = new ArrayList<String>(Arrays.asList("f"));
-        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+        Collections.sort(result);
+        Collections.sort(expected);
+        assertEquals(expected,result);
     }
     
     public void testRemoveParentheses10 ()
     {
         List<String> result = p.removeInvalidParentheses("x(");
         List<String> expected = new ArrayList<String>(Arrays.asList("x"));
-        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+        Collections.sort(result);
+        Collections.sort(expected);
+        assertEquals(expected,result);
     }
     
     public void testRemoveParentheses11 ()
     {
         List<String> result = p.removeInvalidParentheses("())(())(");
         List<String> expected = new ArrayList<String>(Arrays.asList("()(())"));
-        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+        Collections.sort(result);
+        Collections.sort(expected);
+        assertEquals(expected,result);
     }
     
     public void testRemoveParentheses12 ()
     {
         List<String> result = p.removeInvalidParentheses("())))()v(k");
         List<String> expected = new ArrayList<String>(Arrays.asList("()()vk"));
-        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+        Collections.sort(result);
+        Collections.sort(expected);
+        assertEquals(expected,result);
     }
     
     public void testRemoveParentheses13 ()
     {
         List<String> result = p.removeInvalidParentheses("())(((()m)(");
         List<String> expected = new ArrayList<String>(Arrays.asList("()(()m)"));
-        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+        Collections.sort(result);
+        Collections.sort(expected);
+        assertEquals(expected,result);
     }
     
     public void testRemoveParentheses14 ()
     {
         List<String> result = p.removeInvalidParentheses(")(()c))(");
         List<String> expected = new ArrayList<String>(Arrays.asList("((c))","(()c)"));
-        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+        Collections.sort(result);
+        Collections.sort(expected);
+        assertEquals(expected,result);
     }
     
     public void testRemoveParentheses15 ()
     {
         List<String> result = p.removeInvalidParentheses("))n((i()");
         List<String> expected = new ArrayList<String>(Arrays.asList("ni()","n(i)"));
-        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+        Collections.sort(result);
+        Collections.sort(expected);
+        assertEquals(expected,result);
     }
     
     public void testRemoveParentheses16 ()
     {
         List<String> result = p.removeInvalidParentheses("r)(p()q)ux)((()");
         List<String> expected = new ArrayList<String>(Arrays.asList("r(p(q)ux)()","r(p()qux)()","r(p()q)ux()"));
-        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+        Collections.sort(result);
+        Collections.sort(expected);
+        assertEquals(expected,result);
     }
     
      public void testRemoveParentheses17 ()
     {
         List<String> result = p.removeInvalidParentheses("())v)(()(((((())");
         List<String> expected = new ArrayList<String>(Arrays.asList("(v)()(())","(v)(()())","()v()(())","()v(()())"));
-        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+        Collections.sort(result);
+        Collections.sort(expected);
+        assertEquals(expected,result);
     }
      
      public void testRemoveParentheses18 ()
     {
         List<String> result = p.removeInvalidParentheses(")()m)(((()((()((((");
         List<String> expected = new ArrayList<String>(Arrays.asList("(m)()()","(m)(())","()m()()","()m(())"));
-        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+        Collections.sort(result);
+        Collections.sort(expected);
+        assertEquals(expected,result);
     }
     
       public void testRemoveParentheses19 ()
     {
         List<String> result = p.removeInvalidParentheses("()v)(()(())");
         List<String> expected = new ArrayList<String>(Arrays.asList("()v()(())","(v)()(())","()v(()())","(v)(()())"));
-        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+        Collections.sort(result);
+        Collections.sort(expected);
+        assertEquals(expected,result);
     }
       
        public void testRemoveParentheses20 ()
     {
         List<String> result = p.removeInvalidParentheses("()m)(((()()");
         List<String> expected = new ArrayList<String>(Arrays.asList("(m)()()","(m)(())","()m()()","()m(())"));
-        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+        Collections.sort(result);
+        Collections.sort(expected);
+        assertEquals(expected,result);
     }
        
     public void testRemoveParentheses21 ()
     {
         List<String> result = p.removeInvalidParentheses("())((()))x)(v()(h");
         List<String> expected = new ArrayList<String>(Arrays.asList("(((()))x)v()h","(((()))x)(v)h","()((())x)v()h","()((())x)(v)h","()((()))xv()h","()((()))x(v)h"));
-        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+        Collections.sort(result);
+        Collections.sort(expected);
+        assertEquals(expected,result);
     }   
     
     public void testRemoveParentheses22 ()
     {
         List<String> result = p.removeInvalidParentheses("(r(()()(");
         List<String> expected = new ArrayList<String>(Arrays.asList("r()()","r(())","(r)()","(r())"));
-        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+        Collections.sort(result);
+        Collections.sort(expected);
+        assertEquals(expected,result);
     } 
     
     public void testRemoveParentheses23 ()
     {
         List<String> result = p.removeInvalidParentheses("((()())p");
         List<String> expected = new ArrayList<String>(Arrays.asList("(()())p","((()))p"));
-        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+        Collections.sort(result);
+        Collections.sort(expected);
+        assertEquals(expected,result);
     }
     
     public void testRemoveParentheses24 ()
     {
         List<String> result = p.removeInvalidParentheses("((()))))())(");
         List<String> expected = new ArrayList<String>(Arrays.asList("((())())","((()))()"));
-        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+        Collections.sort(result);
+        Collections.sort(expected);
+        assertEquals(expected,result);
     }
     
     public void testRemoveParentheses25 ()
     {
         List<String> result = p.removeInvalidParentheses("((())(()(()(");
         List<String> expected = new ArrayList<String>(Arrays.asList("(())()()","(())(())","((()))()","((())())"));
-        assertTrue(expected.containsAll(result) && result.containsAll(expected));
+        Collections.sort(result);
+        Collections.sort(expected);
+        assertEquals(expected,result);
+    }
+    
+    public void testRemoveParentheses26 ()
+    {
+        List<String> result = p.removeInvalidParentheses("l(((())((z))((");
+        List<String> expected = new ArrayList<String>(Arrays.asList("l(())((z))","l((())(z))","l(((())z))"));
+        Collections.sort(result);
+        Collections.sort(expected);
+        assertEquals(expected,result);
     }
             
 }
