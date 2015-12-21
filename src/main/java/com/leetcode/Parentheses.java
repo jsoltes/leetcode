@@ -60,8 +60,8 @@ public class Parentheses
             for(int i=0;i<sb.length();i++){
                 if(sb.charAt(i)==parenthesis) count++;
                 if(sb.charAt(i)!=parenthesis){
-                    if(count==minNumber) {
-                        sb.delete(i-count, i);
+                    if(count>=minNumber) {
+                        sb.delete(i-minNumber, i);
                         specialSolutions.add(sb.toString());
                         sb=original;
                     }
