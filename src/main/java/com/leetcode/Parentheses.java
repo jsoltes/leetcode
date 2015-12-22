@@ -88,20 +88,26 @@ public class Parentheses
     }
     */
     //prepares string and returns one part(left or right) of the string
-    public StringBuilder prepare(StringBuilder sb){
+    public StringBuilder prepare(StringBuilder sb, char parenthesis){
         List<Integer> indexes=new ArrayList<Integer>();
         int minNumber=0;
         int balance=0;
         int left=0;
+        char otherParenthesis=0;
+        if (parenthesis=='(') otherParenthesis=')';
+        else{
+            sb.reverse();
+            otherParenthesis='(';
+        }
         //gets indexes of wrong right parentheses (from which you can get all possible removals of right parentheses)
         int sblength=sb.length();
         for(int i=0;i<sblength;i++){
             char currentChar=sb.charAt(i);
-            if(currentChar=='(') {
+            if(currentChar==parenthesis) {
                 balance++;
                 left++;
             }
-            if(currentChar==')') balance--;
+            if(currentChar==otherParenthesis) balance--;
             if(balance<0){
                 //in these cases we remove:((((()))))), )(), ()),)a)() in these cases not: ()()),()a)()
                 //remove - if left =0; if left=1 and on i-1 position isn't any symbol; if left is 2 and on i-1 position is the same as on i-2
@@ -118,6 +124,7 @@ public class Parentheses
                 balance=0;
             }
         }
+        if(parenthesis==')') sb.reverse();
         return sb;
     }
     

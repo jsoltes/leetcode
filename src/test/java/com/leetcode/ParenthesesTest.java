@@ -34,7 +34,13 @@ public class ParenthesesTest
     }
 
     Parentheses p = new Parentheses();
-   
+    
+    public void testPrepareLeftSide(){
+        StringBuilder result = p.prepare(new StringBuilder("())v)(()(((((())"),'l');
+        StringBuilder expected = new StringBuilder("()v)");
+        assertEquals(expected,result);
+    }
+            
     public void testRemoveParentheses1 ()
     {
         List<String> result = p.removeInvalidParentheses("()())()");
