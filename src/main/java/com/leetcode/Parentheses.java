@@ -88,7 +88,8 @@ public class Parentheses
     }
     */
     //prepares string and returns one part(left+middle or right) of the string
-    public String prepare(StringBuilder sb, char parenthesis){
+    public Object[] prepare(StringBuilder sb, char parenthesis){
+        Object[] result = new Object[3];
         List<Integer> indexes=new ArrayList<Integer>();
         int minNumber=0;
         int balance=0;
@@ -124,21 +125,23 @@ public class Parentheses
                 balance=0;
             }
         }
-        
-        if(parenthesis=='('){ //leftSide
-            if(indexes.isEmpty()) return sb.toString(); //returns string prepared from left side
-            int lastIndex=indexes.get(indexes.size()-1); //last index of ')' for removal
-        } 
-        else { //rightSide
-            sb.reverse(); //reversing the string back to normal
-            if(indexes.isEmpty()) return sb.toString(); //returns string prepared from right side
-            int isize=indexes.size();
-            for(int i=0;i<isize;i++){//we also have to reverse the indexes
-                indexes.set(i, sblength-1-indexes.get(i));
+        if(minNumber==0) result=new Object[]{sb,0,0};
+        else{
+            if(parenthesis=='('){ //leftSide
+                int lastIndex=indexes.get(indexes.size()-1); //last index of ')' for removal
+                result=new Object[]{sb,lastIndex,minNumber};
+            } 
+            else { //rightSide
+                sb.reverse(); //reversing the string back to normal
+                int isize=indexes.size();
+                for(int i=0;i<isize;i++){//we also have to reverse the indexes
+                    indexes.set(i, sblength-1-indexes.get(i));
+                }
+                int firstIndex=indexes.get(indexes.size()-1);//first index of '(' for removal
+                result = new Object[]{sb,firstIndex,minNumber};
             }
-            int firstIndex=indexes.get(indexes.size()-1);//first index of '(' for removal
         }
-        return sb.toString();
+        return result;
     }
     
     public List<String> removeInvalidParentheses(String s){
