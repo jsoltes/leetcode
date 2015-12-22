@@ -112,8 +112,8 @@ public class Parentheses
                     i--; //because otherways we would skip one character
                     sblength--; //because the string is now shorter
                 } else {
-                    rightIndexes.add(i);
-                    rightMinNumber++;
+                    indexes.add(i);
+                    minNumber++;
                 } 
                 balance=0;
             }
