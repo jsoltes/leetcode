@@ -87,8 +87,8 @@ public class Parentheses
         return specialSolutions;
     }
     */
-    //prepares string and returns one part(left or right) of the string
-    public StringBuilder prepare(StringBuilder sb, char parenthesis){
+    //prepares string and returns one part(left+middle or right) of the string
+    public String prepare(StringBuilder sb, char parenthesis){
         List<Integer> indexes=new ArrayList<Integer>();
         int minNumber=0;
         int balance=0;
@@ -124,8 +124,18 @@ public class Parentheses
                 balance=0;
             }
         }
-        if(parenthesis==')') sb.reverse();
-        return sb;
+        String result;
+        if(indexes.isEmpty()) return "";
+        if(parenthesis=='(') result=sb.substring(0, indexes.get(indexes.size()-1)+1); //leftSide
+        else { //rightSide
+            sb.reverse(); //reversing the string back to normal
+            int isize=indexes.size();
+            for(int i=0;i<isize;i++){//we also have to reverse the indexes
+                indexes.set(i, sblength-1-indexes.get(i));
+            }
+            result=sb.substring(indexes.get(indexes.size()-1),sblength);
+        }
+        return result;
     }
     
     public List<String> removeInvalidParentheses(String s){
@@ -303,7 +313,9 @@ public class Parentheses
     
     public static void main(String[] args) {
         Parentheses p = new Parentheses();
-        List<String> result = p.removeInvalidParentheses("())v)(()(((((())");
+        List<String> result = p.removeInvalidParentheses("())v)m()v(()(((((())");
         System.out.println("result "+result);
+        //String result1=p.prepare(new StringBuilder("()())()"), ')');
+        //System.out.println(result1);
     }
 }
