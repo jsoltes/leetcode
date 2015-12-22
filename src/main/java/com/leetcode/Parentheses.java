@@ -21,20 +21,27 @@ public class Parentheses
         for (int i=0;i<isize;i++){
             int position = indexes.get(i);
             sb.deleteCharAt(position);
+            //we need to delete duplicates at the same time
+            int count=0;
+            if(position+1==indexes.get(i)){
+                sb.deleteCharAt(position);
+                count++;
+            }
             //////recursive case//////
             if (minNumber>1){
-                indexes=indexes.subList(i+1,isize);
+                indexes=indexes.subList(i+1+count,isize);
                 List<Integer> indexes2=new ArrayList<Integer>(indexes);
-                isize=isize-1;//the same as indexes.size()
+                isize=isize-1-count;//the same as indexes.size()
                 for(int j=0;j<isize;j++){
-                    indexes.set(j, indexes.get(j)-1);
+                    indexes.set(j, indexes.get(j)-1-count);
                 }
-                solutions.addAll(generate(sb,minNumber-1,indexes,parenthesis));
+                solutions.addAll(generate(sb,minNumber-1-count,indexes,parenthesis));
                 if(isize>=minNumber){
                     //we need to delete duplicates at the same time
+                    /*
                     if(position+1==indexes2.get(i)){
                         indexes2=indexes2.subList(1,indexes2.size());
-                    }
+                    }*/
                     solutions.addAll(generate(original,minNumber,indexes2,parenthesis));
                 }
                 return solutions;
