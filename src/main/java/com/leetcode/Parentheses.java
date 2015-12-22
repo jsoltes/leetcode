@@ -62,6 +62,7 @@ public class Parentheses
         }
         return solutions;
     }
+    /*
     //for special cases like this (r(()()->(r)() we have to generate extra solutions
     public List<String> generateSpecial(StringBuilder sb,int minNumber,char parenthesis){//l(((())((z))
         List<String> specialSolutions=new ArrayList<String>();
@@ -85,7 +86,41 @@ public class Parentheses
         }
         return specialSolutions;
     }
-            
+    */
+    //prepares string and returns one part(left or right) of the string
+    public StringBuilder prepare(StringBuilder sb){
+        List<Integer> indexes=new ArrayList<Integer>();
+        int minNumber=0;
+        int balance=0;
+        int left=0;
+        //gets indexes of wrong right parentheses (from which you can get all possible removals of right parentheses)
+        int sblength=sb.length();
+        for(int i=0;i<sblength;i++){
+            char currentChar=sb.charAt(i);
+            if(currentChar=='(') {
+                balance++;
+                left++;
+            }
+            if(currentChar==')') balance--;
+            if(balance<0){
+                //in these cases we remove:((((()))))), )(), ()),)a)() in these cases not: ()()),()a)()
+                //remove - if left =0; if left=1 and on i-1 position isn't any symbol; if left is 2 and on i-1 position is the same as on i-2
+                char previousChar=0;
+                if(left>=1) previousChar=sb.charAt(i-1);
+                if((left==0) || (left==1 && (previousChar=='(' || previousChar==')')) || (left==2 && previousChar==sb.charAt(i-2))){
+                    sb.deleteCharAt(i); //after this cursor goes on the next character so we have to decrease it
+                    i--; //because otherways we would skip one character
+                    sblength--; //because the string is now shorter
+                } else {
+                    rightIndexes.add(i);
+                    rightMinNumber++;
+                } 
+                balance=0;
+            }
+        }
+        return sb;
+    }
+    
     public List<String> removeInvalidParentheses(String s){
    ////////////firstly we get rightMinNumber and rightMinIndexes/////////////////////// 
         StringBuilder sb = new StringBuilder(s);
