@@ -123,20 +123,22 @@ public class Parentheses
             //adds other possible right indexes
             List<Integer> newIndexes=new ArrayList<Integer>();
             int start=sb.indexOf("(")+1;
+            int end=sb.lastIndexOf(")");
             int lastRightIndex=rightIndexes.get(rightIndexes.size()-1);
-            for(int i=start;i<=lastRightIndex;i++){
+            for(int i=start;i<lastRightIndex;i++){
                 int count=0;
-                while(i<lastRightIndex && sb.charAt(i)==')'){
+                while(i<=lastRightIndex && sb.charAt(i)==')'){
                     newIndexes.add(i);
                     count++;
                     i++;
                 }
-                if(count<=rightMinNumber){
+                if(count>0 && count<=rightMinNumber && newIndexes.get(newIndexes.size()-1)!=end){
                     rightIndexes.addAll(newIndexes);
                     newIndexes.clear();
                 }
             }
         }
+        Collections.sort(rightIndexes);
 ///////////if balance>0 there are extra left parentheses to be removed and we get leftMinNumber and leftIndexes////////
         List<Integer> leftIndexes=new ArrayList<Integer>();
         int leftMinNumber=0;
@@ -163,10 +165,10 @@ public class Parentheses
                         //everytime we delete we have to decrement all left indexes
                         int size=leftIndexes.size();
                         for(int j=0;j<size;j++){
+                            leftIndexes.set(j, leftIndexes.get(j)-1);
                         }
                     } else {
                         leftIndexes.add(i);
-                        System.out.println(leftIndexes);
                         leftMinNumber++;
                     } 
                     balance=0;
@@ -174,18 +176,23 @@ public class Parentheses
             }
 //////if still after we prepare the string from the right side there are some parentheses to be removed we add also other possible indexes/////
         if(leftMinNumber>0){
-            List<Integer> newIndexes=new ArrayList<Integer>();
+            List<Integer> newIndexes=new ArrayList<Integer>();//()v)(()(())
             int firstLeftIndex=leftIndexes.get(0);
+            System.out.println("firstLeftIndex "+firstLeftIndex);//4
             int start2=sb.lastIndexOf(")")-1;
-            for(int i=start2;i>=firstLeftIndex;i--){
+            int end2=sb.indexOf("(");
+            for(int i=start2;i>firstLeftIndex;i--){
                 int count=0;
-                while(sb.charAt(i)=='('){
+                while(i>=firstLeftIndex && sb.charAt(i)=='('){
                     newIndexes.add(i);
                     count++;
                     i--;
                 }
-                if(count<=leftMinNumber){
+                if(count>1 && count<=leftMinNumber){
                     leftIndexes.addAll(newIndexes);
+                }
+                if(count>1 && count>leftMinNumber){
+                    leftIndexes.add(i+1);
                 }
                 newIndexes.clear();
             }
@@ -254,7 +261,7 @@ public class Parentheses
     
     public static void main(String[] args) {
         Parentheses p = new Parentheses();
-        List<String> result = p.removeInvalidParentheses(")(()c))(");
+        List<String> result = p.removeInvalidParentheses("())v)(()(((((())");
         System.out.println("result "+result);
     }
 }
