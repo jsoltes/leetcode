@@ -89,12 +89,11 @@ public class Parentheses
     */
     //prepares string and returns one part(left+middle or right) of the string
     public Object[] prepare(StringBuilder sb, char parenthesis){
-        Object[] result = new Object[3];
         List<Integer> indexes=new ArrayList<Integer>();
         int minNumber=0;
         int balance=0;
         int left=0;
-        char otherParenthesis=0;
+        char otherParenthesis;
         if (parenthesis=='(') otherParenthesis=')';
         else{
             sb.reverse();
@@ -125,22 +124,30 @@ public class Parentheses
                 balance=0;
             }
         }
-        if(minNumber==0) result=new Object[]{sb,0,0};
-        else{
+        Object[] result;
+        
+        
             if(parenthesis=='('){ //leftSide
+                if(minNumber==0) result=new Object[]{sb,0,0};
+                else{
                 int lastIndex=indexes.get(indexes.size()-1); //last index of ')' for removal
                 result=new Object[]{sb,lastIndex,minNumber};
+                }
+                
             } 
             else { //rightSide
                 sb.reverse(); //reversing the string back to normal
+                if(minNumber==0) result=new Object[]{sb,0,0};
+                else{
                 int isize=indexes.size();
                 for(int i=0;i<isize;i++){//we also have to reverse the indexes
                     indexes.set(i, sblength-1-indexes.get(i));
                 }
                 int firstIndex=indexes.get(indexes.size()-1);//first index of '(' for removal
                 result = new Object[]{sb,firstIndex,minNumber};
+                }
             }
-        }
+        
         return result;
     }
     
@@ -236,7 +243,7 @@ public class Parentheses
         if(leftMinNumber>0){
             List<Integer> newIndexes=new ArrayList<Integer>();//()v)(()(())
             int firstLeftIndex=leftIndexes.get(0);
-            System.out.println("firstLeftIndex "+firstLeftIndex);//4
+            //System.out.println("firstLeftIndex "+firstLeftIndex);//4
             int start2=sb.lastIndexOf(")")-1;
             int end2=sb.indexOf("(");
             for(int i=start2;i>firstLeftIndex;i--){
@@ -256,12 +263,13 @@ public class Parentheses
             }
         }
     }
+        /*
         System.out.println("sb "+sb);
         System.out.println("rightMinNumber "+rightMinNumber);
         System.out.println("leftMinNumber "+leftMinNumber);
         System.out.println("leftIndexes " +leftIndexes);
         System.out.println("rightIndexes "+rightIndexes);
-
+*/
 ///////////we use rightMinNumber and leftMinNumber to manage the flow of the program////////////////////
         //first case - the string is already prepared - so the program has only one solution
         if(rightMinNumber==0 && leftMinNumber==0) return Arrays.asList(sb.toString());
@@ -319,9 +327,10 @@ public class Parentheses
     
     public static void main(String[] args) {
         Parentheses p = new Parentheses();
-        List<String> result = p.removeInvalidParentheses("())v)m()v(()(((((())");
-        System.out.println("result "+result);
+        //List<String> result = p.removeInvalidParentheses("())v)m()v(()(((((())");
+        //System.out.println("result "+result);
         //String result1=p.prepare(new StringBuilder("()())()"), ')');
         //System.out.println(result1);
+        System.out.println(p.prepare(new StringBuilder("()())()"),')')[0]);
     }
 }

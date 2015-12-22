@@ -62,27 +62,55 @@ public class ParenthesesTest
     }
     
      public void testPrepareLeftSide2(){
-        String result = p.prepare(new StringBuilder("()())()"),'(');
-        String expected = "()())()";
-        assertEquals(expected,result);
+        Object[] result = p.prepare(new StringBuilder("()())()"),'(');
+        String result0= ((StringBuilder) result[0]).toString();
+        String expected0="()())()";
+        int result1=(Integer) result[1];
+        int expected1=4;
+        int result2=(Integer) result[2];
+        int expected2=1;
+        assertEquals(expected0,result0);
+        assertEquals(expected1,result1);
+        assertEquals(expected2,result2);
     }
     
      public void testPrepareRightSide2(){
-        String result = p.prepare(new StringBuilder("()())()"),')');
-        String expected = "()())()";
-        assertEquals(expected,result);
+        Object[] result = p.prepare(new StringBuilder("()())()"),')');
+        String result0= ((StringBuilder) result[0]).toString();
+        String expected0="()())()";
+        int result1=(Integer) result[1];
+        int expected1=0;
+        int result2=(Integer) result[2];
+        int expected2=0;
+        assertEquals(expected0,result0);
+        assertEquals(expected1,result1);
+        assertEquals(expected2,result2);
     }
     
     public void testPrepareLeftSide3(){//middle part m()v
-        String result = p.prepare(new StringBuilder("())v)m()v(()(())"),'(');
-        String expected = "()v)m()v(()(())";
-        assertEquals(expected,result);
+        Object[] result = p.prepare(new StringBuilder("())v)m()v(()(())"),'(');
+        String result0= ((StringBuilder) result[0]).toString();
+        String expected0="()v)m()v(()(())";
+        int result1=(Integer) result[1];
+        int expected1=3;
+        int result2=(Integer) result[2];
+        int expected2=1;
+        assertEquals(expected0,result0);
+        assertEquals(expected1,result1);
+        assertEquals(expected2,result2);
     }
     
      public void testPrepareRightSide3(){
-        String result = p.prepare(new StringBuilder("())v)m()v(()(())"),')');
-        String expected = "())v)m()v(()(())";
-        assertEquals(expected,result);
+        Object[] result = p.prepare(new StringBuilder("())v)m()v(()(())"),')');
+        String result0= ((StringBuilder) result[0]).toString();
+        String expected0="())v)m()v(()(())";
+        int result1=(Integer) result[1];
+        int expected1=9;
+        int result2=(Integer) result[2];
+        int expected2=1;
+        assertEquals(expected0,result0);
+        assertEquals(expected1,result1);
+        assertEquals(expected2,result2);
     }
     public void testRemoveParentheses1 ()
     {
