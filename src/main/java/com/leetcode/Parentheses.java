@@ -124,18 +124,21 @@ public class Parentheses
                 balance=0;
             }
         }
-        String result;
-        if(indexes.isEmpty()) return "";
-        if(parenthesis=='(') result=sb.substring(0, indexes.get(indexes.size()-1)+1); //leftSide
+        
+        if(parenthesis=='('){ //leftSide
+            if(indexes.isEmpty()) return sb.toString(); //returns string prepared from left side
+            int lastIndex=indexes.get(indexes.size()-1); //last index of ')' for removal
+        } 
         else { //rightSide
             sb.reverse(); //reversing the string back to normal
+            if(indexes.isEmpty()) return sb.toString(); //returns string prepared from right side
             int isize=indexes.size();
             for(int i=0;i<isize;i++){//we also have to reverse the indexes
                 indexes.set(i, sblength-1-indexes.get(i));
             }
-            result=sb.substring(indexes.get(indexes.size()-1),sblength);
+            int firstIndex=indexes.get(indexes.size()-1);//first index of '(' for removal
         }
-        return result;
+        return sb.toString();
     }
     
     public List<String> removeInvalidParentheses(String s){

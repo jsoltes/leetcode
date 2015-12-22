@@ -55,13 +55,13 @@ public class ParenthesesTest
     
      public void testPrepareRightSide2(){
         String result = p.prepare(new StringBuilder("()())()"),')');
-        String expected = "";
+        String expected = "()())()";
         assertEquals(expected,result);
     }
     
-    public void testPrepareLeftSide3(){
+    public void testPrepareLeftSide3(){//middle part m()v
         String result = p.prepare(new StringBuilder("())v)m()v(()(())"),'(');
-        String expected = "())v)m()v";
+        String expected = "()v)";
         assertEquals(expected,result);
     }
     
