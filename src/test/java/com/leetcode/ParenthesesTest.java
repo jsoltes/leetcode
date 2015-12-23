@@ -147,6 +147,23 @@ public class ParenthesesTest
         List<Integer> expected=Arrays.asList(0,1,3);
         assertEquals(expected,result);
     }
+    
+    public void testGenerate1() {
+        List<String> result =p.generate(new StringBuilder("((i()"), 2, Arrays.asList(0,1,3));
+        List<String> expected = Arrays.asList("(i)","i()");
+        Collections.sort(result);
+        Collections.sort(expected);
+        assertEquals(expected,result);
+    }
+    //")(v)((m(())()("
+    public void testGenerate2() {
+        List<String> result =p.generate(new StringBuilder("((m(())()"), 2, Arrays.asList(0,1,3,4));
+        List<String> expected = Arrays.asList("m(())()","(m())()","(m(()))","((m))()","((m()))");
+        Collections.sort(result);
+        Collections.sort(expected);
+        assertEquals(expected,result);
+    }
+    
     /*
     public void testRemoveParentheses1 ()
     {
