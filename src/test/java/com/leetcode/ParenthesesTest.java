@@ -114,7 +114,7 @@ public class ParenthesesTest
      
     public void testGetIndexes1(){
         List<Integer> result=p.getIndexes(new StringBuilder("()())"), ')',1);
-        List<Integer> expected=Arrays.asList(1,4);
+        List<Integer> expected=Arrays.asList(1,3);
         assertEquals(expected,result);
     }
     

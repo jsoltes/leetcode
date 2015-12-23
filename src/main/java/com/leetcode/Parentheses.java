@@ -124,8 +124,30 @@ public class Parentheses
         return result;
     }
     //gets indexes for all possible parentheses removals
-    public List<Integer> getIndexes(StringBuilder preparedSide, char parenthesis, int minNumber){
+    public List<Integer> getIndexes(StringBuilder preparedSide, char parenthesis, int minNumber){//')'
         List<Integer> indexes = new ArrayList<Integer>();
+        int length=preparedSide.length();
+        for(int i=0;i<length;i++){
+            if(preparedSide.charAt(i)==parenthesis){
+                //if there is only one sole parenthesis it can be added to indexes
+                if(i+1<length && preparedSide.charAt(i+1)!=parenthesis) {
+                    indexes.add(i);
+                    i++; //we can increment, because we know the next character isn't parenthesis we are looking for
+                }
+                //in case of group of parentheses we decide based on their count - if it is less or equal than minNumber, we add all - else only the first one
+                else {
+                    int count=0;
+                    List<Integer> newIndexes = new ArrayList<Integer>();
+                    while(i<length && preparedSide.charAt(i)==parenthesis){
+                        newIndexes.add(i);
+                        count++;
+                        i++;
+                    }
+                    if(count<=minNumber) indexes.addAll(newIndexes);
+                    else indexes.add(newIndexes.get(0));
+                }
+            }
+        }
         return indexes;
     }
             
