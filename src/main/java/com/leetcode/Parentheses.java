@@ -108,24 +108,28 @@ public class Parentheses
         StringBuilder original=new StringBuilder(sb);
         if(minNumber==1){ //base case
             for (int i=0;i<indexes.size();i++){
-                sb.deleteCharAt(indexes.get(i));
-                solutions.add(sb.toString());
-                sb=new StringBuilder(original);
+                int position=indexes.get(i);
+                if(position==0 || position-1>=0 && sb.charAt(position)!=sb.charAt(position-1)){
+                    sb.deleteCharAt(position);
+                    solutions.add(sb.toString());
+                    sb=new StringBuilder(original);
+                }
             }
             return solutions;
         }
         else { //recursive 
-            sb.deleteCharAt(indexes.get(i));
-            indexes=indexes.subList(i+1,isize);//[1,3,4,7]
+            int isize=indexes.size();//5
+            int position=indexes.get(0);//0
+            sb.deleteCharAt(position); //(m(())()
+            indexes=indexes.subList(1,isize);//[1,3,4,7]
             List<Integer> indexes2=new ArrayList<Integer>(indexes);//[1,3,4,7]
-            isize=isize-1;//the same as indexes.size() 4
+            isize=isize-1;//the same as indexes.size()//4
             for(int j=0;j<isize;j++){
                 indexes.set(j, indexes.get(j)-1);
             } //[0,2,3,6]
-            solutions.addAll(generate(sb,minNumber-1,indexes));
-            if(isize>=minNumber){
-                //we need to delete all duplicates at the same time
-                if(position+1==indexes2.get(i)){
+            solutions.addAll(generate(sb,minNumber-1,indexes));//[]
+            if(isize>=minNumber){ //why?
+                if(position+1==indexes2.get(0)){
                     indexes2=indexes2.subList(1,indexes2.size());
                 }
                 solutions.addAll(generate(original,minNumber,indexes2));  

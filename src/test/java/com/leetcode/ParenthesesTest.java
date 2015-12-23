@@ -169,7 +169,7 @@ public class ParenthesesTest
         Collections.sort(expected);
         assertEquals(expected,result);
     }
-    
+
     /*
     public void testRemoveParentheses1 ()
     {
