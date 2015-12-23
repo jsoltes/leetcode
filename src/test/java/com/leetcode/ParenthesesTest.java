@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -112,6 +111,43 @@ public class ParenthesesTest
         assertEquals(expected1,result1);
         assertEquals(expected2,result2);
     }
+     
+    public void testGetIndexes1(){
+        List<Integer> result=p.getIndexes(new StringBuilder("()())"), ')',1);
+        List<Integer> expected=Arrays.asList(1,4);
+        assertEquals(expected,result);
+    }
+    
+    public void testGetIndexes2(){
+        List<Integer> result=p.getIndexes(new StringBuilder("(()c))"), ')',1);
+        List<Integer> expected=Arrays.asList(2,4);
+        assertEquals(expected,result);
+    }
+    
+    public void testGetIndexes3(){
+        List<Integer> result=p.getIndexes(new StringBuilder("(()(())"), '(',1);
+        List<Integer> expected=Arrays.asList(0,3);
+        assertEquals(expected,result);
+    }
+    
+    public void testGetIndexes4(){
+        List<Integer> result=p.getIndexes(new StringBuilder("((i()"), '(',2);
+        List<Integer> expected=Arrays.asList(0,1,3);
+        assertEquals(expected,result);
+    }
+    
+    public void testGetIndexes5(){
+        List<Integer> result=p.getIndexes(new StringBuilder("())v)"), ')',2);
+        List<Integer> expected=Arrays.asList(1,2,4);
+        assertEquals(expected,result);
+    }
+    
+    public void testGetIndexes6(){
+        List<Integer> result=p.getIndexes(new StringBuilder("((i()"), '(',2);
+        List<Integer> expected=Arrays.asList(0,1,3);
+        assertEquals(expected,result);
+    }
+    /*
     public void testRemoveParentheses1 ()
     {
         List<String> result = p.removeInvalidParentheses("()())()");
@@ -354,5 +390,5 @@ public class ParenthesesTest
         Collections.sort(expected);
         assertEquals(expected,result);
     }
-            
+    */     
 }

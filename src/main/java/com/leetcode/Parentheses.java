@@ -123,6 +123,12 @@ public class Parentheses
         
         return result;
     }
+    //gets indexes for all possible parentheses removals
+    public List<Integer> getIndexes(StringBuilder preparedSide, char parenthesis, int minNumber){
+        List<Integer> indexes = new ArrayList<Integer>();
+        return indexes;
+    }
+            
     //main method
     public List<String> removeInvalidParentheses(String s){
    ////////////firstly we get rightMinNumber and rightMinIndexes/////////////////////// 
