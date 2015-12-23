@@ -170,7 +170,7 @@ public class ParenthesesTest
         assertEquals(expected,result);
     }
 
-    /*
+ 
     public void testRemoveParentheses1 ()
     {
         List<String> result = p.removeInvalidParentheses("()())()");
@@ -412,6 +412,5 @@ public class ParenthesesTest
         Collections.sort(result);
         Collections.sort(expected);
         assertEquals(expected,result);
-    }
-    */     
+    }   
 }
