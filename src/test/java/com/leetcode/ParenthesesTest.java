@@ -148,6 +148,12 @@ public class ParenthesesTest
         assertEquals(expected,result);
     }
     
+    public void testGetIndexes7(){
+        List<Integer> result=p.getIndexes(new StringBuilder("((m(())()"), '(',2);
+        List<Integer> expected=Arrays.asList(0,1,3,4,7);
+        assertEquals(expected,result);
+    }
+    
     public void testGenerate1() {
         List<String> result =p.generate(new StringBuilder("((i()"), 2, Arrays.asList(0,1,3));
         List<String> expected = Arrays.asList("(i)","i()");
@@ -157,7 +163,7 @@ public class ParenthesesTest
     }
     //")(v)((m(())()("
     public void testGenerate2() {
-        List<String> result =p.generate(new StringBuilder("((m(())()"), 2, Arrays.asList(0,1,3,4));
+        List<String> result =p.generate(new StringBuilder("((m(())()"), 2, Arrays.asList(0,1,3,4,7));
         List<String> expected = Arrays.asList("m(())()","(m())()","(m(()))","((m))()","((m()))");
         Collections.sort(result);
         Collections.sort(expected);

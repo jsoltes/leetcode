@@ -103,43 +103,35 @@ public class Parentheses
         return indexes;
     }
     
-    public List<String> generate(StringBuilder sb,int minNumber, List<Integer> indexes){
+    public List<String> generate(StringBuilder sb,int minNumber, List<Integer> indexes){ //"((m(())()",2,[0,1,3,4,7]
         List<String> solutions=new ArrayList<String>();
         StringBuilder original=new StringBuilder(sb);
-        int isize=indexes.size();
-        for (int i=0;i<isize;i++){
-            int position = indexes.get(i);
-            sb.deleteCharAt(position);
-            //we need to delete duplicates at the same time
-            int count=0;
-            if(position+1==indexes.get(i)){
-                sb.deleteCharAt(position);
-                count++;
+        if(minNumber==1){ //base case
+            for (int i=0;i<indexes.size();i++){
+                sb.deleteCharAt(indexes.get(i));
+                solutions.add(sb.toString());
+                sb=new StringBuilder(original);
             }
-            //////recursive case//////
-            if (minNumber>1){
-                indexes=indexes.subList(i+1+count,isize);
-                List<Integer> indexes2=new ArrayList<Integer>(indexes);
-                isize=isize-1-count;//the same as indexes.size()
-                for(int j=0;j<isize;j++){
-                    indexes.set(j, indexes.get(j)-1-count);
-                }
-                solutions.addAll(generate(sb,minNumber-1-count,indexes));
-                if(isize>=minNumber){
-                    //we need to delete duplicates at the same time
-                    /*
-                    if(position+1==indexes2.get(i)){
-                        indexes2=indexes2.subList(1,indexes2.size());
-                    }*/
-                    solutions.addAll(generate(original,minNumber,indexes2));
-                }
-                return solutions;
-            }
-            //////end of recursive case//////
-            solutions.add(sb.toString());
-            sb=new StringBuilder(original);
+            return solutions;
         }
+        else { //recursive 
+            sb.deleteCharAt(indexes.get(i));
+            indexes=indexes.subList(i+1,isize);//[1,3,4,7]
+            List<Integer> indexes2=new ArrayList<Integer>(indexes);//[1,3,4,7]
+            isize=isize-1;//the same as indexes.size() 4
+            for(int j=0;j<isize;j++){
+                indexes.set(j, indexes.get(j)-1);
+            } //[0,2,3,6]
+            solutions.addAll(generate(sb,minNumber-1,indexes));
+            if(isize>=minNumber){
+                //we need to delete all duplicates at the same time
+                if(position+1==indexes2.get(i)){
+                    indexes2=indexes2.subList(1,indexes2.size());
+                }
+                solutions.addAll(generate(original,minNumber,indexes2));  
+            }
         return solutions;
+        }
     }
     
     public List<String> connect(List<String> leftSideList,String middle,List<String> rightSideList){
@@ -306,9 +298,10 @@ public class Parentheses
     
     public static void main(String[] args) {
         Parentheses p = new Parentheses();
-        List<String> result = p.removeInvalidParentheses(")(v)((m(())()(");
-        System.out.println("result "+result);
+        //List<String> result = p.removeInvalidParentheses(")(v)((m(())()(");
+        //System.out.println("result "+result);
         //System.out.println(p.prepare(new StringBuilder("()())()"),')')[0]);
-        System.out.println("for comparison "+Arrays.asList("(v)m(())()","(v)(m())()","(v)(m(()))","(v)((m))()","(v)((m()))"));
+        //System.out.println("expected "+Arrays.asList("(v)m(())()","(v)(m())()","(v)(m(()))","(v)((m))()","(v)((m()))"));
+        System.out.println("generate "+p.generate(new StringBuilder("((m(())()"),2,Arrays.asList(0,1,3,4,7)));
     }
 }
