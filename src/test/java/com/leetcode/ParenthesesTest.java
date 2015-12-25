@@ -128,7 +128,7 @@ public class ParenthesesTest
      public void testPrepareRightSide4(){
         Object[] result = p.prepare(new StringBuilder("((()))))())("),')');
         String result0= ((StringBuilder) result[0]).toString();//sb
-        String expected0="((()))())"; 
+        String expected0="((()))))())"; 
         int result1=(Integer) result[1]; //firstLeftIndex
         int expected1=-1;
         int result2=(Integer) result[2]; //minLeftNumber
@@ -205,6 +205,14 @@ public class ParenthesesTest
     public void testGenerate3() {
         List<String> result =p.generate(new StringBuilder("()())()"), 1, Arrays.asList(1,3));
         List<String> expected = Arrays.asList("()()()", "(())()");
+        Collections.sort(result);
+        Collections.sort(expected);
+        assertEquals(expected,result);
+    }
+    //"(a)())()"
+    public void testGenerate4() {
+        List<String> result =p.generate(new StringBuilder("(a)())()"), 1, Arrays.asList(2,4));
+        List<String> expected = Arrays.asList("(a)()()", "(a())()");
         Collections.sort(result);
         Collections.sort(expected);
         assertEquals(expected,result);

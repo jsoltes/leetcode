@@ -15,11 +15,10 @@ import java.util.List;
 public class Parentheses 
 {  
     //prepares string and returns one part(left+middle or right) of the string
-    public Object[] prepare(StringBuilder sb, char parenthesis){
+    public Object[] prepare(StringBuilder sb, char parenthesis){//"(a)())()",'('
         List<Integer> indexes=new ArrayList<Integer>();
         int minNumber=0;
         int balance=0;
-        int count=0;
         int couples=0;
         char otherParenthesis;
         if (parenthesis=='(') otherParenthesis=')';
@@ -33,10 +32,13 @@ public class Parentheses
             char currentChar=sb.charAt(i);
             if(currentChar==parenthesis) {
                 balance++;
-                count++;
             }
             if(currentChar==otherParenthesis) {
-                if(balance>0) couples++;
+                int j=i;
+                while(j>=1 && sb.charAt(j-1)!=parenthesis && sb.charAt(j-1)!=otherParenthesis){ //"(a)())()"
+                    j--;
+                }
+                if(sb.charAt(j-1)==parenthesis) couples++;
                 balance--;
                 
             }
@@ -44,8 +46,8 @@ public class Parentheses
                 //in these cases we remove:((((()))))), )(), ()),)a)() in these cases not: ()()),()a)()
                 //remove - if left =0; if left=1 and on i-1 position isn't any symbol; if left is 2 and on i-1 position is the same as on i-2
                 char previousChar=0;
-                if(count>=1) previousChar=sb.charAt(i-1);
-                if((-balance)>couples-1){
+                if(i>=1) previousChar=sb.charAt(i-1);
+                if(i==0 || ((-balance)>couples-1 && (previousChar==')'||previousChar=='('))){
                     sb.deleteCharAt(i); //after this cursor goes on the next character so we have to decrease it
                     i--; //because otherways we would skip one character
                     sblength--; //because the string is now shorter
@@ -200,7 +202,8 @@ public class Parentheses
     public static void main(String[] args) {
         Parentheses p = new Parentheses();
         //System.out.println("indexes "+p.getIndexes(new StringBuilder("n(i()"), '(', 1));
-        List<String> result = p.removeInvalidParentheses("(()c))");
-        System.out.println("result "+result);
+        //List<String> result = p.removeInvalidParentheses("())v)(()(((((())");
+        //System.out.println("result "+result);
+        System.out.println(p.prepare(new StringBuilder("())v)(()(((((())"),')')[0]);
     }
 }
