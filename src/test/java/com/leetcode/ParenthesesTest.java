@@ -78,7 +78,7 @@ public class ParenthesesTest
         String result0= ((StringBuilder) result[0]).toString();
         String expected0="()())()";
         int result1=(Integer) result[1];
-        int expected1=0;
+        int expected1=-1;
         int result2=(Integer) result[2];
         int expected2=0;
         assertEquals(expected0,result0);
@@ -177,7 +177,7 @@ public class ParenthesesTest
         Collections.sort(expected);
         assertEquals(expected,result);
     }
- 
+    
     public void testRemoveParentheses1 ()
     {
         List<String> result = p.removeInvalidParentheses("()())()");
