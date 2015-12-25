@@ -169,7 +169,14 @@ public class ParenthesesTest
         Collections.sort(expected);
         assertEquals(expected,result);
     }
-
+    //"()())()"
+    public void testGenerate3() {
+        List<String> result =p.generate(new StringBuilder("()())()"), 1, Arrays.asList(1,3));
+        List<String> expected = Arrays.asList("()()()", "(())()");
+        Collections.sort(result);
+        Collections.sort(expected);
+        assertEquals(expected,result);
+    }
  
     public void testRemoveParentheses1 ()
     {

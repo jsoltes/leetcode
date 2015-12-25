@@ -167,8 +167,14 @@ public class Parentheses
             int minLeftNumber=(Integer)fromBoth[2];
             if (minRightNumber==0 && minLeftNumber==0) return Arrays.asList(sb.toString());//there is only one solution
             else{
-                if(minLeftNumber!=0 && minRightNumber==0) return generate(sb,minLeftNumber,getIndexes(sb,'(',minLeftNumber)); //there are only left solutions
-                if(minLeftNumber==0 && minRightNumber!=0) return generate(sb, minRightNumber, getIndexes(sb, ')', minRightNumber));
+                if(minLeftNumber!=0 && minRightNumber==0) { //there are only left solutions
+                    StringBuilder rightSide=new StringBuilder(sb.substring(firstLeftIndex, sb.length()));
+                    return generate(sb,minLeftNumber,getIndexes(rightSide,'(',minLeftNumber));
+                } 
+                if(minLeftNumber==0 && minRightNumber!=0) {
+                    StringBuilder leftSide=new StringBuilder(sb.substring(0, lastRightIndex+1));
+                    return generate(sb, minRightNumber, getIndexes(leftSide, ')', minRightNumber));
+                }
                 if (minLeftNumber!=0 && minRightNumber!=0){//we divide the sb on three parts left, middle and right based on lastRightIndex & firstLeftIndex
                     StringBuilder leftSide=new StringBuilder(sb.substring(0, lastRightIndex+1));
                     String middle =sb.substring(lastRightIndex+1, firstLeftIndex);
@@ -184,10 +190,7 @@ public class Parentheses
     
     public static void main(String[] args) {
         Parentheses p = new Parentheses();
-        //List<String> result = p.removeInvalidParentheses(")(v)((m(())()(");
-        //System.out.println("result "+result);
-        //System.out.println(p.prepare(new StringBuilder("()())()"),')')[0]);
-        //System.out.println("expected "+Arrays.asList("(v)m(())()","(v)(m())()","(v)(m(()))","(v)((m))()","(v)((m()))"));
-        System.out.println("generate "+p.generate(new StringBuilder("((m(())()"),2,Arrays.asList(0,1,3,4,7)));
+        List<String> result = p.removeInvalidParentheses("()())()");
+        System.out.println("result "+result);
     }
 }
