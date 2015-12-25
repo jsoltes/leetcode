@@ -19,7 +19,8 @@ public class Parentheses
         List<Integer> indexes=new ArrayList<Integer>();
         int minNumber=0;
         int balance=0;
-        int left=0;
+        int count=0;
+        int couples=0;
         char otherParenthesis;
         if (parenthesis=='(') otherParenthesis=')';
         else{
@@ -32,15 +33,19 @@ public class Parentheses
             char currentChar=sb.charAt(i);
             if(currentChar==parenthesis) {
                 balance++;
-                left++;
+                count++;
             }
-            if(currentChar==otherParenthesis) balance--;
+            if(currentChar==otherParenthesis) {
+                if(balance>0) couples++;
+                balance--;
+                
+            }
             if(balance<0){
                 //in these cases we remove:((((()))))), )(), ()),)a)() in these cases not: ()()),()a)()
                 //remove - if left =0; if left=1 and on i-1 position isn't any symbol; if left is 2 and on i-1 position is the same as on i-2
                 char previousChar=0;
-                if(left>=1) previousChar=sb.charAt(i-1);
-                if((left==0) || (left==1 && (previousChar=='(' || previousChar==')')) || (left==2 && previousChar==sb.charAt(i-2))){
+                if(count>=1) previousChar=sb.charAt(i-1);
+                if((-balance)>couples-1){
                     sb.deleteCharAt(i); //after this cursor goes on the next character so we have to decrease it
                     i--; //because otherways we would skip one character
                     sblength--; //because the string is now shorter
@@ -194,8 +199,8 @@ public class Parentheses
     
     public static void main(String[] args) {
         Parentheses p = new Parentheses();
-        System.out.println("indexes "+p.getIndexes(new StringBuilder("n(i()"), '(', 1));
-        List<String> result = p.removeInvalidParentheses("))n((i()");
+        //System.out.println("indexes "+p.getIndexes(new StringBuilder("n(i()"), '(', 1));
+        List<String> result = p.removeInvalidParentheses("(()c))");
         System.out.println("result "+result);
     }
 }

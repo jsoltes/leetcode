@@ -111,6 +111,32 @@ public class ParenthesesTest
         assertEquals(expected1,result1);
         assertEquals(expected2,result2);
     }
+    //"((()))))())("
+    public void testPrepareLeftSide4(){//middle part m()v
+        Object[] result = p.prepare(new StringBuilder("((()))))())("),'(');
+        String result0= ((StringBuilder) result[0]).toString(); //sb
+        String expected0="((()))())("; 
+        int result1=(Integer) result[1]; //lastRightIndex
+        int expected1=8;
+        int result2=(Integer) result[2]; //minRightNumber
+        int expected2=1;
+        assertEquals(expected0,result0);
+        assertEquals(expected1,result1);
+        assertEquals(expected2,result2);
+    }
+    //"((()))))())("
+     public void testPrepareRightSide4(){
+        Object[] result = p.prepare(new StringBuilder("((()))))())("),')');
+        String result0= ((StringBuilder) result[0]).toString();//sb
+        String expected0="((()))())"; 
+        int result1=(Integer) result[1]; //firstLeftIndex
+        int expected1=-1;
+        int result2=(Integer) result[2]; //minLeftNumber
+        int expected2=0;
+        assertEquals(expected0,result0);
+        assertEquals(expected1,result1);
+        assertEquals(expected2,result2);
+    }
      
     public void testGetIndexes1(){
         List<Integer> result=p.getIndexes(new StringBuilder("()())"), ')',1);
@@ -151,6 +177,12 @@ public class ParenthesesTest
     public void testGetIndexes7(){
         List<Integer> result=p.getIndexes(new StringBuilder("((m(())()"), '(',2);
         List<Integer> expected=Arrays.asList(0,1,3,4,7);
+        assertEquals(expected,result);
+    }
+    //"((()))))())("
+    public void testGetIndexes8(){
+        List<Integer> result=p.getIndexes(new StringBuilder("((()))))())"), ')',3);
+        List<Integer> expected=Arrays.asList(3,9,10);
         assertEquals(expected,result);
     }
     
