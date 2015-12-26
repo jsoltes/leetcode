@@ -38,8 +38,8 @@ public class ParenthesesTest
         Object[] result = p.prepare(new StringBuilder("())v)(()(((((())"),'(');
         String result0= ((StringBuilder) result[0]).toString(); //sb
         String expected0="()v)(()(((((())";
-        int result1=(Integer) result[1]; //lastRightIndex
-        int expected1=3;
+        List<Integer> result1=(List<Integer>) result[1]; //rightIndexes
+        List<Integer> expected1=Arrays.asList(3);
         int result2=(Integer) result[2]; //minRightNumber
         int expected2=1;
         assertEquals(expected0,result0);
@@ -51,8 +51,8 @@ public class ParenthesesTest
         Object[] result = p.prepare(new StringBuilder("())v)(()(((((())"),')');
         String result0= ((StringBuilder) result[0]).toString(); //sb
         String expected0="())v)(()(())";
-        int result1=(Integer) result[1]; //firstLeftIndex
-        int expected1=5;
+        List<Integer> result1=(List<Integer>) result[1]; //leftIndexes
+        List<Integer> expected1=Arrays.asList(5);
         int result2=(Integer) result[2]; //minLeftNumber
         int expected2=1;
         assertEquals(expected0,result0);
@@ -64,8 +64,8 @@ public class ParenthesesTest
         Object[] result = p.prepare(new StringBuilder("()())()"),'(');
         String result0= ((StringBuilder) result[0]).toString();
         String expected0="()())()";
-        int result1=(Integer) result[1];
-        int expected1=4;
+        List<Integer> result1=(List<Integer>) result[1]; //rightIndexes
+        List<Integer> expected1=Arrays.asList(4);
         int result2=(Integer) result[2];
         int expected2=1;
         assertEquals(expected0,result0);
@@ -77,8 +77,8 @@ public class ParenthesesTest
         Object[] result = p.prepare(new StringBuilder("()())()"),')');
         String result0= ((StringBuilder) result[0]).toString();
         String expected0="()())()";
-        int result1=(Integer) result[1];
-        int expected1=-1;
+        List<Integer> result1=(List<Integer>) result[1]; //leftIndexes
+        List<Integer> expected1=Arrays.asList(-1);
         int result2=(Integer) result[2];
         int expected2=0;
         assertEquals(expected0,result0);
@@ -90,8 +90,8 @@ public class ParenthesesTest
         Object[] result = p.prepare(new StringBuilder("())v)m()v(()(())"),'(');
         String result0= ((StringBuilder) result[0]).toString();
         String expected0="()v)m()v(()(())";
-        int result1=(Integer) result[1];
-        int expected1=3;
+        List<Integer> result1=(List<Integer>) result[1]; //rightIndexes
+        List<Integer> expected1=Arrays.asList(3);
         int result2=(Integer) result[2];
         int expected2=1;
         assertEquals(expected0,result0);
@@ -103,8 +103,8 @@ public class ParenthesesTest
         Object[] result = p.prepare(new StringBuilder("())v)m()v(()(())"),')');
         String result0= ((StringBuilder) result[0]).toString();
         String expected0="())v)m()v(()(())";
-        int result1=(Integer) result[1];
-        int expected1=9;
+        List<Integer> result1=(List<Integer>) result[1]; //leftIndexes
+        List<Integer> expected1=Arrays.asList(9);
         int result2=(Integer) result[2];
         int expected2=1;
         assertEquals(expected0,result0);
@@ -116,8 +116,8 @@ public class ParenthesesTest
         Object[] result = p.prepare(new StringBuilder("((()))))())("),'(');
         String result0= ((StringBuilder) result[0]).toString(); //sb
         String expected0="((()))())("; 
-        int result1=(Integer) result[1]; //lastRightIndex
-        int expected1=8;
+        List<Integer> result1=(List<Integer>) result[1]; //rightIndexes
+        List<Integer> expected1=Arrays.asList(8);
         int result2=(Integer) result[2]; //minRightNumber
         int expected2=1;
         assertEquals(expected0,result0);
@@ -129,8 +129,8 @@ public class ParenthesesTest
         Object[] result = p.prepare(new StringBuilder("((()))))())("),')');
         String result0= ((StringBuilder) result[0]).toString();//sb
         String expected0="((()))))())"; 
-        int result1=(Integer) result[1]; //firstLeftIndex
-        int expected1=-1;
+        List<Integer> result1=(List<Integer>) result[1]; //leftIndexes
+        List<Integer> expected1=Arrays.asList(-1);
         int result2=(Integer) result[2]; //minLeftNumber
         int expected2=0;
         assertEquals(expected0,result0);
