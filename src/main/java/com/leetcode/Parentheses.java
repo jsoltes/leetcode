@@ -58,30 +58,28 @@ public class Parentheses
         }
         Object[] result;
             if(parenthesis=='('){ //leftSide
-                if(minNumber==0) result=new Object[]{sb,-1,0};
+                if(minNumber==0) result=new Object[]{sb,Arrays.asList(-1),0};
                 else{
-                int lastIndex=indexes.get(indexes.size()-1); //last index of ')' for removal
-                result=new Object[]{sb,lastIndex,minNumber};
+                result=new Object[]{sb,indexes,minNumber};
                 }
                 
             } 
             else { //rightSide
                 sb.reverse(); //reversing the string back to normal
-                if(minNumber==0) result=new Object[]{sb,-1,0};
+                if(minNumber==0) result=new Object[]{sb,Arrays.asList(-1),0};
                 else{
                 int isize=indexes.size();
                 for(int i=0;i<isize;i++){//we also have to reverse the indexes
                     indexes.set(i, sblength-1-indexes.get(i));
                 }
-                int firstIndex=indexes.get(indexes.size()-1);//first index of '(' for removal
-                result = new Object[]{sb,firstIndex,minNumber};
+                result = new Object[]{sb,indexes,minNumber};
                 }
             }
         
         return result;
     }
     //gets indexes for all possible parentheses removals
-    public List<Integer> getIndexes(StringBuilder preparedSide, char parenthesis, int minNumber){//')'
+    public List<Integer> getIndexes(StringBuilder preparedSide, char parenthesis, int minNumber){//"l(((())((z))",'(',2 ->1,2,7,8
         List<Integer> indexes = new ArrayList<Integer>();
         int length=preparedSide.length();
         for(int i=0;i<length;i++){
@@ -91,7 +89,7 @@ public class Parentheses
                     indexes.add(i);
                     i++; //we can increment, because we know the next character isn't parenthesis we are looking for
                 }
-                //in case of group of parentheses we decide based on their count - if it is less or equal than minNumber, we add all - else only the first one
+                //in case of group of parentheses we decide based on their count - if it is less or equal than minNumber, we add all - else only the first of them
                 else {
                     int count=0;
                     List<Integer> newIndexes = new ArrayList<Integer>();
@@ -158,7 +156,8 @@ public class Parentheses
         //prepare from the left side
         Object[] fromLeft = prepare(sb,'(');
         sb=(StringBuilder)fromLeft[0];
-        int lastRightIndex=(Integer)fromLeft[1];
+        List<Integer> rightIndexes=(List<Integer>)fromLeft[1];
+        int lastRightIndex=rightIndexes.get(rightIndexes.size()-1); //last index of ')' for removal
         int minRightNumber=(Integer)fromLeft[2];
         //now the decision tree
         if(lastRightIndex==sb.lastIndexOf(")") && sb.lastIndexOf("(")<sb.lastIndexOf(")")){ //we don't need to prepare right side
@@ -168,7 +167,8 @@ public class Parentheses
         else{ //we need to also prepare right side
             Object[] fromBoth=prepare(sb,')');//now it will be prepared from both sides, because we already prepared it from left side
             sb=(StringBuilder)fromBoth[0];
-            int firstLeftIndex=(Integer)fromBoth[1];
+            List<Integer> leftIndexes=(List<Integer>)fromBoth[1];
+            int firstLeftIndex=leftIndexes.get(leftIndexes.size()-1);//first index of '(' for removal
             int minLeftNumber=(Integer)fromBoth[2];
             if (minRightNumber==0 && minLeftNumber==0) return Arrays.asList(sb.toString());//there is only one solution
             else{
@@ -199,8 +199,8 @@ public class Parentheses
     
     public static void main(String[] args) {
         Parentheses p = new Parentheses();
-        //System.out.println("indexes "+p.getIndexes(new StringBuilder("n(i()"), '(', 1));
-        List<String> result = p.removeInvalidParentheses("l(((())((z))((");
+        System.out.println("indexes "+p.getIndexes(new StringBuilder("((())(()()"), '(', 2));
+        List<String> result = p.removeInvalidParentheses("((())(()()");
         System.out.println("result "+result);
         //System.out.println(p.prepare(new StringBuilder("l(((())((z))(("),'(')[0]);
     }

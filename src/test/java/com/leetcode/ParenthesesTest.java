@@ -34,33 +34,33 @@ public class ParenthesesTest
 
     Parentheses p = new Parentheses();
     
-    public void testPrepareLeftSide1(){
+    public void testPrepareLeftSide01(){
         Object[] result = p.prepare(new StringBuilder("())v)(()(((((())"),'(');
-        String result0= ((StringBuilder) result[0]).toString();
+        String result0= ((StringBuilder) result[0]).toString(); //sb
         String expected0="()v)(()(((((())";
-        int result1=(Integer) result[1];
+        int result1=(Integer) result[1]; //lastRightIndex
         int expected1=3;
-        int result2=(Integer) result[2];
+        int result2=(Integer) result[2]; //minRightNumber
         int expected2=1;
         assertEquals(expected0,result0);
         assertEquals(expected1,result1);
         assertEquals(expected2,result2);
     }
     
-     public void testPrepareRightSide1(){
+     public void testPrepareRightSide01(){
         Object[] result = p.prepare(new StringBuilder("())v)(()(((((())"),')');
-        String result0= ((StringBuilder) result[0]).toString();
+        String result0= ((StringBuilder) result[0]).toString(); //sb
         String expected0="())v)(()(())";
-        int result1=(Integer) result[1];
+        int result1=(Integer) result[1]; //firstLeftIndex
         int expected1=5;
-        int result2=(Integer) result[2];
+        int result2=(Integer) result[2]; //minLeftNumber
         int expected2=1;
         assertEquals(expected0,result0);
         assertEquals(expected1,result1);
         assertEquals(expected2,result2);
     }
     
-     public void testPrepareLeftSide2(){
+     public void testPrepareLeftSide02(){
         Object[] result = p.prepare(new StringBuilder("()())()"),'(');
         String result0= ((StringBuilder) result[0]).toString();
         String expected0="()())()";
@@ -73,7 +73,7 @@ public class ParenthesesTest
         assertEquals(expected2,result2);
     }
     
-     public void testPrepareRightSide2(){
+     public void testPrepareRightSide02(){
         Object[] result = p.prepare(new StringBuilder("()())()"),')');
         String result0= ((StringBuilder) result[0]).toString();
         String expected0="()())()";
@@ -86,7 +86,7 @@ public class ParenthesesTest
         assertEquals(expected2,result2);
     }
     
-    public void testPrepareLeftSide3(){//middle part m()v
+    public void testPrepareLeftSide03(){//middle part m()v
         Object[] result = p.prepare(new StringBuilder("())v)m()v(()(())"),'(');
         String result0= ((StringBuilder) result[0]).toString();
         String expected0="()v)m()v(()(())";
@@ -99,7 +99,7 @@ public class ParenthesesTest
         assertEquals(expected2,result2);
     }
     
-     public void testPrepareRightSide3(){
+     public void testPrepareRightSide03(){
         Object[] result = p.prepare(new StringBuilder("())v)m()v(()(())"),')');
         String result0= ((StringBuilder) result[0]).toString();
         String expected0="())v)m()v(()(())";
@@ -112,7 +112,7 @@ public class ParenthesesTest
         assertEquals(expected2,result2);
     }
     //"((()))))())("
-    public void testPrepareLeftSide4(){//middle part m()v
+    public void testPrepareLeftSide04(){
         Object[] result = p.prepare(new StringBuilder("((()))))())("),'(');
         String result0= ((StringBuilder) result[0]).toString(); //sb
         String expected0="((()))())("; 
@@ -125,7 +125,7 @@ public class ParenthesesTest
         assertEquals(expected2,result2);
     }
     //"((()))))())("
-     public void testPrepareRightSide4(){
+     public void testPrepareRightSide04(){
         Object[] result = p.prepare(new StringBuilder("((()))))())("),')');
         String result0= ((StringBuilder) result[0]).toString();//sb
         String expected0="((()))))())"; 
@@ -138,55 +138,67 @@ public class ParenthesesTest
         assertEquals(expected2,result2);
     }
      
-    public void testGetIndexes1(){
+    public void testGetIndexes01(){
         List<Integer> result=p.getIndexes(new StringBuilder("()())"), ')',1);
         List<Integer> expected=Arrays.asList(1,3);
         assertEquals(expected,result);
     }
     
-    public void testGetIndexes2(){
+    public void testGetIndexes02(){
         List<Integer> result=p.getIndexes(new StringBuilder("(()c))"), ')',1);
         List<Integer> expected=Arrays.asList(2,4);
         assertEquals(expected,result);
     }
     
-    public void testGetIndexes3(){
+    public void testGetIndexes03(){
         List<Integer> result=p.getIndexes(new StringBuilder("(()(())"), '(',1);
         List<Integer> expected=Arrays.asList(0,3);
         assertEquals(expected,result);
     }
     
-    public void testGetIndexes4(){
+    public void testGetIndexes04(){
         List<Integer> result=p.getIndexes(new StringBuilder("((i()"), '(',2);
         List<Integer> expected=Arrays.asList(0,1,3);
         assertEquals(expected,result);
     }
     
-    public void testGetIndexes5(){
+    public void testGetIndexes05(){
         List<Integer> result=p.getIndexes(new StringBuilder("())v)"), ')',2);
         List<Integer> expected=Arrays.asList(1,2,4);
         assertEquals(expected,result);
     }
     
-    public void testGetIndexes6(){
+    public void testGetIndexes06(){
         List<Integer> result=p.getIndexes(new StringBuilder("((i()"), '(',2);
         List<Integer> expected=Arrays.asList(0,1,3);
         assertEquals(expected,result);
     }
     
-    public void testGetIndexes7(){
+    public void testGetIndexes07(){
         List<Integer> result=p.getIndexes(new StringBuilder("((m(())()"), '(',2);
         List<Integer> expected=Arrays.asList(0,1,3,4,7);
         assertEquals(expected,result);
     }
     //"((()))))())("
-    public void testGetIndexes8(){
+    public void testGetIndexes08(){
         List<Integer> result=p.getIndexes(new StringBuilder("((()))))())"), ')',3);
         List<Integer> expected=Arrays.asList(3,9,10);
         assertEquals(expected,result);
     }
+    //
+    public void testGetIndexes09(){
+        List<Integer> result=p.getIndexes(new StringBuilder("l(((())((z))"), '(',2);
+        List<Integer> expected=Arrays.asList(1,2,7,8);
+        assertEquals(expected,result);
+    }
+    //
+    public void testGetIndexes10(){
+        List<Integer> result=p.getIndexes(new StringBuilder("((())(()()"), '(',2);
+        List<Integer> expected=Arrays.asList(0,5,6,8);
+        assertEquals(expected,result);
+    }
     
-    public void testGenerate1() {
+    public void testGenerate01() {
         List<String> result =p.generate(new StringBuilder("((i()"), 2, Arrays.asList(0,1,3));
         List<String> expected = Arrays.asList("(i)","i()");
         Collections.sort(result);
@@ -194,7 +206,7 @@ public class ParenthesesTest
         assertEquals(expected,result);
     }
     //")(v)((m(())()("
-    public void testGenerate2() {
+    public void testGenerate02() {
         List<String> result =p.generate(new StringBuilder("((m(())()"), 2, Arrays.asList(0,1,3,4,7));
         List<String> expected = Arrays.asList("m(())()","(m())()","(m(()))","((m))()","((m()))");
         Collections.sort(result);
@@ -202,7 +214,7 @@ public class ParenthesesTest
         assertEquals(expected,result);
     }
     //"()())()"
-    public void testGenerate3() {
+    public void testGenerate03() {
         List<String> result =p.generate(new StringBuilder("()())()"), 1, Arrays.asList(1,3));
         List<String> expected = Arrays.asList("()()()", "(())()");
         Collections.sort(result);
@@ -210,7 +222,7 @@ public class ParenthesesTest
         assertEquals(expected,result);
     }
     //"(a)())()"
-    public void testGenerate4() {
+    public void testGenerate04() {
         List<String> result =p.generate(new StringBuilder("(a)())()"), 1, Arrays.asList(2,4));
         List<String> expected = Arrays.asList("(a)()()", "(a())()");
         Collections.sort(result);
@@ -218,7 +230,7 @@ public class ParenthesesTest
         assertEquals(expected,result);
     }
     
-    public void testRemoveParentheses1 ()
+    public void testRemoveParentheses01 ()
     {
         List<String> result = p.removeInvalidParentheses("()())()");
         List<String> expected = new ArrayList<String>(Arrays.asList("()()()", "(())()"));
@@ -227,7 +239,7 @@ public class ParenthesesTest
         assertEquals(expected,result);
     }
     
-    public void testRemoveParentheses2 ()
+    public void testRemoveParentheses02 ()
     {
         List<String> result = p.removeInvalidParentheses("(a)())()");
         List<String> expected = new ArrayList<String>(Arrays.asList("(a)()()", "(a())()"));
@@ -236,7 +248,7 @@ public class ParenthesesTest
         assertEquals(expected,result);
     }
     
-    public void testRemoveParentheses3 ()
+    public void testRemoveParentheses03 ()
     {
         List<String> result = p.removeInvalidParentheses(")(");
         List<String> expected = new ArrayList<String>(Arrays.asList(""));
@@ -245,7 +257,7 @@ public class ParenthesesTest
         assertEquals(expected,result);
     }
     
-    public void testRemoveParentheses4 ()
+    public void testRemoveParentheses04 ()
     {
         List<String> result = p.removeInvalidParentheses("((");
         List<String> expected = new ArrayList<String>(Arrays.asList(""));
@@ -254,7 +266,7 @@ public class ParenthesesTest
         assertEquals(expected,result);
     }
     
-    public void testRemoveParentheses5 ()
+    public void testRemoveParentheses05 ()
     {
         List<String> result = p.removeInvalidParentheses("()()))()");
         List<String> expected = new ArrayList<String>(Arrays.asList("()()()", "(())()"));
@@ -263,7 +275,7 @@ public class ParenthesesTest
         assertEquals(expected,result);
     }
     
-    public void testRemoveParentheses6 ()
+    public void testRemoveParentheses06 ()
     {
         List<String> result = p.removeInvalidParentheses("()()))()(");
         List<String> expected = new ArrayList<String>(Arrays.asList("()()()", "(())()"));
@@ -272,7 +284,7 @@ public class ParenthesesTest
         assertEquals(expected,result);
     }
     
-    public void testRemoveParentheses7 ()
+    public void testRemoveParentheses07 ()
     {
         List<String> result = p.removeInvalidParentheses("n");
         List<String> expected = new ArrayList<String>(Arrays.asList("n"));
@@ -281,7 +293,7 @@ public class ParenthesesTest
         assertEquals(expected,result);
     }
     
-    public void testRemoveParentheses8 ()
+    public void testRemoveParentheses08 ()
     {
         List<String> result = p.removeInvalidParentheses("(()");
         List<String> expected = new ArrayList<String>(Arrays.asList("()"));
@@ -290,7 +302,7 @@ public class ParenthesesTest
         assertEquals(expected,result);
     }
     
-    public void testRemoveParentheses9 ()
+    public void testRemoveParentheses09 ()
     {
         List<String> result = p.removeInvalidParentheses(")(f");
         List<String> expected = new ArrayList<String>(Arrays.asList("f"));
