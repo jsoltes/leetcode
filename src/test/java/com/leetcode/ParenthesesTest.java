@@ -137,7 +137,7 @@ public class ParenthesesTest
         assertEquals(expected1,result1);
         assertEquals(expected2,result2);
     }
-     
+/*  
     public void testGetIndexes01(){
         List<Integer> result=p.getIndexes(new StringBuilder("()())"), ')',1);
         List<Integer> expected=Arrays.asList(1,3);
@@ -197,7 +197,7 @@ public class ParenthesesTest
         List<Integer> expected=Arrays.asList(0,5,6,8);
         assertEquals(expected,result);
     }
-    
+*/    
     public void testGenerate01() {
         List<String> result =p.generate(new StringBuilder("((i()"), 2, Arrays.asList(0,1,3));
         List<String> expected = Arrays.asList("(i)","i()");

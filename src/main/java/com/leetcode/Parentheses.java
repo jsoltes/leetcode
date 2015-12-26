@@ -128,7 +128,6 @@ public class Parentheses
         return solutions;
         }
     }
-    
     public List<String> connect(List<String> leftSideList,String middle,List<String> rightSideList){
         List<String> solutions=new ArrayList<String>();
         for(String r:rightSideList){
@@ -160,30 +159,24 @@ public class Parentheses
             int firstLeftIndex=minLeftIndexes.get(minLeftIndexes.size()-1);//first index of '(' for removal
             int minLeftNumber=(Integer)fromBoth[2];
             if (minRightNumber==0 && minLeftNumber==0) return Arrays.asList(sb.toString());//there is only one solution
-            else{
-                if(minLeftNumber!=0 && minRightNumber==0) { //there are only left solutions
-                    StringBuilder rightSide=new StringBuilder(sb.substring(firstLeftIndex, sb.length()));
-                    String middle =sb.substring(lastRightIndex+1, firstLeftIndex);
-                    //we have to make minLeftIndexes smaller correspondingly to the substring
-                    for(int i=0;i<minLeftIndexes.size();i++) minLeftIndexes.set(i, minLeftIndexes.get(i)-middle.length());
-                    List<String> rightSideSolutions = generate(rightSide,minLeftNumber,getIndexes(rightSide,'(',minLeftNumber,minLeftIndexes));
+            StringBuilder leftSide=new StringBuilder(sb.substring(0, lastRightIndex+1));
+            if(minLeftNumber!=0){
+                StringBuilder rightSide=new StringBuilder(sb.substring(firstLeftIndex, sb.length()));
+                String middle =sb.substring(lastRightIndex+1, firstLeftIndex);
+                for(int i=0;i<minLeftIndexes.size();i++) minLeftIndexes.set(i, minLeftIndexes.get(i)-firstLeftIndex);
+                List<String> rightSideSolutions = generate(rightSide,minLeftNumber,getIndexes(rightSide,'(',minLeftNumber,minLeftIndexes));
+                if(minRightNumber==0) { //there are only left solutions   
                     List<String> solutions = new ArrayList<String>();
                     for(String r:rightSideSolutions) solutions.add(middle+r);
                     return solutions;
-                } 
-                if(minLeftNumber==0 && minRightNumber!=0) {
-                    StringBuilder leftSide=new StringBuilder(sb.substring(0, lastRightIndex+1));
-                    return generate(sb, minRightNumber, getIndexes(leftSide, ')', minRightNumber,minRightIndexes));
                 }
-                if (minLeftNumber!=0 && minRightNumber!=0){//we divide the sb on three parts left, middle and right based on lastRightIndex & firstLeftIndex
-                    StringBuilder leftSide=new StringBuilder(sb.substring(0, lastRightIndex+1));
-                    String middle =sb.substring(lastRightIndex+1, firstLeftIndex);
-                    StringBuilder rightSide=new StringBuilder(sb.substring(firstLeftIndex, sb.length()));
-                    List<String> leftSideSolutions=generate(leftSide, minRightNumber, getIndexes(leftSide, ')', minRightNumber,minRightIndexes));
-                    for(int i=0;i<minLeftIndexes.size();i++) minLeftIndexes.set(i, minLeftIndexes.get(i)-middle.length()-leftSide.length()-1);
-                    List<String> rightSideSolutions=generate(rightSide, minLeftNumber, getIndexes(rightSide, '(', minLeftNumber,minLeftIndexes));
-                    return connect(leftSideSolutions, middle, rightSideSolutions);
+                if (minLeftNumber!=0){
+                List<String> leftSideSolutions=generate(leftSide, minRightNumber, getIndexes(leftSide, ')', minRightNumber,minRightIndexes));
+                return connect(leftSideSolutions, middle, rightSideSolutions);
                 }
+            }
+            if(minLeftNumber==0 && minRightNumber!=0) {
+                return generate(sb, minRightNumber, getIndexes(leftSide, ')', minRightNumber,minRightIndexes));
             }
         }
         return null;
