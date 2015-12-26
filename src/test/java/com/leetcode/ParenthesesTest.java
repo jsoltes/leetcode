@@ -188,7 +188,7 @@ public class ParenthesesTest
     //
     public void testGetIndexes09(){
         List<Integer> result=p.getIndexes(new StringBuilder("l(((())((z))"), '(',2);
-        List<Integer> expected=Arrays.asList(1,2,7,8);
+        List<Integer> expected=Arrays.asList(1,7,8);
         assertEquals(expected,result);
     }
     //

@@ -105,7 +105,6 @@ public class Parentheses
         }
         return indexes;
     }
-    
     public List<String> generate(StringBuilder sb,int minNumber, List<Integer> indexes){ //"((m(())()",2,[0,1,3,4,7]
         List<String> solutions=new ArrayList<String>();
         StringBuilder original=new StringBuilder(sb);
@@ -156,40 +155,59 @@ public class Parentheses
         //prepare from the left side
         Object[] fromLeft = prepare(sb,'(');
         sb=(StringBuilder)fromLeft[0];
-        List<Integer> rightIndexes=(List<Integer>)fromLeft[1];
-        int lastRightIndex=rightIndexes.get(rightIndexes.size()-1); //last index of ')' for removal
+        List<Integer> minRightIndexes=(List<Integer>)fromLeft[1];
+        int lastRightIndex=minRightIndexes.get(minRightIndexes.size()-1); //last index of ')' for removal
         int minRightNumber=(Integer)fromLeft[2];
         //now the decision tree
         if(lastRightIndex==sb.lastIndexOf(")") && sb.lastIndexOf("(")<sb.lastIndexOf(")")){ //we don't need to prepare right side
             if(minRightNumber==0) return Arrays.asList(sb.toString()); //means there is only one solution
-            else return generate(sb, minRightNumber, getIndexes(sb, ')', minRightNumber)); //if there are more solutions
+            else {
+                List<Integer> indexes=getIndexes(sb, ')', minRightNumber);
+                for(int mi:minRightIndexes) if(!indexes.contains(mi)) indexes.add(mi);
+                return generate(sb, minRightNumber, indexes);
+            } //if there are more solutions
         }
-        else{ //we need to also prepare right side
+        else{ //we need to prepare right side
             Object[] fromBoth=prepare(sb,')');//now it will be prepared from both sides, because we already prepared it from left side
             sb=(StringBuilder)fromBoth[0];
-            List<Integer> leftIndexes=(List<Integer>)fromBoth[1];
-            int firstLeftIndex=leftIndexes.get(leftIndexes.size()-1);//first index of '(' for removal
+            List<Integer> minLeftIndexes=(List<Integer>)fromBoth[1];
+            int firstLeftIndex=minLeftIndexes.get(minLeftIndexes.size()-1);//first index of '(' for removal
             int minLeftNumber=(Integer)fromBoth[2];
             if (minRightNumber==0 && minLeftNumber==0) return Arrays.asList(sb.toString());//there is only one solution
             else{
                 if(minLeftNumber!=0 && minRightNumber==0) { //there are only left solutions
                     StringBuilder rightSide=new StringBuilder(sb.substring(firstLeftIndex, sb.length()));
                     String middle =sb.substring(lastRightIndex+1, firstLeftIndex);
-                    List<String> rightSideSolutions = generate(rightSide,minLeftNumber,getIndexes(rightSide,'(',minLeftNumber));
+                    List<Integer> indexes = getIndexes(rightSide,'(',minLeftNumber);
+                    //we have to make minLeftIndexes smaller correspondingly to the substring
+                    for(int i=0;i<minLeftIndexes.size();i++) minLeftIndexes.set(i, minLeftIndexes.get(i)-middle.length());                            
+                    for(int mi:minLeftIndexes) if(!indexes.contains(mi)) indexes.add(mi);
+                    Collections.sort(indexes);
+                    List<String> rightSideSolutions = generate(rightSide,minLeftNumber,indexes);
                     List<String> solutions = new ArrayList<String>();
                     for(String r:rightSideSolutions) solutions.add(middle+r);
                     return solutions;
                 } 
                 if(minLeftNumber==0 && minRightNumber!=0) {
                     StringBuilder leftSide=new StringBuilder(sb.substring(0, lastRightIndex+1));
-                    return generate(sb, minRightNumber, getIndexes(leftSide, ')', minRightNumber));
+                    List<Integer> indexes=getIndexes(leftSide, ')', minRightNumber);
+                    for(int mi:minRightIndexes) if(!indexes.contains(mi)) indexes.add(mi);
+                    return generate(sb, minRightNumber, indexes);
                 }
                 if (minLeftNumber!=0 && minRightNumber!=0){//we divide the sb on three parts left, middle and right based on lastRightIndex & firstLeftIndex
                     StringBuilder leftSide=new StringBuilder(sb.substring(0, lastRightIndex+1));
                     String middle =sb.substring(lastRightIndex+1, firstLeftIndex);
                     StringBuilder rightSide=new StringBuilder(sb.substring(firstLeftIndex, sb.length()));
-                    List<String> leftSideSolutions=generate(leftSide, minRightNumber, getIndexes(leftSide, ')', minRightNumber));
-                    List<String> rightSideSolutions=generate(rightSide, minLeftNumber, getIndexes(rightSide, '(', minLeftNumber));
+                    
+                    List<Integer> rightIndexes=getIndexes(leftSide, ')', minRightNumber);
+                    for(int mi:minRightIndexes) if(!rightIndexes.contains(mi)) rightIndexes.add(mi);
+                    List<String> leftSideSolutions=generate(leftSide, minRightNumber, rightIndexes);
+                    List<Integer> leftIndexes=getIndexes(rightSide, '(', minLeftNumber);
+                    for(int i=0;i<minLeftIndexes.size();i++) minLeftIndexes.set(i, minLeftIndexes.get(i)-middle.length()-leftSide.length()-1);
+                    for(int mi:minLeftIndexes) if(!leftIndexes.contains(mi)) leftIndexes.add(mi);
+                    Collections.sort(leftIndexes);
+                    List<String> rightSideSolutions=generate(rightSide, minLeftNumber, leftIndexes);
+                    
                     return connect(leftSideSolutions, middle, rightSideSolutions);
                 }
             }
@@ -199,8 +217,8 @@ public class Parentheses
     
     public static void main(String[] args) {
         Parentheses p = new Parentheses();
-        System.out.println("indexes "+p.getIndexes(new StringBuilder("((())(()()"), '(', 2));
-        List<String> result = p.removeInvalidParentheses("((())(()()");
+        //System.out.println("indexes "+p.getIndexes(new StringBuilder("((())(()()"), '(', 2));
+        List<String> result = p.removeInvalidParentheses("l(((())((z))((");
         System.out.println("result "+result);
         //System.out.println(p.prepare(new StringBuilder("l(((())((z))(("),'(')[0]);
     }
