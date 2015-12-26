@@ -14,8 +14,8 @@ import java.util.List;
  */
 public class Parentheses 
 {  
-    //prepares string and returns one part(left+middle or right) of the string
-    public Object[] prepare(StringBuilder sb, char parenthesis){//")(()c))(", '('
+    //prepares the String from one side based on the input parenthesis
+    public Object[] prepare(StringBuilder sb, char parenthesis){
         List<Integer> indexes=new ArrayList<Integer>();
         int minNumber=0;
         int balance=0;
@@ -27,7 +27,6 @@ public class Parentheses
             sb.reverse();
             otherParenthesis='(';
         }
-        //gets indexes of wrong right parentheses (from which you can get all possible removals of right parentheses)
         int sblength=sb.length();
         for(int i=0;i<sblength;i++){
             char currentChar=sb.charAt(i);
@@ -41,8 +40,6 @@ public class Parentheses
                 count++;
             }
             if(balance<0){
-                //in these cases we remove:((((()))))), )(), ()),)a)() in these cases not: ()()),()a)()
-                //remove - if left =0; if left=1 and on i-1 position isn't any symbol; if left is 2 and on i-1 position is the same as on i-2
                 char previousChar=0;
                 if(i>=1) previousChar=sb.charAt(i-1);
                 if(i<=2 || (count>left && (previousChar==')'|| previousChar=='(') && previousChar==sb.charAt(i-2))){
@@ -57,61 +54,56 @@ public class Parentheses
             }
         }
         Object[] result;
-            if(parenthesis=='('){ //leftSide
-                if(minNumber==0) result=new Object[]{sb,Arrays.asList(-1),0};
-                else{
-                result=new Object[]{sb,indexes,minNumber};
-                }
-                
+        if(parenthesis=='('){ //leftSide
+            if(minNumber==0) result=new Object[]{sb,Arrays.asList(-1),0};
+            else result=new Object[]{sb,indexes,minNumber};
             } 
-            else { //rightSide
-                sb.reverse(); //reversing the string back to normal
-                if(minNumber==0) result=new Object[]{sb,Arrays.asList(-1),0};
-                else{
+        else { //rightSide
+            sb.reverse(); //reversing the string back to normal
+            if(minNumber==0) result=new Object[]{sb,Arrays.asList(-1),0};
+            else{
                 int isize=indexes.size();
                 for(int i=0;i<isize;i++){//we also have to reverse the indexes
                     indexes.set(i, sblength-1-indexes.get(i));
                 }
                 result = new Object[]{sb,indexes,minNumber};
-                }
             }
-        
-        return result;
+        }
+    return result;
     }
     //gets indexes for all possible parentheses removals
-    public List<Integer> getIndexes(StringBuilder preparedSide, char parenthesis, int minNumber){//"l(((())((z))",'(',2 ->1,2,7,8
+    public List<Integer> getIndexes(StringBuilder sb, char parenthesis, int minNumber, List<Integer> minIndexes){
         List<Integer> indexes = new ArrayList<Integer>();
-        int length=preparedSide.length();
+        int length=sb.length();
         for(int i=0;i<length;i++){
-            if(preparedSide.charAt(i)==parenthesis){
-                //if there is only one sole parenthesis it can be added to indexes
-                if(i+1<length && preparedSide.charAt(i+1)!=parenthesis) {
+            if(sb.charAt(i)==parenthesis){
+                if(i+1<length && sb.charAt(i+1)!=parenthesis) { //if it is sole parenthesis
                     indexes.add(i);
-                    i++; //we can increment, because we know the next character isn't parenthesis we are looking for
+                    i++; //we increment, because the next character isn't the parenthesis
                 }
-                //in case of group of parentheses we decide based on their count - if it is less or equal than minNumber, we add all - else only the first of them
-                else {
-                    int count=0;
+                else {//there is a group of parentheses
                     List<Integer> newIndexes = new ArrayList<Integer>();
-                    while(i<length && preparedSide.charAt(i)==parenthesis){
+                    while(i<length && sb.charAt(i)==parenthesis){
                         newIndexes.add(i);
-                        count++;
                         i++;
                     }
-                    if(count<=minNumber) indexes.addAll(newIndexes);
+                    if(i-newIndexes.get(0)<=minNumber) indexes.addAll(newIndexes);
                     else indexes.add(newIndexes.get(0));
                 }
             }
         }
+        for(int mi:minIndexes) if(!indexes.contains(mi)) indexes.add(mi);
+        if(parenthesis=='(') Collections.sort(indexes);
         return indexes;
     }
-    public List<String> generate(StringBuilder sb,int minNumber, List<Integer> indexes){ //"((m(())()",2,[0,1,3,4,7]
+    public List<String> generate(StringBuilder sb,int minNumber, List<Integer> indexes){
         List<String> solutions=new ArrayList<String>();
         StringBuilder original=new StringBuilder(sb);
+        int isize=indexes.size();//5
         if(minNumber==1){ //base case
-            for (int i=0;i<indexes.size();i++){
+            for (int i=0;i<isize;i++){
                 int position=indexes.get(i);
-                if(position==0 || position-1>=0 && sb.charAt(position)!=sb.charAt(position-1)){
+                if(position==0 || (position-1>=0 && sb.charAt(position)!=sb.charAt(position-1))){
                     sb.deleteCharAt(position);
                     solutions.add(sb.toString());
                     sb=new StringBuilder(original);
@@ -120,17 +112,14 @@ public class Parentheses
             return solutions;
         }
         else { //recursive 
-            int isize=indexes.size();//5
-            int position=indexes.get(0);//0
-            sb.deleteCharAt(position); //(m(())()
-            indexes=indexes.subList(1,isize);//[1,3,4,7]
-            List<Integer> indexes2=new ArrayList<Integer>(indexes);//[1,3,4,7]
-            isize=isize-1;//the same as indexes.size()//4
-            for(int j=0;j<isize;j++){
-                indexes.set(j, indexes.get(j)-1);
-            } //[0,2,3,6]
-            solutions.addAll(generate(sb,minNumber-1,indexes));//[]
-            if(isize>=minNumber){ //why?
+            int position=indexes.get(0);
+            sb.deleteCharAt(position);
+            indexes=indexes.subList(1,isize);
+            List<Integer> indexes2=new ArrayList<Integer>(indexes);
+            isize=isize-1;//the same as indexes.size()
+            for(int j=0;j<isize;j++) indexes.set(j, indexes.get(j)-1);
+            solutions.addAll(generate(sb,minNumber-1,indexes));
+            if(isize>=minNumber){
                 if(position+1==indexes2.get(0)){
                     indexes2=indexes2.subList(1,indexes2.size());
                 }
@@ -159,16 +148,13 @@ public class Parentheses
         int lastRightIndex=minRightIndexes.get(minRightIndexes.size()-1); //last index of ')' for removal
         int minRightNumber=(Integer)fromLeft[2];
         //now the decision tree
-        if(lastRightIndex==sb.lastIndexOf(")") && sb.lastIndexOf("(")<sb.lastIndexOf(")")){ //we don't need to prepare right side
+        int lastRight=sb.lastIndexOf(")");
+        if(lastRightIndex==lastRight && sb.lastIndexOf("(")<lastRight){ //we don't need to prepare right side
             if(minRightNumber==0) return Arrays.asList(sb.toString()); //means there is only one solution
-            else {
-                List<Integer> indexes=getIndexes(sb, ')', minRightNumber);
-                for(int mi:minRightIndexes) if(!indexes.contains(mi)) indexes.add(mi);
-                return generate(sb, minRightNumber, indexes);
-            } //if there are more solutions
+            else return generate(sb, minRightNumber, getIndexes(sb, ')', minRightNumber, minRightIndexes));
         }
         else{ //we need to prepare right side
-            Object[] fromBoth=prepare(sb,')');//now it will be prepared from both sides, because we already prepared it from left side
+            Object[] fromBoth=prepare(sb,')');//now it is prepared from both sides
             sb=(StringBuilder)fromBoth[0];
             List<Integer> minLeftIndexes=(List<Integer>)fromBoth[1];
             int firstLeftIndex=minLeftIndexes.get(minLeftIndexes.size()-1);//first index of '(' for removal
@@ -178,36 +164,24 @@ public class Parentheses
                 if(minLeftNumber!=0 && minRightNumber==0) { //there are only left solutions
                     StringBuilder rightSide=new StringBuilder(sb.substring(firstLeftIndex, sb.length()));
                     String middle =sb.substring(lastRightIndex+1, firstLeftIndex);
-                    List<Integer> indexes = getIndexes(rightSide,'(',minLeftNumber);
                     //we have to make minLeftIndexes smaller correspondingly to the substring
-                    for(int i=0;i<minLeftIndexes.size();i++) minLeftIndexes.set(i, minLeftIndexes.get(i)-middle.length());                            
-                    for(int mi:minLeftIndexes) if(!indexes.contains(mi)) indexes.add(mi);
-                    Collections.sort(indexes);
-                    List<String> rightSideSolutions = generate(rightSide,minLeftNumber,indexes);
+                    for(int i=0;i<minLeftIndexes.size();i++) minLeftIndexes.set(i, minLeftIndexes.get(i)-middle.length());
+                    List<String> rightSideSolutions = generate(rightSide,minLeftNumber,getIndexes(rightSide,'(',minLeftNumber,minLeftIndexes));
                     List<String> solutions = new ArrayList<String>();
                     for(String r:rightSideSolutions) solutions.add(middle+r);
                     return solutions;
                 } 
                 if(minLeftNumber==0 && minRightNumber!=0) {
                     StringBuilder leftSide=new StringBuilder(sb.substring(0, lastRightIndex+1));
-                    List<Integer> indexes=getIndexes(leftSide, ')', minRightNumber);
-                    for(int mi:minRightIndexes) if(!indexes.contains(mi)) indexes.add(mi);
-                    return generate(sb, minRightNumber, indexes);
+                    return generate(sb, minRightNumber, getIndexes(leftSide, ')', minRightNumber,minRightIndexes));
                 }
                 if (minLeftNumber!=0 && minRightNumber!=0){//we divide the sb on three parts left, middle and right based on lastRightIndex & firstLeftIndex
                     StringBuilder leftSide=new StringBuilder(sb.substring(0, lastRightIndex+1));
                     String middle =sb.substring(lastRightIndex+1, firstLeftIndex);
                     StringBuilder rightSide=new StringBuilder(sb.substring(firstLeftIndex, sb.length()));
-                    
-                    List<Integer> rightIndexes=getIndexes(leftSide, ')', minRightNumber);
-                    for(int mi:minRightIndexes) if(!rightIndexes.contains(mi)) rightIndexes.add(mi);
-                    List<String> leftSideSolutions=generate(leftSide, minRightNumber, rightIndexes);
-                    List<Integer> leftIndexes=getIndexes(rightSide, '(', minLeftNumber);
+                    List<String> leftSideSolutions=generate(leftSide, minRightNumber, getIndexes(leftSide, ')', minRightNumber,minRightIndexes));
                     for(int i=0;i<minLeftIndexes.size();i++) minLeftIndexes.set(i, minLeftIndexes.get(i)-middle.length()-leftSide.length()-1);
-                    for(int mi:minLeftIndexes) if(!leftIndexes.contains(mi)) leftIndexes.add(mi);
-                    Collections.sort(leftIndexes);
-                    List<String> rightSideSolutions=generate(rightSide, minLeftNumber, leftIndexes);
-                    
+                    List<String> rightSideSolutions=generate(rightSide, minLeftNumber, getIndexes(rightSide, '(', minLeftNumber,minLeftIndexes));
                     return connect(leftSideSolutions, middle, rightSideSolutions);
                 }
             }
