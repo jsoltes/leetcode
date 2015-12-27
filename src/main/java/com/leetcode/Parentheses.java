@@ -72,8 +72,8 @@ public class Parentheses
     return result;
     }
     //gets indexes for all possible parentheses removals
-    public List<Integer> getIndexes(StringBuilder sb, char parenthesis, int minNumber, List<Integer> minIndexes){
-        List<Integer> indexes = new ArrayList<Integer>();
+    public List<Integer> getIndexes(StringBuilder sb, char parenthesis, int minNumber, List<Integer> minIndexes){//
+        List<Integer> indexes = new ArrayList<Integer>();//"(l))())t", ')', 2,[3,6]
         int length=sb.length();
         for(int i=0;i<length;i++){
             if(sb.charAt(i)==parenthesis){
@@ -97,9 +97,9 @@ public class Parentheses
         return indexes;
     }
     public List<String> generate(StringBuilder sb,int minNumber, List<Integer> indexes){
-        List<String> solutions=new ArrayList<String>();
+        List<String> solutions=new ArrayList<String>();//"(l))())t",2,[2,3,5,6]
         StringBuilder original=new StringBuilder(sb);
-        int isize=indexes.size();//5
+        int isize=indexes.size();//4
         if(minNumber==1){ //base case
             for (int i=0;i<isize;i++){
                 int position=indexes.get(i);
@@ -112,18 +112,19 @@ public class Parentheses
             return solutions;
         }
         else { //recursive 
-            int position=indexes.get(0);
-            sb.deleteCharAt(position);
-            indexes=indexes.subList(1,isize);
-            List<Integer> indexes2=new ArrayList<Integer>(indexes);
-            isize=isize-1;//the same as indexes.size()
-            for(int j=0;j<isize;j++) indexes.set(j, indexes.get(j)-1);
-            solutions.addAll(generate(sb,minNumber-1,indexes));
-            if(isize>=minNumber){
-                if(position+1==indexes2.get(0)){
-                    indexes2=indexes2.subList(1,indexes2.size());
-                }
-                solutions.addAll(generate(original,minNumber,indexes2));  
+            int position=indexes.get(0);//2;5
+            sb.deleteCharAt(position);//(l)())t;(l))()t
+            indexes=indexes.subList(1,isize);//[3,5,6];[6]
+            List<Integer> indexes2=new ArrayList<Integer>(indexes);//[3,5,6];[6]
+            isize=isize-1;//the same as indexes.size()//3;1
+            for(int j=0;j<isize;j++) indexes.set(j, indexes.get(j)-1);//[2,4,5];[5]
+            solutions.addAll(generate(sb,minNumber-1,indexes));//(l)())t,1,[2,4,5];(l))()t,1,[5]
+            if(isize>=minNumber){//3>=2;
+                if(position+1==indexes2.get(0)){//3==3;
+                    indexes2=indexes2.subList(1,isize);
+                }//[5,6]
+                if(indexes2.get(indexes2.size()-1)==original.lastIndexOf(")")) indexes2=indexes2.subList(0, indexes2.size()-1);
+                solutions.addAll(generate(original,minNumber,indexes2));//(l))())t,2,[5,6]  
             }
         return solutions;
         }
@@ -184,8 +185,10 @@ public class Parentheses
     
     public static void main(String[] args) {
         Parentheses p = new Parentheses();
-        //System.out.println("indexes "+p.getIndexes(new StringBuilder("((())(()()"), '(', 2));
-        List<String> result = p.removeInvalidParentheses("l(((())((z))((");
+        System.out.println("indexes "+p.getIndexes(new StringBuilder("(l))())t"), ')', 2,Arrays.asList(3,6)));
+        System.out.println("generate "+p.generate(new StringBuilder("(l))())t"), 2, Arrays.asList(2,3,5)));
+        System.out.println("generate "+p.generate(new StringBuilder("(l))())t"), 2, Arrays.asList(2,3,6)));
+        List<String> result = p.removeInvalidParentheses("(l))())(t(");
         System.out.println("result "+result);
         //System.out.println(p.prepare(new StringBuilder("l(((())((z))(("),'(')[0]);
     }
