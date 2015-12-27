@@ -481,4 +481,13 @@ public class ParenthesesTest
         Collections.sort(expected);
         assertEquals(expected,result);
     }   
+    //"((()((s((((()"
+    public void testRemoveParentheses29 ()
+    {
+        List<String> result = p.removeInvalidParentheses("((()((s((((()");
+        List<String> expected = new ArrayList<String>(Arrays.asList("()s()","()(s)","(()s)"));
+        Collections.sort(result);
+        Collections.sort(expected);
+        assertEquals(expected,result);
+    }   
 }
