@@ -28,21 +28,21 @@ public class Parentheses
             otherParenthesis='(';
         }
         int sblength=sb.length();
-        for(int i=0;i<sblength;i++){
-            char currentChar=sb.charAt(i);
+        for(int i=0;i<sblength;i++){//o(()()()m()((()t
+            char currentChar=sb.charAt(i);//t;);(;(
             if(currentChar==parenthesis) {
-                balance++;
+                balance++;//1
                 count=0;
-                left++;
+                left++;//1
             }
             if(currentChar==otherParenthesis) {
-                balance--;
-                count++;
+                balance--;//0;-1
+                count++;//1;2
             }
             if(balance<0){
                 char previousChar=0;
                 if(i>=1) previousChar=sb.charAt(i-1);
-                if(i<=2 || (count>left && (previousChar==')'|| previousChar=='(') && previousChar==sb.charAt(i-2))){
+                if(i-sb.indexOf(Character.toString(parenthesis))<=2 || (count>left && (previousChar==')'|| previousChar=='(') && previousChar==sb.charAt(i-2))){
                     sb.deleteCharAt(i); //after this cursor goes on the next character so we have to decrease it
                     i--; //because otherways we would skip one character
                     sblength--; //because the string is now shorter
@@ -92,9 +92,10 @@ public class Parentheses
                 }
             }
         }
-        System.out.println("indexes before "+indexes);
         for(int mi:minIndexes) if(!indexes.contains(mi)) indexes.add(mi);
         if(parenthesis=='(') Collections.sort(indexes);
+        System.out.println("minIndexes "+minIndexes);
+        System.out.println("indexes"+indexes);
         return indexes;
     }
     public List<String> generate(StringBuilder sb,int minNumber, List<Integer> indexes){
@@ -188,7 +189,7 @@ public class Parentheses
     
     public static void main(String[] args) {
         Parentheses p = new Parentheses();
-        List<String> result = p.removeInvalidParentheses("((()((s((((()");
+        List<String> result = p.removeInvalidParentheses("o(()()()m()((()t");
         System.out.println("result "+result);
     }
 }
