@@ -28,24 +28,23 @@ public class Parentheses
             otherParenthesis='(';
         }
         int sblength=sb.length();
-        for(int i=0;i<sblength;i++){//o(()()()m()((()t
-            char currentChar=sb.charAt(i);//t;);(;(
+        for(int i=0;i<sblength;i++){
+            char currentChar=sb.charAt(i);
             if(currentChar==parenthesis) {
-                balance++;//1
+                balance++;
                 count=0;
-                left++;//1
+                left++;
             }
             if(currentChar==otherParenthesis) {
-                balance--;//0;-1
-                count++;//1;2
+                balance--;
+                count++;
             }
             if(balance<0){
                 char previousChar=0;
                 if(i>=1) previousChar=sb.charAt(i-1);
                 if(i-sb.indexOf(Character.toString(parenthesis))<=2 || (count>left && (previousChar==')'|| previousChar=='(') && previousChar==sb.charAt(i-2))){
-                    sb.deleteCharAt(i); //after this cursor goes on the next character so we have to decrease it
-                    i--; //because otherways we would skip one character
-                    sblength--; //because the string is now shorter
+                    sb.deleteCharAt(i--); //after this cursor goes on the next character so we have to decrease it
+                    sblength--; 
                 } else {
                     indexes.add(i);
                     minNumber++;
@@ -55,28 +54,14 @@ public class Parentheses
         }
         List<Object> result=new ArrayList<Object>();
         if(parenthesis=='('){ //leftSide
-            if(minNumber==0) {
-                result.add(Arrays.asList(-1));
-                if(balance>0) result.addAll(prepare(sb,')'));
-                else {
-                    result.add(Arrays.asList(-1));
-                    result.add(sb);
-                }
-            }
-            else {
-                result.add(indexes);
-                if(balance>0) result.addAll(prepare(sb,')'));
-                else {
-                    result.add(Arrays.asList(-1));
-                    result.add(sb);
-                }
-            }
+            if(minNumber==0) result.add(Arrays.asList(-1));
+            else result.add(indexes);
+            if(balance>0) result.addAll(prepare(sb,')'));
+            else result.addAll(Arrays.asList(Arrays.asList(-1),sb));
         } 
         else { //rightSide
             sb.reverse(); //reversing the string back to normal
-            if(minNumber==0){
-                result.add(Arrays.asList(-1));
-            }
+            if(minNumber==0)result.add(Arrays.asList(-1));
             else{    
                 int isize=indexes.size();
                 for(int i=0;i<isize;i++){//we also have to reverse the indexes
