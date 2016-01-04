@@ -73,52 +73,10 @@ public class Parentheses
         }
     return result;
     }
-    //gets indexes for all possible parentheses removals
-    public List<Integer> getIndexes(StringBuilder sb, char parenthesis, int minNumber, List<Integer> minIndexes){//
-        List<Integer> indexes = new ArrayList<Integer>();//"(l))())t", ')', 2,[3,6]
-        int length=sb.length();
-        for(int i=0;i<length;i++){
-            if(sb.charAt(i)==parenthesis){
-                if(i+1<length && sb.charAt(i+1)!=parenthesis) { //if it is sole parenthesis
-                    indexes.add(i);
-                    i++; //we increment, because the next character isn't the parenthesis
-                }
-                else {//there is a group of parentheses
-                    List<Integer> newIndexes = new ArrayList<Integer>();
-                    while(i<length && sb.charAt(i)==parenthesis){
-                        newIndexes.add(i);
-                        i++;
-                    }
-                    if(i-newIndexes.get(0)<=minNumber && newIndexes.get(0)!=sb.indexOf("(")) indexes.addAll(newIndexes);
-                    else indexes.add(newIndexes.get(0));
-                }
-            }
-        }
-        for(int mi:minIndexes) if(!indexes.contains(mi)) indexes.add(mi);
-        if(parenthesis=='(') Collections.sort(indexes);
-        System.out.println("minIndexes "+minIndexes);
-        System.out.println("indexes"+indexes);
-        return indexes;
-    }
-    public List<String> generate2(StringBuilder sb,int minNumber, List<Integer> indexes){
-        List<StringBuilder> solutions=new ArrayList<StringBuilder>();
-        StringBuilder original=new StringBuilder(sb);
-        for(int i=0;i<indexes.size();i++){
-            int position = indexes.get(i);
-            if(i==0||position-1!=indexes.get(i-1)) {
-                sb.deleteCharAt(position);
-                solutions.add(sb);
-                sb=original;
-            }
-        }
-        List<String> results=new ArrayList<String>();
-        for(StringBuilder sbu:solutions) results.add(sbu.toString());
-        return results;
-    }
- 
+    //generates list of all solutions based on minIndexes
     public List<String> generate(StringBuilder sb,int minNumber, List<Integer> indexes){
-        List<String> solutions=new ArrayList<String>();//"()())()))())()",4,[1, 3, 4, 6, 7, 8, 10, 11]
-        StringBuilder original=new StringBuilder(sb);//()())()))())()
+        List<String> solutions=new ArrayList<String>();
+        StringBuilder original=new StringBuilder(sb);
         int isize=indexes.size();//8
         if(minNumber==1){ //base case
             for (int i=0;i<isize;i++){
