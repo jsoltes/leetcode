@@ -127,7 +127,7 @@ public class ParenthesesTest
     }
     //1 minRightIndex
     public void testGenerate01() {
-        List<String> result =p.generate(new StringBuilder("()())"), Arrays.asList(4));
+        List<String> result =p.generate(new StringBuilder("()())"),1,1);
         List<String> expected = Arrays.asList("()()", "(())");
         Collections.sort(result);
         Collections.sort(expected);
@@ -135,7 +135,7 @@ public class ParenthesesTest
     }
     //2 minLeftIndexes
     public void testGenerate02() {
-        List<String> result =p.generate(new StringBuilder("((i()"), Arrays.asList(0,1));
+        List<String> result =p.generate(new StringBuilder("((i()"),0,2);
         List<String> expected = Arrays.asList("(i)","i()");
         Collections.sort(result);
         Collections.sort(expected);
@@ -143,7 +143,7 @@ public class ParenthesesTest
     }
     //2 minLeftIndexes
     public void testGenerate03() {
-        List<String> result =p.generate(new StringBuilder("((m(())()"), Arrays.asList(0,1));
+        List<String> result =p.generate(new StringBuilder("((m(())()"),0,2);
         List<String> expected = Arrays.asList("m(())()","(m())()","(m(()))","((m))()","((m()))");
         Collections.sort(result);
         Collections.sort(expected);
@@ -151,7 +151,7 @@ public class ParenthesesTest
     }
     //4 minRightIndexes
     public void testGenerate04() {
-        List<String> result =p.generate(new StringBuilder("()())()))())"), Arrays.asList(4,7,8,11));
+        List<String> result =p.generate(new StringBuilder("()())()))())"),1,4);
         List<String> expected = Arrays.asList("((())())()","((()))()()","(()()())()","(()())()()","(())(())()","(())()()()","()(()())()","()(())()()","()()(())()","()()()()()");
         Collections.sort(result);
         Collections.sort(expected);

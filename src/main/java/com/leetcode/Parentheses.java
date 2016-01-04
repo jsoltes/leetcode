@@ -74,45 +74,54 @@ public class Parentheses
     return result;
     }
     //generates list of solutions based on minIndexes and input string
-    public List<String> generate(StringBuilder sb,List<Integer> minIndexes){
+    public List<String> generate(StringBuilder sb,int start,int minNumber){
         List<String> solutions=new ArrayList<String>();
         StringBuilder original=new StringBuilder(sb);
-        int isize=indexes.size();//8
-        if(minNumber==1){ //base case
-            for (int i=0;i<isize;i++){
-                int position=indexes.get(i);
-                if(position==0 || (position-1>=0 && sb.charAt(position)!=sb.charAt(position-1))){
-                    sb.deleteCharAt(position);
-                    solutions.add(sb.toString());
-                    sb=new StringBuilder(original);
+        char parenthesis=sb.charAt(start);
+        if(minNumber==1){
+            for(int i=start;i<sb.length();i++){
+                if(sb.charAt(i)==parenthesis){
+                    while(i<sb.length()-1 && sb.charAt(i)==sb.charAt(i+1)){ //always deletes only the last one from group
+                        i++;
+                    }
+                sb.deleteCharAt(i);
                 }
+                solutions.add(sb.toString());
+                sb=original;
             }
             return solutions;
         }
-        else { //recursive case
-            int position=indexes.get(0);//1
-            int p=1;
-            sb.deleteCharAt(position);//(())()))())()
-            indexes=indexes.subList(1,isize);//[3, 4, 6, 7, 8, 10, 11]
-            List<Integer> indexes2=new ArrayList<Integer>(indexes);//[3, 4, 6, 7, 8, 10, 11]
-            System.out.println("position "+position);
-            System.out.println("just indexes 2 "+indexes2);
-            isize=indexes.size();
-            for(int j=0;j<isize;j++) indexes.set(j, indexes.get(j)-1);//[2, 3, 5, 6, 7, 9, 10]
-            if(indexes.size()>0) solutions.addAll(generate(sb,minNumber-1,indexes));//(())()))())(),3,[2, 3, 5, 6, 7, 9, 10];
-            if(isize>=minNumber){//
-                System.out.println("indexes2 before "+indexes2);
-                while(position+1==indexes2.get(0)){//
-                    indexes2=indexes2.subList(1,indexes2.size());
-                    position++;
-                }//
-                System.out.println("indexes2 after "+indexes2);
-                if(indexes2.get(indexes2.size()-1)==original.lastIndexOf(")")) indexes2=indexes2.subList(0, indexes2.size()-1);
-                solutions.addAll(generate(original,minNumber,indexes2));//()())()))())(),4,[3, 4, 6, 7, 8, 10, 11] 
+        if(minNumber>1){
+            sb.deleteCharAt(start);
+            start=sb.indexOf(Character.toString(parenthesis), start);
+            solutions.addAll(generate(sb,start,minNumber-1));
+            
+            int start2=original.indexOf(Character.toString(parenthesis), start+1);
+            while(start<original.length()-1 && start2==start+1){
+                start2=original.indexOf(Character.toString(parenthesis), start2+1);
+                start++;
             }
-        return solutions;
+            int firstMinIndex=original.length()-1;
+            int balance=0;
+            char otherParenthesis;
+            if(parenthesis=='(') otherParenthesis=')';
+            else otherParenthesis='(';
+            for(int i=0;i<original.length();i++){
+                if(original.charAt(i)==parenthesis) balance++;
+                if(original.charAt(i)==otherParenthesis) balance--;
+                if(balance<0){
+                    firstMinIndex=i;
+                    break;
+                }
+            }
+            if(start2<firstMinIndex){
+                solutions.addAll(generate(original,start2,minNumber));
+            }
+            return solutions;
         }
+        return solutions;
     }
+    
     public List<String> connect(List<String> leftSideList,String middle,List<String> rightSideList){
         List<String> solutions=new ArrayList<String>();
         for(String r:rightSideList){
