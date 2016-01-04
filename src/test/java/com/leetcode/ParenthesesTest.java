@@ -34,7 +34,86 @@ public class ParenthesesTest
 
     Parentheses p = new Parentheses();
     
+    //no parentheses, no indexes
     public void testPrepare01(){
+        List<Object> result = p.prepare(new StringBuilder("n"),'(');
+        List<Integer> result0=(List<Integer>) result.get(0); //minRightIndexes
+        List<Integer> expected0=Arrays.asList(-1);
+        List<Integer> result1=(List<Integer>) result.get(1); //minLeftIndexes
+        List<Integer> expected1=Arrays.asList(-1);
+        String result2= ((StringBuilder) result.get(2)).toString(); //sb
+        String expected2="n";
+        assertEquals(expected0,result0);
+        assertEquals(expected1,result1);
+        assertEquals(expected2,result2);
+    }
+    //left parentheses, no indexes 
+    public void testPrepare02(){
+        List<Object> result = p.prepare(new StringBuilder("(("),'(');
+        List<Integer> result0=(List<Integer>) result.get(0); //minRightIndexes
+        List<Integer> expected0=Arrays.asList(-1);
+        List<Integer> result1=(List<Integer>) result.get(1); //minLeftIndexes
+        List<Integer> expected1=Arrays.asList(-1);
+        String result2= ((StringBuilder) result.get(2)).toString(); //sb
+        String expected2="";
+        assertEquals(expected0,result0);
+        assertEquals(expected1,result1);
+        assertEquals(expected2,result2);
+    }
+    //right parentheses, no indexes 
+    public void testPrepare03(){
+        List<Object> result = p.prepare(new StringBuilder("))"),'(');
+        List<Integer> result0=(List<Integer>) result.get(0); //minRightIndexes
+        List<Integer> expected0=Arrays.asList(-1);
+        List<Integer> result1=(List<Integer>) result.get(1); //minLeftIndexes
+        List<Integer> expected1=Arrays.asList(-1);
+        String result2= ((StringBuilder) result.get(2)).toString(); //sb
+        String expected2="";
+        assertEquals(expected0,result0);
+        assertEquals(expected1,result1);
+        assertEquals(expected2,result2);
+    }
+    //right parentheses, minRightIndexes
+    public void testPrepare04(){
+        List<Object> result = p.prepare(new StringBuilder("()())()"),'(');
+        List<Integer> result0=(List<Integer>) result.get(0); //minRightIndexes
+        List<Integer> expected0=Arrays.asList(4);
+        List<Integer> result1=(List<Integer>) result.get(1); //minLeftIndexes
+        List<Integer> expected1=Arrays.asList(-1);
+        String result2= ((StringBuilder) result.get(2)).toString(); //sb
+        String expected2="()())()";
+        assertEquals(expected0,result0);
+        assertEquals(expected1,result1);
+        assertEquals(expected2,result2);
+    }
+    //left parentheses, minLeftIndexes 
+    public void testPrepare05(){
+        List<Object> result = p.prepare(new StringBuilder("()(()()"),'(');
+        List<Integer> result0=(List<Integer>) result.get(0); //minRightIndexes
+        List<Integer> expected0=Arrays.asList(-1);
+        List<Integer> result1=(List<Integer>) result.get(1); //minLeftIndexes
+        List<Integer> expected1=Arrays.asList(2);
+        String result2= ((StringBuilder) result.get(2)).toString(); //sb
+        String expected2="()(()()";
+        assertEquals(expected0,result0);
+        assertEquals(expected1,result1);
+        assertEquals(expected2,result2);
+    }
+    //both parentheses, no indexes
+    public void testPrepare06(){
+        List<Object> result = p.prepare(new StringBuilder("())()(()"),'(');
+        List<Integer> result0=(List<Integer>) result.get(0); //minRightIndexes
+        List<Integer> expected0=Arrays.asList(-1);
+        List<Integer> result1=(List<Integer>) result.get(1); //minLeftIndexes
+        List<Integer> expected1=Arrays.asList(-1);
+        String result2= ((StringBuilder) result.get(2)).toString(); //sb
+        String expected2="()()()";
+        assertEquals(expected0,result0);
+        assertEquals(expected1,result1);
+        assertEquals(expected2,result2);
+    }
+    //both parentheses, both indexes
+    public void testPrepare07(){
         List<Object> result = p.prepare(new StringBuilder("())v)(()(((((())"),'(');
         List<Integer> result0=(List<Integer>) result.get(0); //minRightIndexes
         List<Integer> expected0=Arrays.asList(3);
@@ -47,44 +126,6 @@ public class ParenthesesTest
         assertEquals(expected2,result2);
     }
     
-     public void testPrepare02(){
-        List<Object> result = p.prepare(new StringBuilder("()())()"),'(');
-        List<Integer> result0=(List<Integer>) result.get(0); //rightIndexes
-        List<Integer> expected0=Arrays.asList(4);
-        List<Integer> result1=(List<Integer>) result.get(1); //leftIndexes
-        List<Integer> expected1=Arrays.asList(-1);
-        String result2= ((StringBuilder) result.get(2)).toString();
-        String expected2="()())()";
-        assertEquals(expected0,result0);
-        assertEquals(expected1,result1);
-        assertEquals(expected2,result2);
-    }
-    
-    public void testPrepare03(){
-        List<Object> result = p.prepare(new StringBuilder("())v)m()v(()(())"),'(');
-        List<Integer> result0=(List<Integer>) result.get(0); //rightIndexes
-        List<Integer> expected0=Arrays.asList(3);
-        List<Integer> result1=(List<Integer>) result.get(1); //leftIndexes
-        List<Integer> expected1=Arrays.asList(8);
-        String result2= ((StringBuilder) result.get(2)).toString();
-        String expected2="()v)m()v(()(())";
-        assertEquals(expected0,result0);
-        assertEquals(expected1,result1);
-        assertEquals(expected2,result2);
-    }
-    //"((()))))())("
-    public void testPrepare04(){
-        List<Object> result = p.prepare(new StringBuilder("((()))))())("),'(');
-        List<Integer> result0=(List<Integer>) result.get(0); //rightIndexes
-        List<Integer> expected0=Arrays.asList(8);
-        List<Integer> result1=(List<Integer>) result.get(1); //leftIndexes
-        List<Integer> expected1=Arrays.asList(-1);
-        String result2= ((StringBuilder) result.get(2)).toString(); //sb
-        String expected2="((()))())"; 
-        assertEquals(expected0,result0);
-        assertEquals(expected1,result1);
-        assertEquals(expected2,result2);
-    }
 /*  
     public void testGetIndexes01(){
         List<Integer> result=p.getIndexes(new StringBuilder("()())"), ')',1);

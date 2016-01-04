@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class Parentheses 
 {  
-    //prepares the String from one side based on the input parenthesis
+    //prepares the String and returns minRightIndexes and minLeftIndexes
     public List<Object> prepare(StringBuilder sb, char parenthesis){
         List<Integer> indexes=new ArrayList<Integer>();
         int minNumber=0;
