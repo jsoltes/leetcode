@@ -15,7 +15,7 @@ import java.util.List;
 public class Parentheses 
 {  
     //prepares the String from one side based on the input parenthesis
-    public Object[] prepare(StringBuilder sb, char parenthesis){
+    public List<Object> prepare(StringBuilder sb, char parenthesis){
         List<Integer> indexes=new ArrayList<Integer>();
         int minNumber=0;
         int balance=0;
@@ -53,24 +53,32 @@ public class Parentheses
                 balance=0;
             }
         }
+        List<Object> result=new ArrayList<Object>();
         if(parenthesis=='('){ //leftSide
-            Object[] result;
-            if(minNumber==0) result=new Object[]{sb,Arrays.asList(-1),0};
-            else result=new Object[]{sb,indexes,minNumber};
-            } 
+            if(minNumber==0) {
+                result.add(Arrays.asList(-1));
+                result.addAll(prepare(sb,')'));
+            }
+            else {
+                result.add(indexes);
+                result.addAll(prepare(sb,')'));
+            }
+        } 
         else { //rightSide
-            Object[] result;
             sb.reverse(); //reversing the string back to normal
-            if(minNumber==0) result=new Object[]{sb,Arrays.asList(-1),0};
+            if(minNumber==0) {
+                result.add(Arrays.asList(-1));
+            }
             else{
                 int isize=indexes.size();
                 for(int i=0;i<isize;i++){//we also have to reverse the indexes
                     indexes.set(i, sblength-1-indexes.get(i));
                 }
-                result = new Object[]{sb,indexes,minNumber};
+                result.add(indexes);
             }
+            result.add(sb);
         }
-    return null;
+    return result;
     }
     //gets indexes for all possible parentheses removals
     public List<Integer> getIndexes(StringBuilder sb, char parenthesis, int minNumber, List<Integer> minIndexes){//
