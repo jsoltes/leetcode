@@ -57,19 +57,27 @@ public class Parentheses
         if(parenthesis=='('){ //leftSide
             if(minNumber==0) {
                 result.add(Arrays.asList(-1));
-                result.addAll(prepare(sb,')'));
+                if(balance>0) result.addAll(prepare(sb,')'));
+                else {
+                    result.add(Arrays.asList(-1));
+                    result.add(sb);
+                }
             }
             else {
                 result.add(indexes);
-                result.addAll(prepare(sb,')'));
+                if(balance>0) result.addAll(prepare(sb,')'));
+                else {
+                    result.add(Arrays.asList(-1));
+                    result.add(sb);
+                }
             }
         } 
         else { //rightSide
             sb.reverse(); //reversing the string back to normal
-            if(minNumber==0) {
+            if(minNumber==0){
                 result.add(Arrays.asList(-1));
             }
-            else{
+            else{    
                 int isize=indexes.size();
                 for(int i=0;i<isize;i++){//we also have to reverse the indexes
                     indexes.set(i, sblength-1-indexes.get(i));
