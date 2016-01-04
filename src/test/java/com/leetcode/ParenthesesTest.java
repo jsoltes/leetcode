@@ -125,37 +125,39 @@ public class ParenthesesTest
         assertEquals(expected1,result1);
         assertEquals(expected2,result2);
     }
+    //1 minRightIndex
     public void testGenerate01() {
-        List<String> result =p.generate2(new StringBuilder("((i()"), 2, Arrays.asList(0,1,3));
+        List<String> result =p.generate(new StringBuilder("()())"), Arrays.asList(4));
+        List<String> expected = Arrays.asList("()()", "(())");
+        Collections.sort(result);
+        Collections.sort(expected);
+        assertEquals(expected,result);
+    }
+    //2 minLeftIndexes
+    public void testGenerate02() {
+        List<String> result =p.generate(new StringBuilder("((i()"), Arrays.asList(0,1));
         List<String> expected = Arrays.asList("(i)","i()");
         Collections.sort(result);
         Collections.sort(expected);
         assertEquals(expected,result);
     }
-    //")(v)((m(())()("
-    public void testGenerate02() {
-        List<String> result =p.generate2(new StringBuilder("((m(())()"), 2, Arrays.asList(0,1,3,4,7));
+    //2 minLeftIndexes
+    public void testGenerate03() {
+        List<String> result =p.generate(new StringBuilder("((m(())()"), Arrays.asList(0,1));
         List<String> expected = Arrays.asList("m(())()","(m())()","(m(()))","((m))()","((m()))");
         Collections.sort(result);
         Collections.sort(expected);
         assertEquals(expected,result);
     }
-    //"()())()"
-    public void testGenerate03() {
-        List<String> result =p.generate2(new StringBuilder("()())()"), 1, Arrays.asList(1,3));
-        List<String> expected = Arrays.asList("()()()", "(())()");
-        Collections.sort(result);
-        Collections.sort(expected);
-        assertEquals(expected,result);
-    }
-    //"(a)())()"
+    //4 minRightIndexes
     public void testGenerate04() {
-        List<String> result =p.generate2(new StringBuilder("(a)())()"), 1, Arrays.asList(2,4));
-        List<String> expected = Arrays.asList("(a)()()", "(a())()");
+        List<String> result =p.generate(new StringBuilder("()())()))())"), Arrays.asList(4,7,8,11));
+        List<String> expected = Arrays.asList("((())())()","((()))()()","(()()())()","(()())()()","(())(())()","(())()()()","()(()())()","()(())()()","()()(())()","()()()()()");
         Collections.sort(result);
         Collections.sort(expected);
         assertEquals(expected,result);
     }
+
  /*   
     public void testRemoveParentheses01 ()
     {

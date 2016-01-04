@@ -73,8 +73,8 @@ public class Parentheses
         }
     return result;
     }
-    //generates list of all solutions based on minIndexes
-    public List<String> generate(StringBuilder sb,int minNumber, List<Integer> indexes){
+    //generates list of solutions based on minIndexes and input string
+    public List<String> generate(StringBuilder sb,List<Integer> minIndexes){
         List<String> solutions=new ArrayList<String>();
         StringBuilder original=new StringBuilder(sb);
         int isize=indexes.size();//8
