@@ -9,7 +9,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
- * Unit test for simple App.
+ * Unit test for Parentheses.java
  */
 public class ParenthesesTest 
     extends TestCase
@@ -34,105 +34,53 @@ public class ParenthesesTest
 
     Parentheses p = new Parentheses();
     
-    public void testPrepareLeftSide01(){
-        Object[] result = p.prepare(new StringBuilder("())v)(()(((((())"),'(');
-        String result0= ((StringBuilder) result[0]).toString(); //sb
-        String expected0="()v)(()(((((())";
-        List<Integer> result1=(List<Integer>) result[1]; //rightIndexes
-        List<Integer> expected1=Arrays.asList(3);
-        int result2=(Integer) result[2]; //minRightNumber
-        int expected2=1;
-        assertEquals(expected0,result0);
-        assertEquals(expected1,result1);
-        assertEquals(expected2,result2);
-    }
-    
-     public void testPrepareRightSide01(){
-        Object[] result = p.prepare(new StringBuilder("())v)(()(((((())"),')');
-        String result0= ((StringBuilder) result[0]).toString(); //sb
-        String expected0="())v)(()(())";
-        List<Integer> result1=(List<Integer>) result[1]; //leftIndexes
+    public void testPrepare01(){
+        List<Object> result = p.prepare(new StringBuilder("())v)(()(((((())"),'(');
+        List<Integer> result0=(List<Integer>) result.get(0); //minRightIndexes
+        List<Integer> expected0=Arrays.asList(3);
+        List<Integer> result1=(List<Integer>) result.get(1); //minLeftIndexes
         List<Integer> expected1=Arrays.asList(5);
-        int result2=(Integer) result[2]; //minLeftNumber
-        int expected2=1;
+        String result2= ((StringBuilder) result.get(2)).toString(); //sb
+        String expected2="()v)(()(())";
         assertEquals(expected0,result0);
         assertEquals(expected1,result1);
         assertEquals(expected2,result2);
     }
     
-     public void testPrepareLeftSide02(){
-        Object[] result = p.prepare(new StringBuilder("()())()"),'(');
-        String result0= ((StringBuilder) result[0]).toString();
-        String expected0="()())()";
-        List<Integer> result1=(List<Integer>) result[1]; //rightIndexes
-        List<Integer> expected1=Arrays.asList(4);
-        int result2=(Integer) result[2];
-        int expected2=1;
-        assertEquals(expected0,result0);
-        assertEquals(expected1,result1);
-        assertEquals(expected2,result2);
-    }
-    
-     public void testPrepareRightSide02(){
-        Object[] result = p.prepare(new StringBuilder("()())()"),')');
-        String result0= ((StringBuilder) result[0]).toString();
-        String expected0="()())()";
-        List<Integer> result1=(List<Integer>) result[1]; //leftIndexes
+     public void testPrepare02(){
+        List<Object> result = p.prepare(new StringBuilder("()())()"),'(');
+        List<Integer> result0=(List<Integer>) result.get(0); //rightIndexes
+        List<Integer> expected0=Arrays.asList(4);
+        List<Integer> result1=(List<Integer>) result.get(1); //leftIndexes
         List<Integer> expected1=Arrays.asList(-1);
-        int result2=(Integer) result[2];
-        int expected2=0;
+        String result2= ((StringBuilder) result.get(2)).toString();
+        String expected2="()())()";
         assertEquals(expected0,result0);
         assertEquals(expected1,result1);
         assertEquals(expected2,result2);
     }
     
-    public void testPrepareLeftSide03(){//middle part m()v
-        Object[] result = p.prepare(new StringBuilder("())v)m()v(()(())"),'(');
-        String result0= ((StringBuilder) result[0]).toString();
-        String expected0="()v)m()v(()(())";
-        List<Integer> result1=(List<Integer>) result[1]; //rightIndexes
-        List<Integer> expected1=Arrays.asList(3);
-        int result2=(Integer) result[2];
-        int expected2=1;
-        assertEquals(expected0,result0);
-        assertEquals(expected1,result1);
-        assertEquals(expected2,result2);
-    }
-    
-     public void testPrepareRightSide03(){
-        Object[] result = p.prepare(new StringBuilder("())v)m()v(()(())"),')');
-        String result0= ((StringBuilder) result[0]).toString();
-        String expected0="())v)m()v(()(())";
-        List<Integer> result1=(List<Integer>) result[1]; //leftIndexes
+    public void testPrepare03(){
+        List<Object> result = p.prepare(new StringBuilder("())v)m()v(()(())"),'(');
+        List<Integer> result0=(List<Integer>) result.get(0); //rightIndexes
+        List<Integer> expected0=Arrays.asList(3);
+        List<Integer> result1=(List<Integer>) result.get(1); //leftIndexes
         List<Integer> expected1=Arrays.asList(9);
-        int result2=(Integer) result[2];
-        int expected2=1;
+        String result2= ((StringBuilder) result.get(2)).toString();
+        String expected2="()v)m()v(()(())";
         assertEquals(expected0,result0);
         assertEquals(expected1,result1);
         assertEquals(expected2,result2);
     }
     //"((()))))())("
-    public void testPrepareLeftSide04(){
-        Object[] result = p.prepare(new StringBuilder("((()))))())("),'(');
-        String result0= ((StringBuilder) result[0]).toString(); //sb
-        String expected0="((()))())("; 
-        List<Integer> result1=(List<Integer>) result[1]; //rightIndexes
-        List<Integer> expected1=Arrays.asList(8);
-        int result2=(Integer) result[2]; //minRightNumber
-        int expected2=1;
-        assertEquals(expected0,result0);
-        assertEquals(expected1,result1);
-        assertEquals(expected2,result2);
-    }
-    //"((()))))())("
-     public void testPrepareRightSide04(){
-        Object[] result = p.prepare(new StringBuilder("((()))))())("),')');
-        String result0= ((StringBuilder) result[0]).toString();//sb
-        String expected0="((()))))())"; 
-        List<Integer> result1=(List<Integer>) result[1]; //leftIndexes
+    public void testPrepare04(){
+        List<Object> result = p.prepare(new StringBuilder("((()))))())("),'(');
+        List<Integer> result0=(List<Integer>) result.get(0); //rightIndexes
+        List<Integer> expected0=Arrays.asList(8);
+        List<Integer> result1=(List<Integer>) result.get(1); //leftIndexes
         List<Integer> expected1=Arrays.asList(-1);
-        int result2=(Integer) result[2]; //minLeftNumber
-        int expected2=0;
+        String result2= ((StringBuilder) result.get(2)).toString(); //sb
+        String expected2="((()))())("; 
         assertEquals(expected0,result0);
         assertEquals(expected1,result1);
         assertEquals(expected2,result2);
@@ -197,7 +145,7 @@ public class ParenthesesTest
         List<Integer> expected=Arrays.asList(0,5,6,8);
         assertEquals(expected,result);
     }
-*/    
+   
     public void testGenerate01() {
         List<String> result =p.generate2(new StringBuilder("((i()"), 2, Arrays.asList(0,1,3));
         List<String> expected = Arrays.asList("(i)","i()");
@@ -508,4 +456,5 @@ public class ParenthesesTest
         Collections.sort(expected);
         assertEquals(expected,result);
     }  
+    */ 
 }

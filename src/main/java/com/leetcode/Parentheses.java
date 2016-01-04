@@ -53,12 +53,13 @@ public class Parentheses
                 balance=0;
             }
         }
-        Object[] result;
         if(parenthesis=='('){ //leftSide
+            Object[] result;
             if(minNumber==0) result=new Object[]{sb,Arrays.asList(-1),0};
             else result=new Object[]{sb,indexes,minNumber};
             } 
         else { //rightSide
+            Object[] result;
             sb.reverse(); //reversing the string back to normal
             if(minNumber==0) result=new Object[]{sb,Arrays.asList(-1),0};
             else{
@@ -69,7 +70,7 @@ public class Parentheses
                 result = new Object[]{sb,indexes,minNumber};
             }
         }
-    return result;
+    return null;
     }
     //gets indexes for all possible parentheses removals
     public List<Integer> getIndexes(StringBuilder sb, char parenthesis, int minNumber, List<Integer> minIndexes){//
