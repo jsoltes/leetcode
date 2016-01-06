@@ -133,18 +133,18 @@ public class ParenthesesTest
         Collections.sort(expected);
         assertEquals(expected,result);
     }
-    //2 minLeftIndexes - reversed "((i()" -> "(i)","i()"
+    //2 minLeftIndexes
     public void testGenerate02() {
         List<String> result =p.generate(new StringBuilder("((i()").reverse(),1,2);
-        List<String> expected = Arrays.asList(")i(",")(i");
+        List<String> expected = Arrays.asList("(i)","i()");
         Collections.sort(result);
         Collections.sort(expected);
         assertEquals(expected,result);
     }
-    //2 minLeftIndexes - reversed "((m(())()" -> "m(())()","(m())()","(m(()))","((m))()","((m()))"
+    //2 minLeftIndexes
     public void testGenerate03() {
         List<String> result =p.generate(new StringBuilder("((m(())()").reverse(),1,2);
-        List<String> expected = Arrays.asList(")())((m",")())(m(",")))((m(",")())m((",")))(m((");
+        List<String> expected = Arrays.asList("m(())()","(m())()","(m(()))","((m))()","((m()))");
         Collections.sort(result);
         Collections.sort(expected);
         assertEquals(expected,result);
@@ -157,10 +157,10 @@ public class ParenthesesTest
         Collections.sort(expected);
         assertEquals(expected,result);
     }
-    //3 minLeftIndexes - reversed "((()(()()" -> "((()))","(())()","(()())","()()()","()(())"
+    //3 minLeftIndexes
     public void testGenerate05() {
         List<String> result =p.generate(new StringBuilder("((()(()()").reverse(),1,3);
-        List<String> expected = Arrays.asList(")))(((",")())((","))()((",")()()(","))(()(");
+        List<String> expected = Arrays.asList("((()))","(())()","(()())","()()()","()(())");
         Collections.sort(result);
         Collections.sort(expected);
         assertEquals(expected,result);
@@ -181,7 +181,6 @@ public class ParenthesesTest
         Collections.sort(expected);
         assertEquals(expected,result);
     }
-  
     public void testRemoveParentheses01 ()
     {
         List<String> result = p.removeInvalidParentheses("()())()");

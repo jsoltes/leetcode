@@ -85,7 +85,8 @@ public class Parentheses
                         i++;
                     }
                 sb.deleteCharAt(i);
-                solutions.add(sb.toString());
+                if (parenthesis==')') solutions.add(sb.toString());
+                else solutions.add(sb.reverse().toString());
                 sb=original;
                 }
             }
@@ -122,68 +123,52 @@ public class Parentheses
         }
         return solutions;
     }
-    
-    public List<String> connect(List<String> leftSideList,String middle,List<String> rightSideList){
+    //method that controls the flow of the program
+    public List<String> removeInvalidParentheses(String s){
         List<String> solutions=new ArrayList<String>();
-        for(String r:rightSideList){
-            for(String l:leftSideList){
+        StringBuilder sb = new StringBuilder(s);
+        List<Object> prepared=prepare(sb,'(');
+        List<Integer> minRightIndexes=(List<Integer>)prepared.get(0);
+        List<Integer> minLeftIndexes=(List<Integer>)prepared.get(1);
+        sb=(StringBuilder)prepared.get(2);
+        //code for dividing on leftSide, middle and rightSide
+        int len,firstLeftIndex;
+        len=firstLeftIndex=sb.length();
+        int minRightNumber,minLeftNumber,lastRightIndex;
+        minRightNumber=minLeftNumber=lastRightIndex=0;
+        if(minRightIndexes.get(0)!=-1){
+            minRightNumber=minRightIndexes.size();
+            lastRightIndex=minRightIndexes.get(minRightNumber-1);
+        }
+        if(minLeftIndexes.get(0)!=-1){
+            minLeftNumber=minLeftIndexes.size();
+            firstLeftIndex=minLeftIndexes.get(0);
+        }
+        String leftSide=sb.substring(0,lastRightIndex+1);
+        System.out.println("leftSide "+leftSide);
+        String middle=sb.substring(lastRightIndex+1,firstLeftIndex);
+        System.out.println("middle "+middle);
+        String rightSide=sb.substring(firstLeftIndex,len);
+        System.out.println("rightSide "+rightSide);
+        
+        List<String> leftSideSolutions=new ArrayList<String>(Arrays.asList(""));
+        if(minRightNumber!=0) leftSideSolutions=generate(new StringBuilder(leftSide),leftSide.indexOf(')'),minRightNumber);
+        List<String> rightSideSolutions=new ArrayList<String>(Arrays.asList(""));
+        if(minLeftNumber!=0){
+            StringBuilder rightSideSB=new StringBuilder(rightSide);
+            rightSideSB.reverse();
+            rightSideSolutions=generate(rightSideSB,rightSideSB.indexOf("("),minLeftNumber);
+        }
+        for(String l:leftSideSolutions){
+            for(String r:rightSideSolutions){
                 solutions.add(l+middle+r);
             }
         }
         return solutions;
     }
-    //method that controls the flow of the program
-    public List<String> removeInvalidParentheses(String s){
-        StringBuilder sb = new StringBuilder(s);
-        //prepare from the left side
-        Object[] fromLeft = prepare(sb,'(');
-        sb=(StringBuilder)fromLeft[0];
-        List<Integer> minRightIndexes=(List<Integer>)fromLeft[1];
-        int lastRightIndex=minRightIndexes.get(minRightIndexes.size()-1); //last index of ')' for removal
-        int minRightNumber=(Integer)fromLeft[2];
-        //now the decision tree
-        int lastRight=sb.lastIndexOf(")");
-        if(lastRightIndex==lastRight && sb.lastIndexOf("(")<lastRight){ //we don't need to prepare right side
-            if(minRightNumber==0) return Arrays.asList(sb.toString()); //means there is only one solution
-            else return generate2(sb, minRightNumber, getIndexes(sb, ')', minRightNumber, minRightIndexes));
-        }
-        else{ //we need to prepare right side
-            Object[] fromBoth=prepare(sb,')');//now it is prepared from both sides
-            sb=(StringBuilder)fromBoth[0];
-            List<Integer> minLeftIndexes=(List<Integer>)fromBoth[1];
-            int firstLeftIndex=minLeftIndexes.get(minLeftIndexes.size()-1);//first index of '(' for removal
-            int minLeftNumber=(Integer)fromBoth[2];
-            System.out.println("sb "+sb);
-            System.out.println("minLeftNumber "+minLeftNumber);
-            System.out.println("minRightNumber "+minRightNumber);
-            if (minRightNumber==0 && minLeftNumber==0) return Arrays.asList(sb.toString());//there is only one solution
-            StringBuilder leftSide=new StringBuilder(sb.substring(0, lastRightIndex+1));
-            if(minLeftNumber!=0){
-                StringBuilder rightSide=new StringBuilder(sb.substring(firstLeftIndex, sb.length()));
-                String middle =sb.substring(lastRightIndex+1, firstLeftIndex);
-                for(int i=0;i<minLeftIndexes.size();i++) minLeftIndexes.set(i, minLeftIndexes.get(i)-firstLeftIndex);
-                List<String> rightSideSolutions = generate2(rightSide,minLeftNumber,getIndexes(rightSide,'(',minLeftNumber,minLeftIndexes));
-                if(minRightNumber==0) { //there are only left solutions   
-                    List<String> solutions = new ArrayList<String>();
-                    for(String r:rightSideSolutions) solutions.add(middle+r);
-                    return solutions;
-                }
-                if (minLeftNumber!=0){
-                List<String> leftSideSolutions=generate2(leftSide, minRightNumber, getIndexes(leftSide, ')', minRightNumber,minRightIndexes));
-                return connect(leftSideSolutions, middle, rightSideSolutions);
-                }
-            }
-            if(minLeftNumber==0 && minRightNumber!=0) {
-                return generate2(sb, minRightNumber, getIndexes(leftSide, ')', minRightNumber,minRightIndexes));
-            }
-        }
-        return null;
-    }
     public static void main(String[] args) {
         Parentheses p = new Parentheses();
-        List<String> result =p.generate(new StringBuilder("((()(()()").reverse(),1,3);
-        List<String> expected = Arrays.asList(")))(((",")())((","))()((",")()()(","))(()(","))(()(");
+        List<String> result =p.removeInvalidParentheses("()())()");
         System.out.println("result "+result);
-        System.out.println("expected "+expected);
     }
 }
