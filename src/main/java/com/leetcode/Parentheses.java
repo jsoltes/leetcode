@@ -92,18 +92,14 @@ public class Parentheses
             return solutions;
         }
         if(minNumber>1){ //recursive case
-            System.out.println("start "+start);
             sb.deleteCharAt(start);
             solutions.addAll(generate(sb,sb.indexOf(Character.toString(parenthesis), start),minNumber-1));
-            System.out.println("solutions "+solutions);
             
-            System.out.println("original "+original);
             int start2=original.indexOf(Character.toString(parenthesis), start+1);
             while(start<original.length()-1 && start2==start+1){
                 start2=original.indexOf(Character.toString(parenthesis), start2+1);
                 start++; //always on the first of the group
             }
-            System.out.println("start2 "+start2);
             if(start2!=-1){
             int firstMinIndex=original.length()-1;
             int balance=0;
@@ -118,7 +114,6 @@ public class Parentheses
                     break;
                 }
             }
-            System.out.println("firstMinIndex "+firstMinIndex);
             if(start2<=firstMinIndex){
                 solutions.addAll(generate(original,start2,minNumber));
             }
@@ -137,7 +132,6 @@ public class Parentheses
         }
         return solutions;
     }
-    /*
     //method that controls the flow of the program
     public List<String> removeInvalidParentheses(String s){
         StringBuilder sb = new StringBuilder(s);
@@ -185,7 +179,6 @@ public class Parentheses
         }
         return null;
     }
-    */
     public static void main(String[] args) {
         Parentheses p = new Parentheses();
         List<String> result =p.generate(new StringBuilder("((()(()()").reverse(),1,3);
