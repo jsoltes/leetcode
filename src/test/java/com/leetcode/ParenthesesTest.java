@@ -133,18 +133,18 @@ public class ParenthesesTest
         Collections.sort(expected);
         assertEquals(expected,result);
     }
-    //2 minLeftIndexes
+    //2 minLeftIndexes - reversed "((i()" -> "(i)","i()"
     public void testGenerate02() {
-        List<String> result =p.generate(new StringBuilder("((i()"),0,2);
-        List<String> expected = Arrays.asList("(i)","i()");
+        List<String> result =p.generate(new StringBuilder("((i()").reverse(),1,2);
+        List<String> expected = Arrays.asList(")i(",")(i");
         Collections.sort(result);
         Collections.sort(expected);
         assertEquals(expected,result);
     }
-    //2 minLeftIndexes
+    //2 minLeftIndexes - reversed "((m(())()" -> "m(())()","(m())()","(m(()))","((m))()","((m()))"
     public void testGenerate03() {
-        List<String> result =p.generate(new StringBuilder("((m(())()"),0,2);
-        List<String> expected = Arrays.asList("m(())()","(m())()","(m(()))","((m))()","((m()))");
+        List<String> result =p.generate(new StringBuilder("((m(())()").reverse(),1,2);
+        List<String> expected = Arrays.asList(")())((m",")())(m(",")))((m(",")())m((",")))(m((");
         Collections.sort(result);
         Collections.sort(expected);
         assertEquals(expected,result);
@@ -152,7 +152,7 @@ public class ParenthesesTest
     //4 minRightIndexes
     public void testGenerate04() {
         List<String> result =p.generate(new StringBuilder("()())()))())"),1,4);
-        List<String> expected = Arrays.asList("((())())()","((()))()()","(()()())()","(()())()()","(())(())()","(())()()()","()(()())()","()(())()()","()()(())()","()()()()()");
+        List<String> expected = Arrays.asList("((())())","((()))()","(()()())","(()())()","(())(())","(())()()","()(()())","()(())()","()()(())","()()()()");
         Collections.sort(result);
         Collections.sort(expected);
         assertEquals(expected,result);
