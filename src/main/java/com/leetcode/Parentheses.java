@@ -87,7 +87,7 @@ public class Parentheses
                 sb.deleteCharAt(i);
                 if (parenthesis==')') solutions.add(sb.toString());
                 else solutions.add(sb.reverse().toString());
-                sb=original;
+                sb=new StringBuilder(original);
                 }
             }
             return solutions;
@@ -135,21 +135,27 @@ public class Parentheses
         int len,firstLeftIndex;
         len=firstLeftIndex=sb.length();
         int minRightNumber,minLeftNumber,lastRightIndex;
-        minRightNumber=minLeftNumber=lastRightIndex=0;
+        minRightNumber=minLeftNumber=0;
+        lastRightIndex=-1;
         if(minRightIndexes.get(0)!=-1){
             minRightNumber=minRightIndexes.size();
             lastRightIndex=minRightIndexes.get(minRightNumber-1);
         }
         if(minLeftIndexes.get(0)!=-1){
             minLeftNumber=minLeftIndexes.size();
-            firstLeftIndex=minLeftIndexes.get(0);
+            firstLeftIndex=minLeftIndexes.get(minLeftNumber-1);
         }
         String leftSide=sb.substring(0,lastRightIndex+1);
-        System.out.println("leftSide "+leftSide);
         String middle=sb.substring(lastRightIndex+1,firstLeftIndex);
-        System.out.println("middle "+middle);
         String rightSide=sb.substring(firstLeftIndex,len);
+        
+        System.out.println("minLeftIndexes "+minLeftIndexes);
+        System.out.println("minRightIndexes "+minRightIndexes);
+        System.out.println("lastRightIndex "+(lastRightIndex));
+        System.out.println("leftSide "+leftSide);
+        System.out.println("middle "+middle);
         System.out.println("rightSide "+rightSide);
+        
         
         List<String> leftSideSolutions=new ArrayList<String>(Arrays.asList(""));
         if(minRightNumber!=0) leftSideSolutions=generate(new StringBuilder(leftSide),leftSide.indexOf(')'),minRightNumber);
@@ -168,7 +174,9 @@ public class Parentheses
     }
     public static void main(String[] args) {
         Parentheses p = new Parentheses();
-        List<String> result =p.removeInvalidParentheses("()())()");
-        System.out.println("result "+result);
+        List<String> result =p.removeInvalidParentheses("r)(p()q)ux)((()");
+        List<String> expected = new ArrayList<String>(Arrays.asList("r(p(q)ux)()","r(p()qux)()","r(p()q)ux()"));
+        System.out.println("result   "+result);
+        System.out.println("expected "+expected);
     }
 }
