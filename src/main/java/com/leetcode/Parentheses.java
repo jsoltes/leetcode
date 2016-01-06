@@ -188,8 +188,8 @@ public class Parentheses
     */
     public static void main(String[] args) {
         Parentheses p = new Parentheses();
-        List<String> result =p.generate(new StringBuilder("((i()").reverse(),1,2);
-        List<String> expected = Arrays.asList(")i(",")(i");
+        List<String> result =p.generate(new StringBuilder("((()(()()").reverse(),1,3);
+        List<String> expected = Arrays.asList(")))(((",")())((","))()((",")()()(","))(()(","))(()(");
         System.out.println("result "+result);
         System.out.println("expected "+expected);
     }
