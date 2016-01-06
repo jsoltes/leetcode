@@ -19,7 +19,7 @@ public class Parentheses
         List<Integer> indexes=new ArrayList<Integer>();
         int minNumber=0;
         int balance=0;
-        int count=0;
+        //int count=0;
         int left=0;
         char otherParenthesis;
         if (parenthesis=='(') otherParenthesis=')';
@@ -32,17 +32,17 @@ public class Parentheses
             char currentChar=sb.charAt(i);
             if(currentChar==parenthesis) {
                 balance++;
-                count=0;
+                //count=0;
                 left++;
             }
             if(currentChar==otherParenthesis) {
                 balance--;
-                count++;
+                //count++;
             }
             if(balance<0){
                 char previousChar=0;
                 if(i>=1) previousChar=sb.charAt(i-1);
-                if(i-sb.indexOf(Character.toString(parenthesis))<=2 || (count>left && (previousChar==')'|| previousChar=='(') && previousChar==sb.charAt(i-2))){
+                if(i-sb.indexOf(Character.toString(parenthesis))<=2 || (-balance>left && (previousChar==')'|| previousChar=='(') && previousChar==sb.charAt(i-2))){
                     sb.deleteCharAt(i--); //after this cursor goes on the next character so we have to decrease it
                     sblength--; 
                 } else {
@@ -149,6 +149,7 @@ public class Parentheses
         String middle=sb.substring(lastRightIndex+1,firstLeftIndex);
         String rightSide=sb.substring(firstLeftIndex,len);
         
+        System.out.println("sb "+sb);
         System.out.println("minLeftIndexes "+minLeftIndexes);
         System.out.println("minRightIndexes "+minRightIndexes);
         System.out.println("lastRightIndex "+(lastRightIndex));
@@ -174,8 +175,12 @@ public class Parentheses
     }
     public static void main(String[] args) {
         Parentheses p = new Parentheses();
-        List<String> result =p.removeInvalidParentheses("r)(p()q)ux)((()");
-        List<String> expected = new ArrayList<String>(Arrays.asList("r(p(q)ux)()","r(p()qux)()","r(p()q)ux()"));
+        List<String> result =p.removeInvalidParentheses("())v)(()(((((())");
+        List<String> expected = new ArrayList<String>(Arrays.asList("v(())((()))","v((())(()))","(v())((()))","(v(())(()))","(v((())()))","((v))((()))","((v())(()))","((v(())()))","((v((()))))","(((v))(()))","(((v())()))","(((v(()))))"));
+        Collections.sort(result);
+        Collections.sort(expected);
+        Collections.reverse(result);
+        Collections.reverse(expected);
         System.out.println("result   "+result);
         System.out.println("expected "+expected);
     }
