@@ -76,8 +76,9 @@ public class Parentheses
         int len=sb.length();
         if(minNumber==1){ //base case
             for(int i=start;i<len;i++){
-                if(sb.charAt(i)==parenthesis){
-                    while(i<len-1 && sb.charAt(i)==sb.charAt(i+1)){ //always deletes only the last one from group
+                int thisChar=sb.charAt(i);
+                if(thisChar==parenthesis){
+                    while(i<len-1 && thisChar==sb.charAt(i+1)){ //always deletes only the last one from group
                         i++;
                     }
                 sb.deleteCharAt(i);
@@ -90,13 +91,12 @@ public class Parentheses
         }
         else if(minNumber>1){ //recursive case
             sb.deleteCharAt(start);
-            solutions.addAll(generate(sb,sb.indexOf(Character.toString(parenthesis), start),minNumber-1));
-            
-            int start2=original.indexOf(Character.toString(parenthesis), start+1);
-            while(start<len-1 && start2==start+1){
-                start2=original.indexOf(Character.toString(parenthesis), start2+1);
-                start++; //always on the first of the group
+            String par=Character.toString(parenthesis);
+            solutions.addAll(generate(sb,sb.indexOf(par, start),minNumber-1));
+            while(start<len-1 && original.charAt(start)==original.charAt(start+1)){
+                start++;
             }
+            int start2=original.indexOf(par, start+1); //puts start2 always on the first of the group
             if(start2!=-1){
             int firstMinIndex=len-1;
             int balance=0;
