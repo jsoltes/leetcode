@@ -149,6 +149,7 @@ public class ParenthesesTest
         assertEquals(expected1,result1);
         assertEquals(expected2,result2);
     }
+    /*
     //1 minRightIndex
     public void testGenerate01() {
         List<String> result =p.generate(new StringBuilder("()())"),1,1);
@@ -213,6 +214,7 @@ public class ParenthesesTest
         Collections.sort(expected);
         assertEquals(expected,result);
     }
+    */
     public void testRemoveParentheses01 ()
     {
         List<String> result = p.removeInvalidParentheses("()())()");
