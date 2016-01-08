@@ -26,6 +26,8 @@ public class Parentheses
             otherParenthesis='(';
         }
         int sblength=sb.length();
+        String par=Character.toString(parenthesis);
+        int first=sb.indexOf(par);
         for(int i=0;i<sblength;i++){
             char currentChar=sb.charAt(i);
             if(currentChar==parenthesis) {
@@ -36,10 +38,10 @@ public class Parentheses
                 balance--;
             }
             if(balance<0){
-                char previousChar=((i>=1)?sb.charAt(i-1):0);
-                if(i-sb.indexOf(Character.toString(parenthesis))<=2 || (-balance>left && (previousChar==')'|| previousChar=='(') && previousChar==sb.charAt(i-2))){
+                if(i-first<=2 || (-balance>left)){
                     sb.deleteCharAt(i--); //after this cursor goes on the next character so we have to decrease it
                     sblength--; 
+                    first=sb.indexOf(par);
                 } else {
                     indexes.add(i);
                     minNumber++;
@@ -93,33 +95,70 @@ public class Parentheses
             sb.deleteCharAt(start);
             String par=Character.toString(parenthesis);
             solutions.addAll(generate(sb,sb.indexOf(par, start),minNumber-1));
-            while(start<len-1 && original.charAt(start)==original.charAt(start+1)){
+            
+            while(start<len-1 && parenthesis==original.charAt(start+1)){
                 start++;
             }
-            int start2=original.indexOf(par, start+1); //puts start2 always on the first of the group
-            if(start2!=-1){
-            int firstMinIndex=len-1;
-            int balance=0;
-            char otherParenthesis;
-            if(parenthesis=='(') otherParenthesis=')';
-            else otherParenthesis='(';
-            for(int i=0;i<len;i++){
-                char thisChar=original.charAt(i);
-                if(thisChar==otherParenthesis) balance++;
-                if(thisChar==parenthesis) balance--;
-                if(balance<0){
-                    firstMinIndex=i;
-                    break;
+            start=original.indexOf(par, start+2); //puts start2 always on the first of the group
+            if(start!=-1){
+                int firstMinIndex=len-1;
+                int balance=0;
+                char otherParenthesis;
+                if(parenthesis=='(') otherParenthesis=')';
+                else otherParenthesis='(';
+                for(int i=0;i<len;i++){
+                    char thisChar=original.charAt(i);
+                    if(thisChar==otherParenthesis) balance++;
+                    if(thisChar==parenthesis) balance--;
+                    if(balance<0){
+                        firstMinIndex=i;
+                        break;
+                    }
                 }
-            }
-            if(start2<=firstMinIndex){
-                solutions.addAll(generate(original,start2,minNumber));
-            }
+                if(start<=firstMinIndex){
+                    solutions.addAll(generate(original,start,minNumber));
+                }
             }
             return solutions;
         }
         return solutions;
     }
+    //breadth-first algorithm
+    public List<StringBuilder> generate2(StringBuilder sb,int start,int minNumber, char parenthesis, char otherParenthesis){
+        List<StringBuilder> solutions=new ArrayList<StringBuilder>();
+        StringBuilder original=new StringBuilder(sb);
+        String par=Character.toString(parenthesis);
+        int balance=0;
+        int len=sb.length();
+        for(int i=0;i<len;i++){
+            char currentChar=sb.charAt(i);
+            if(currentChar==otherParenthesis) {
+                balance++;
+            }
+            if(currentChar==parenthesis){
+                balance--;
+                while(i<len-1 && sb.charAt(i+1)==parenthesis){
+                    i++;
+                    balance--;
+                } //always picks the last one from group
+                if(i>=start){
+                    sb.deleteCharAt(i);
+                    if(minNumber>1) solutions.addAll(generate2(sb,sb.indexOf(par, i-1),minNumber-1,parenthesis,otherParenthesis));
+                    else {
+                        if (parenthesis=='(') sb.reverse();
+                        solutions.add(sb);
+                    }
+                    sb=new StringBuilder(original);
+                }
+            }
+            if(balance<0) {
+                if(minNumber>1) break;
+                else return solutions;
+            }
+        }
+        return solutions;
+    }
+            
     //method that controls the flow of the program
     public List<String> removeInvalidParentheses(String s){
         StringBuilder sb = new StringBuilder(s);
@@ -145,12 +184,12 @@ public class Parentheses
         String rightSide=sb.substring(firstLeftIndex,len);
         StringBuilder middle=sb.delete(firstLeftIndex,len).delete(0, lastRightIndex+1);
 
-        List<StringBuilder> leftSideSolutions= (minRightNumber == 0) ? new ArrayList<StringBuilder>(Arrays.asList(new StringBuilder(""))): generate(new StringBuilder(leftSide),leftSide.indexOf(')'),minRightNumber);
+        List<StringBuilder> leftSideSolutions= (minRightNumber == 0) ? new ArrayList<StringBuilder>(Arrays.asList(new StringBuilder(""))): generate2(new StringBuilder(leftSide),leftSide.indexOf(')'),minRightNumber,')','(');
         List<StringBuilder> rightSideSolutions=new ArrayList<StringBuilder>(Arrays.asList(new StringBuilder("")));
         if(minLeftNumber!=0){
             StringBuilder rightSideSB=new StringBuilder(rightSide);
             rightSideSB.reverse();
-            rightSideSolutions=generate(rightSideSB,rightSideSB.indexOf("("),minLeftNumber);
+            rightSideSolutions=generate2(rightSideSB,rightSideSB.indexOf("("),minLeftNumber,'(',')');
         }
         List<String> solutions=new ArrayList<String>(leftSideSolutions.size()*rightSideSolutions.size());
         for(StringBuilder l:leftSideSolutions){
@@ -159,5 +198,9 @@ public class Parentheses
             }
         }
         return solutions;
+    }
+    public static void main(String[] args) {
+        Parentheses p=new Parentheses();
+        System.out.println("generate2 "+p.generate2(new StringBuilder("(()((()(()()").reverse(),1,4,'(',')'));
     }
 }
