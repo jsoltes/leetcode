@@ -33,7 +33,7 @@ public class ParenthesesTest
     }
 
     Parentheses p = new Parentheses();
-    
+    /*
     //no parentheses, no indexes
     public void testPrepare01(){
         List<Object> result = p.prepare(new StringBuilder("n"),'(');
@@ -149,7 +149,7 @@ public class ParenthesesTest
         assertEquals(expected1,result1);
         assertEquals(expected2,result2);
     }
-    /*
+    
     //1 minRightIndex
     public void testGenerate01() {
         List<String> result =p.generate(new StringBuilder("()())"),1,1);
