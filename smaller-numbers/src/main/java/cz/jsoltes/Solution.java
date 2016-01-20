@@ -35,7 +35,7 @@ public class Solution {
                 count = prevCount + 1;
                 //now we iterate through the zeroCountIndexes from the end (at the end is the lowest index)
                 if (zsize > 1) {
-                    for (int j = zsize - 1; j > 0; j--) {
+                    for (int j = zsize - 2; j >= 0; j--) {
                         int k = zeroCountIndexes.get(j);
                         if (nums[k] < elem) {
                             count++;
