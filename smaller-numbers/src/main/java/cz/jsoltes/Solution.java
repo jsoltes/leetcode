@@ -38,7 +38,7 @@ public class Solution {
             if (elem > prevElem) {
                 count = prevCount + 1;
                 //now we iterate through the startingIndexes from the end (at the end is the lowest index)
-                if(i==30) System.out.println(elem+" "+checkIndexes);
+                //if(i==20) System.out.println(elem+" "+checkIndexes);
                 if (csize > 0) {
                     for (int j = csize - 1; j >= 0; j--) {
                         int k = checkIndexes.get(j);
@@ -58,6 +58,7 @@ public class Solution {
                 count = 0;
                 checkIndexes=new ArrayList(startingIndexes);
                 csize=ssize;
+                //if(i==21) System.out.println(elem+" "+checkIndexes);
                 startingIndexes.add(i);
                 if (csize > 0) {
                     for (int j = csize - 1; j >= 0; j--) {
@@ -68,7 +69,7 @@ public class Solution {
                                 count++;
                                 k--;
                             }
-                            if(nums[k-1]>nums[k]) nextCheckIndexes.add(k);
+                            if(nums[k-1]>nums[k]) nextCheckIndexes.add(k-1);
                         } else {
                             nextCheckIndexes.add(k);
                         }
@@ -80,6 +81,7 @@ public class Solution {
                     startingIndexes.add(i);
                 }
             }
+            //if(i==21) System.out.println(elem+" "+nextCheckIndexes);
             prevCount = count;
             counts[i] = count;
             checkIndexes=new ArrayList(nextCheckIndexes);
