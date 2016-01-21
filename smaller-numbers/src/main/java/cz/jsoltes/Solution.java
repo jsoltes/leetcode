@@ -19,62 +19,71 @@ public class Solution {
         List<Integer> solution = new ArrayList<>(len);
         int prevCount = 0; //count of the previous number
         int count; //count of the current number
-        List<Integer> zeroCountIndexes = new ArrayList<>(); //list of indexes with zero count
+        List<Integer> startingIndexes = new ArrayList<>(); //list of indexes of elements which start the growing row
         int counts[] = new int[len];
         //info from the last element is always the same
         counts[len - 1] = 0;
-        zeroCountIndexes.add(len - 1);
+        startingIndexes.add(len - 1);
+        
+        List<Integer> checkIndexes = new ArrayList<>(); //indexes to check by the current element
+        List<Integer> nextCheckIndexes = new ArrayList<>(); //indexes to check by the next element
         
         for (int i = len - 2; i >= 0; i--) {
             
             int elem = nums[i];
             int prevElem = nums[i + 1];
-            int zsize = zeroCountIndexes.size();
+            int ssize=startingIndexes.size();
+            int csize = checkIndexes.size();
             
             if (elem > prevElem) {
                 count = prevCount + 1;
-                //now we iterate through the zeroCountIndexes from the end (at the end is the lowest index)
-                if (zsize > 1) {
-                    for (int j = zsize - 2; j >= 0; j--) {
-                        int k = zeroCountIndexes.get(j);
+                //now we iterate through the startingIndexes from the end (at the end is the lowest index)
+                if(i==30) System.out.println(elem+" "+checkIndexes);
+                if (csize > 0) {
+                    for (int j = csize - 1; j >= 0; j--) {
+                        int k = checkIndexes.get(j);
                         if (nums[k] < elem) {
                             count++;
-                            while (nums[k - 1] < elem) {
+                            while (nums[k - 1]>nums[k] && nums[k - 1] < elem) {
                                 count++;
                                 k--;
                             }
+                            if(nums[k-1]>nums[k]) nextCheckIndexes.add(k-1);
                         } else {
-                            break;
+                            nextCheckIndexes.add(k);
                         }
                     }
                 }
             } else if (elem < prevElem) {
                 count = 0;
-                if (zsize > 0) {
-                    for (int j = zsize - 1; j >= 0; j--) {
-                        int k = zeroCountIndexes.get(j);
+                checkIndexes=new ArrayList(startingIndexes);
+                csize=ssize;
+                startingIndexes.add(i);
+                if (csize > 0) {
+                    for (int j = csize - 1; j >= 0; j--) {
+                        int k = checkIndexes.get(j);
                         if (nums[k] < elem) {
                             count++;
-                            while (nums[k - 1] < elem) {
+                            while (nums[k - 1]>nums[k] && nums[k - 1] < elem) {
                                 count++;
                                 k--;
                             }
+                            if(nums[k-1]>nums[k]) nextCheckIndexes.add(k);
                         } else {
-                            break;
+                            nextCheckIndexes.add(k);
                         }
                     }
-                }
-                if (count == 0) {
-                    zeroCountIndexes.add(i);
                 }
             } else { //the one and only case when elem==prevElem
                 count = prevCount;
                 if (count == 0) {
-                    zeroCountIndexes.add(i);
+                    startingIndexes.add(i);
                 }
             }
             prevCount = count;
             counts[i] = count;
+            checkIndexes=new ArrayList(nextCheckIndexes);
+            nextCheckIndexes.clear();
         }
         for (int c : counts) {
             solution.add(c);
