@@ -15,77 +15,38 @@ import java.util.List;
  */
 public class Solution {
 
+    private List<Integer>[] createTree(int[] nums, int len, int i, List<Integer> nodes) {
+        if(i==len-1) return null; //base case
+        else{ //recursive case
+            List<Integer>[] tree=new ArrayList[len]; 
+            return tree;
+        }
+    }
+
     public List<Integer> countSmaller(int[] nums) {
+
         int len = nums.length;
         List<Integer> solution = new ArrayList<>(len);
-        if (len==0) return  solution;
-        int prevCount; //count of the previous number
-        int count; //count of the current number
-        List<Integer> lowerElements = new ArrayList<>(); //lower elements
-        List<Integer> newLowerElements = new ArrayList<>(); //new lower elements
-        List<Integer> higherElements = new ArrayList<>(); //higher elements
-        List<Integer> newHigherElements = new ArrayList<>(); //new higher elements
-        //for the last element
-        solution.add(0);
-        prevCount=0;
-        
-        for (int i = len - 2; i >= 0; i--) {
+        List<Integer> firstNodes = new ArrayList<>(); //list of first nodes
+        List<Integer> tree[] = new ArrayList[len]; //array of lists for storing the tree
+
+        for (int i = 0; i < len; i++) {
             int elem = nums[i];
-            int prevElem = nums[i + 1];
-            
-            if(elem>prevElem){
-               count=prevCount+1;
-               int hsize=higherElements.size();
-               for(int j=0;j<hsize;j++){
-                   int h = higherElements.get(j);
-                   if(elem<=h) { //breaking point
-                       newHigherElements.addAll(higherElements.subList(j, hsize));
-                       while(j>0){
-                           j--;
-                           if(higherElements.get(j)!=prevElem) newLowerElements.add(higherElements.get(j));
-                           count++;
-                       }
-                       break;
-                   }
-               }
-               newLowerElements.add(prevElem);
-               newLowerElements.addAll(lowerElements);
-               
-            } else if (elem<prevElem){
-                count=prevCount;
-                int lsize=lowerElements.size();
-                if(lsize!=0){
-                    for(int j=lsize-1;j>=0;j--){
-                      int l = lowerElements.get(j);
-                      if(elem<=l){//breaking point
-                          newLowerElements=lowerElements.subList(j+1, lsize);
-                          while(j>=0){
-                              newHigherElements.add(lowerElements.get(j));
-                              count--;
-                              j--;
-                          }
-                          break;
-                        }
-                    }
+            //this part probably has to be done recursively
+            int fsize = firstNodes.size();
+            if (firstNodes.isEmpty() || nums[firstNodes.get(fsize - 1)] < elem) {
+                firstNodes.add(i);
+            } else {
+                int j = fsize - 1;
+                while (nums[firstNodes.get(j)] > elem) {
+                    if (tree[j].isEmpty() || tree[j].get(tree[j].size() - 1) < elem) {
+                        tree[j].add(i);
+                    } else; //and the same recursively until ??
+                    j--;
                 }
-                newHigherElements.add(prevElem);
-                newHigherElements.addAll(higherElements);
-            }else {
-                count=prevCount;
             }
-            solution.add(count);
-            prevCount=count;
-            lowerElements=new ArrayList<>(newLowerElements);
-            newLowerElements.clear();
-            higherElements=new ArrayList<>(newHigherElements);
-            newHigherElements.clear();
-            if(i==7) {
-                System.out.println(elem);
-                System.out.println(higherElements);
-                System.out.println(lowerElements);
-            }
+            //this part probably has to be done recursively
         }
-        Collections.reverse(solution);
         return solution;
     }
 
