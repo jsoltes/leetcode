@@ -6,6 +6,7 @@
 package cz.jsoltes;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -17,79 +18,74 @@ public class Solution {
     public List<Integer> countSmaller(int[] nums) {
         int len = nums.length;
         List<Integer> solution = new ArrayList<>(len);
-        int prevCount = 0; //count of the previous number
+        if (len==0) return  solution;
+        int prevCount; //count of the previous number
         int count; //count of the current number
-        List<Integer> startingIndexes = new ArrayList<>(); //list of indexes of elements which start the growing row
-        int counts[] = new int[len];
-        //info from the last element is always the same
-        counts[len - 1] = 0;
-        startingIndexes.add(len - 1);
-        
-        List<Integer> checkIndexes = new ArrayList<>(); //indexes to check by the current element
-        List<Integer> nextCheckIndexes = new ArrayList<>(); //indexes to check by the next element
+        List<Integer> lowerElements = new ArrayList<>(); //lower elements
+        List<Integer> newLowerElements = new ArrayList<>(); //new lower elements
+        List<Integer> higherElements = new ArrayList<>(); //higher elements
+        List<Integer> newHigherElements = new ArrayList<>(); //new higher elements
+        //for the last element
+        solution.add(0);
+        prevCount=0;
         
         for (int i = len - 2; i >= 0; i--) {
-            
             int elem = nums[i];
             int prevElem = nums[i + 1];
-            int ssize=startingIndexes.size();
-            int csize = checkIndexes.size();
             
-            if (elem > prevElem) {
-                count = prevCount + 1;
-                //now we iterate through the startingIndexes from the end (at the end is the lowest index)
-                //if(i==20) System.out.println(elem+" "+checkIndexes);
-                if (csize > 0) {
-                    for (int j = csize - 1; j >= 0; j--) {
-                        int k = checkIndexes.get(j);
-                        if (nums[k] < elem) {
-                            count++;
-                            while (nums[k - 1]>nums[k] && nums[k - 1] < elem) {
-                                count++;
-                                k--;
-                            }
-                            if(nums[k-1]>nums[k]) nextCheckIndexes.add(k-1);
-                        } else {
-                            nextCheckIndexes.add(k);
+            if(elem>prevElem){
+               count=prevCount+1;
+               int hsize=higherElements.size();
+               for(int j=0;j<hsize;j++){
+                   int h = higherElements.get(j);
+                   if(elem<=h) { //breaking point
+                       newHigherElements.addAll(higherElements.subList(j, hsize));
+                       while(j>0){
+                           j--;
+                           if(higherElements.get(j)!=prevElem) newLowerElements.add(higherElements.get(j));
+                           count++;
+                       }
+                       break;
+                   }
+               }
+               newLowerElements.add(prevElem);
+               newLowerElements.addAll(lowerElements);
+               
+            } else if (elem<prevElem){
+                count=prevCount;
+                int lsize=lowerElements.size();
+                if(lsize!=0){
+                    for(int j=lsize-1;j>=0;j--){
+                      int l = lowerElements.get(j);
+                      if(elem<=l){//breaking point
+                          newLowerElements=lowerElements.subList(j+1, lsize);
+                          while(j>=0){
+                              newHigherElements.add(lowerElements.get(j));
+                              count--;
+                              j--;
+                          }
+                          break;
                         }
                     }
                 }
-            } else if (elem < prevElem) {
-                count = 0;
-                checkIndexes=new ArrayList(startingIndexes);
-                csize=ssize;
-                //if(i==21) System.out.println(elem+" "+checkIndexes);
-                startingIndexes.add(i);
-                if (csize > 0) {
-                    for (int j = csize - 1; j >= 0; j--) {
-                        int k = checkIndexes.get(j);
-                        if (nums[k] < elem) {
-                            count++;
-                            while (nums[k - 1]>nums[k] && nums[k - 1] < elem) {
-                                count++;
-                                k--;
-                            }
-                            if(nums[k-1]>nums[k]) nextCheckIndexes.add(k-1);
-                        } else {
-                            nextCheckIndexes.add(k);
-                        }
-                    }
-                }
-            } else { //the one and only case when elem==prevElem
-                count = prevCount;
-                if (count == 0) {
-                    startingIndexes.add(i);
-                }
+                newHigherElements.add(prevElem);
+                newHigherElements.addAll(higherElements);
+            }else {
+                count=prevCount;
             }
-            //if(i==21) System.out.println(elem+" "+nextCheckIndexes);
-            prevCount = count;
-            counts[i] = count;
-            checkIndexes=new ArrayList(nextCheckIndexes);
-            nextCheckIndexes.clear();
+            solution.add(count);
+            prevCount=count;
+            lowerElements=new ArrayList<>(newLowerElements);
+            newLowerElements.clear();
+            higherElements=new ArrayList<>(newHigherElements);
+            newHigherElements.clear();
+            if(i==7) {
+                System.out.println(elem);
+                System.out.println(higherElements);
+                System.out.println(lowerElements);
+            }
         }
-        for (int c : counts) {
-            solution.add(c);
-        }
+        Collections.reverse(solution);
         return solution;
     }
 
