@@ -18,28 +18,16 @@ public class Solution {
 
     public List<Integer> countSmaller(int[] nums) {
         int len = nums.length;
-        List<Integer> results=new ArrayList<>(len); //results
-        int updated[]=new int[len]; //updated count+1
-        int lower[]=new int[len]; //pointers to lower numbers
-        int higher[]=new int[len]; //pointers to higher numbers
-        
-        
-        for (int i = 0; i < len; i++) {
-            int elem = nums[i];
-            //this part probably has to be done recursively
-            int fsize = firstNodes.size();
-            if (firstNodes.isEmpty() || nums[firstNodes.get(fsize - 1)] < elem) {
-                firstNodes.add(i);
-            } else {
-                int j = fsize - 1;
-                while (nums[firstNodes.get(j)] > elem) {
-                    if (tree[j].isEmpty() || tree[j].get(tree[j].size() - 1) < elem) {
-                        tree[j].add(i);
-                    } else; //and the same recursively until ??
-                    j--;
-                }
-            }
-            //this part probably has to be done recursively
+        List<Integer> results = new ArrayList<>(len); //results
+        int updated[] = new int[len]; //updated count+1
+        int lower[] = new int[len]; //pointers to lower numbers
+        int higher[] = new int[len]; //pointers to higher numbers
+        //first element
+        int firstElem=
+        results.add(0);
+        updated[len-1]=1;
+        for (int i = len - 2; i >= 0; i--) {
+            
         }
         Collections.reverse(results);
         return results;
