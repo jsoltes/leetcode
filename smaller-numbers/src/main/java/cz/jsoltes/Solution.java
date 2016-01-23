@@ -19,15 +19,30 @@ public class Solution {
     public List<Integer> countSmaller(int[] nums) {
         int len = nums.length;
         List<Integer> results = new ArrayList<>(len); //results
+        int count[] = new int[len];
         int updated[] = new int[len]; //updated count+1
         int lower[] = new int[len]; //pointers to lower numbers
         int higher[] = new int[len]; //pointers to higher numbers
         //first element
-        int firstElem=
-        results.add(0);
-        updated[len-1]=1;
+        count[len - 1] = 0;
+        updated[len - 1] = 1;
+        lower[len - 1] = -1;
+        higher[len - 1] = -1;
+        //the rest
         for (int i = len - 2; i >= 0; i--) {
-            
+            int elem = nums[i];
+            updated[i]=1;
+            count[i]=0;
+            int compared = len-1;
+            while (compared != -1) {
+                if (elem > nums[compared]) {
+                    count[i]+=updated[compared];
+                    compared=higher[compared];
+                } else {
+                    updated[compared]+=1;
+                    compared=lower[compared];
+                }
+            }
         }
         Collections.reverse(results);
         return results;
