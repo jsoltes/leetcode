@@ -18,8 +18,8 @@ public class Solution {
 
     public List<Integer> countSmaller(int[] nums) {
         int len = nums.length;
-        List<Integer> results = new ArrayList<>(len); //results
-        int count[] = new int[len];
+        if(len==0) return Arrays.asList(); //the case of empty input
+        Integer count[] = new Integer[len];
         int updated[] = new int[len]; //updated count+1
         int lower[] = new int[len]; //pointers to lower numbers
         int higher[] = new int[len]; //pointers to higher numbers
@@ -31,21 +31,24 @@ public class Solution {
         //the rest
         for (int i = len - 2; i >= 0; i--) {
             int elem = nums[i];
-            updated[i]=1;
             count[i]=0;
+            updated[i]=1;
             int compared = len-1;
             while (compared != -1) {
                 if (elem > nums[compared]) {
                     count[i]+=updated[compared];
+                    lower[i]=compared;
+                    higher[i]=-1;
                     compared=higher[compared];
                 } else {
                     updated[compared]+=1;
+                    higher[i]=compared;
+                    lower[i]=-1;
                     compared=lower[compared];
                 }
             }
         }
-        Collections.reverse(results);
-        return results;
+        return Arrays.asList(count);
     }
 
     public static void main(String[] args) {
