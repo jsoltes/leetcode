@@ -6,6 +6,7 @@
 package cz.jsoltes;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -15,21 +16,14 @@ import java.util.List;
  */
 public class Solution {
 
-    private List<Integer>[] createTree(int[] nums, int len, int i, List<Integer> nodes) {
-        if(i==len-1) return null; //base case
-        else{ //recursive case
-            List<Integer>[] tree=new ArrayList[len]; 
-            return tree;
-        }
-    }
-
     public List<Integer> countSmaller(int[] nums) {
-
         int len = nums.length;
-        List<Integer> solution = new ArrayList<>(len);
-        List<Integer> firstNodes = new ArrayList<>(); //list of first nodes
-        List<Integer> tree[] = new ArrayList[len]; //array of lists for storing the tree
-
+        List<Integer> results=new ArrayList<>(len); //results
+        int updated[]=new int[len]; //updated count+1
+        int lower[]=new int[len]; //pointers to lower numbers
+        int higher[]=new int[len]; //pointers to higher numbers
+        
+        
         for (int i = 0; i < len; i++) {
             int elem = nums[i];
             //this part probably has to be done recursively
@@ -47,7 +41,8 @@ public class Solution {
             }
             //this part probably has to be done recursively
         }
-        return solution;
+        Collections.reverse(results);
+        return results;
     }
 
     public static void main(String[] args) {
