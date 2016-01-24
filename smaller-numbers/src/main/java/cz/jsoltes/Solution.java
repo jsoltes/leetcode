@@ -18,7 +18,9 @@ public class Solution {
 
     public List<Integer> countSmaller(int[] nums) {
         int len = nums.length;
-        if(len==0) return Arrays.asList(); //the case of empty input
+        if (len == 0) {
+            return Arrays.asList(); //the case of empty input
+        }
         Integer count[] = new Integer[len];
         int updated[] = new int[len]; //updated count+1
         int lower[] = new int[len]; //pointers to lower numbers
@@ -31,21 +33,26 @@ public class Solution {
         //the rest
         for (int i = len - 2; i >= 0; i--) {
             int elem = nums[i];
-            count[i]=0;
-            updated[i]=1;
-            int compared = len-1;
-            while (compared != -1) {
+            count[i] = 0;
+            updated[i] = 1;
+            int compared = -1;
+            int nextCompared = len - 1;
+            while (nextCompared != -1) {
+                compared = nextCompared;
                 if (elem > nums[compared]) {
-                    count[i]+=updated[compared];
-                    lower[i]=compared;
-                    higher[i]=-1;
-                    compared=higher[compared];
+                    count[i] += updated[compared];
+                    nextCompared = higher[compared];
                 } else {
-                    updated[compared]+=1;
-                    higher[i]=compared;
-                    lower[i]=-1;
-                    compared=lower[compared];
+                    updated[compared] += 1;
+                    nextCompared = lower[compared];
                 }
+            }
+            if (nums[i] < nums[compared]) {
+                higher[i]=compared;
+                lower[compared]=i;
+            } else {
+                lower[i]=compared;
+                higher[compared]=i;
             }
         }
         return Arrays.asList(count);
