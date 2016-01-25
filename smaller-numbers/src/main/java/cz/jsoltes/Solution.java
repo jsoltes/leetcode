@@ -5,6 +5,7 @@
  */
 package cz.jsoltes;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class Solution {
         if (len == 0) {
             return Arrays.asList(); //the case of empty input
         }
-        Integer count[] = new Integer[len];
+        int count[] = new int[len];
         int updated[] = new int[len]; //updated count+1
         int lower[] = new int[len]; //pointers to lower numbers
         int higher[] = new int[len]; //pointers to higher numbers
@@ -63,8 +64,9 @@ public class Solution {
         for (int i = 2; i < 3; i++) {
             System.out.println("elem " + nums[i] + " count " + count[i] + " updated " + updated[i] + " higher " + higher[i] + " lower " + lower[i]);
         }
-
-        return Arrays.asList(count);
+        List<Integer> solution=new ArrayList<>(len);
+        for(int c:count) solution.add(c);
+        return solution;
     }
 
     public static void main(String[] args) {
