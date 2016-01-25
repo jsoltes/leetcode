@@ -34,6 +34,8 @@ public class Solution {
             int elem = nums[i];
             count[i] = 0;
             updated[i] = 1;
+            higher[i] = -1;
+            lower[i] = -1;
             int nextCompared = len - 1;
             while (nextCompared != -1) {
                 compared = nextCompared;
@@ -44,30 +46,17 @@ public class Solution {
                     updated[compared] += 1;
                     nextCompared = lower[compared];
                 } else if (elem == nums[compared]) {
-
-                    if (higher[compared] != -1) {
-                        nextCompared = higher[compared];
-                    } else {
-                        updated[compared] += 1;
-                        nextCompared = lower[compared];
-                    }
-                }
-                if (i == 2) {
-                    System.out.println(nums[compared] + " " + updated[compared]);
+                    count[i]+=updated[compared]-1;
+                    nextCompared=-1;
                 }
             }
-
             if (elem > nums[compared]) {
-                higher[i] = -1;
-                lower[i] = -1;
                 higher[compared] = i;
             } else if (elem < nums[compared]) {
-                lower[i] = -1;
-                higher[i] = -1;
                 lower[compared] = i;
             } else if (elem == nums[compared]) {
-                lower[i] = lower[compared];
-                higher[i] = higher[compared];
+                higher[i]=higher[compared];
+                higher[compared] = i;
             }
         }
 
