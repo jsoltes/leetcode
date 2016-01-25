@@ -31,34 +31,39 @@ public class Solution {
         higher[len - 1] = -1;
         //the rest
         int compared = -1;
+        int elem;
+        int nextCompared;
+        int celem=0;
         for (int i = len - 2; i >= 0; i--) {
-            int elem = nums[i];
+            elem = nums[i];
             count[i] = 0;
             updated[i] = 1;
             higher[i] = -1;
             lower[i] = -1;
-            int nextCompared = len - 1;
+            nextCompared = len - 1;
             while (nextCompared != -1) {
                 compared = nextCompared;
-                if (elem > nums[compared]) {
+                celem=nums[compared];
+                if (elem > celem) {
                     count[i] += updated[compared];
                     nextCompared = higher[compared];
-                } else if (elem < nums[compared]) {
+                } else if (elem < celem) {
                     updated[compared] += 1;
                     nextCompared = lower[compared];
-                } else if (elem == nums[compared]) {
+                } else if (elem == celem) {
                     count[i]+=updated[compared]-1;
                     nextCompared=-1;
                 }
             }
-            if (elem > nums[compared]) {
+            if (elem > celem) {
                 higher[compared] = i;
-            } else if (elem < nums[compared]) {
+            } else if (elem < celem) {
                 lower[compared] = i;
-            } else if (elem == nums[compared]) {
+            } else if (elem == celem) {
                 higher[i]=higher[compared];
                 higher[compared] = i;
             }
+            
         }
 
         for (int i = 2; i < 3; i++) {
