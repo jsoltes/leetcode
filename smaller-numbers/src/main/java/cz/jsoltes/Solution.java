@@ -84,9 +84,22 @@ public class Solution {
                     newRoot=lower[newRoot];
                 }
                 lower[newRoot]=root;
+                updated[newRoot]=updated[root]+1;
                 root=newRoot;
+                rightWing=0;
+                leftWing=0;
             }else if (leftWing-rightWing==2){
-                
+                newRoot=lower[root];
+                lower[root]=-1;
+                while(higher[newRoot]!=-1){
+                    lower[newRoot]=newRoot;
+                    newRoot=higher[newRoot];
+                }
+                higher[newRoot]=root;
+                updated[newRoot]=updated[root]-1;
+                root=newRoot;
+                rightWing=0;
+                leftWing=0;
             }
         }
         List<Integer> solution=new ArrayList<>(len);
