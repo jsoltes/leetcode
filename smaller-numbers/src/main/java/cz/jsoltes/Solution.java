@@ -31,25 +31,22 @@ public class Solution {
         higher[len - 1] = -1;
         //the rest
         int compared = -1;
-        int elem;
-        int nextCompared;
-        int celem=0;
-        int leftWing=0;
-        int rightWing=0;
-        int root=len-1;
-        int newRoot;
+        int celem = 0;
+        int leftWing = 0;
+        int rightWing = 0;
+        int root = len - 1;
         //iterates through the nums backwards
-        for (int i = len-2; i >= 0; i--) {
-            elem = nums[i];
+        for (int i = len - 2; i >= 0; i--) {
+            int elem = nums[i];
             count[i] = 0;
             updated[i] = 1;
             higher[i] = -1;
             lower[i] = -1;
-            nextCompared = root;
+            int nextCompared = root;
             //iterates through the tree, updates updated count and calculates count
             do {
                 compared = nextCompared;
-                celem=nums[compared];
+                celem = nums[compared];
                 if (elem > celem) {
                     count[i] += updated[compared];
                     nextCompared = higher[compared];
@@ -57,53 +54,79 @@ public class Solution {
                     updated[compared] += 1;
                     nextCompared = lower[compared];
                 } else if (elem == celem) {
-                    count[i]+=updated[compared]-1;
+                    count[i] += updated[compared] - 1;
                     break;
-                } 
-            } while(nextCompared!=-1);
+                }
+            } while (nextCompared != -1);
             //adds the element to the tree structure
             if (elem > celem) {
                 higher[compared] = i;
             } else if (elem < celem) {
                 lower[compared] = i;
             } else if (elem == celem) {
-                higher[i]=higher[compared];
+                higher[i] = higher[compared];
                 higher[compared] = i;
             }
             //balances the tree
-            if(elem>=nums[root]){
+            if (elem >= nums[root]) {
                 rightWing++;
-            }else{
+            } else {
                 leftWing++;
             }
-            if(rightWing-leftWing==2){
-                newRoot=higher[root];
-                higher[root]=-1;
-                while(lower[newRoot]!=-1){
-                    higher[newRoot]=newRoot;
-                    newRoot=lower[newRoot];
+            if (rightWing - leftWing == 2) {
+                int rightElem = higher[root];
+                int newRoot = rightElem;
+                int prevRoot = -1;
+                while (lower[newRoot] != -1) {
+                    prevRoot = newRoot;
+                    updated[prevRoot]--;
+                    newRoot = lower[newRoot];
                 }
-                lower[newRoot]=root;
-                updated[newRoot]=updated[root]+1;
-                root=newRoot;
-                rightWing=0;
-                leftWing=0;
-            }else if (leftWing-rightWing==2){
-                newRoot=lower[root];
-                lower[root]=-1;
-                while(higher[newRoot]!=-1){
-                    lower[newRoot]=newRoot;
-                    newRoot=higher[newRoot];
+                higher[root] = -1;
+                lower[newRoot] = root;
+                if (rightElem != newRoot) {
+                    if (higher[newRoot] != -1) {
+                        lower[prevRoot] = higher[newRoot];
+                    } else {
+                        lower[prevRoot] = -1;
+                    }
+                    higher[newRoot] = rightElem;
                 }
-                higher[newRoot]=root;
-                updated[newRoot]=updated[root]-1;
+                updated[newRoot] = updated[root] + 1;
                 root=newRoot;
-                rightWing=0;
-                leftWing=0;
+
+            } else if (leftWing - rightWing == 2) {
+                int leftElem = lower[root];
+                int newRoot = leftElem;
+                int prevRoot = -1;
+                while (higher[newRoot] != -1) {
+                    prevRoot = newRoot;
+                    newRoot = higher[newRoot];
+                }
+                lower[root] = -1;
+                higher[newRoot] = root;
+                if (leftElem != newRoot) {
+                    if (lower[newRoot] != -1) {
+                        higher[prevRoot] = lower[newRoot];
+                    } else {
+                        higher[prevRoot] = -1;
+                    }
+                    lower[newRoot] = leftElem;
+                }
+                updated[newRoot] = updated[root] - 1;
+                updated[root] = 1;
+                root=newRoot;
             }
         }
-        List<Integer> solution=new ArrayList<>(len);
-        for(int c:count) solution.add(c);
+        List<Integer> solution = new ArrayList<>(len);
+        for (int c : count) {
+            solution.add(c);
+        }
         return solution;
+    }
+
+    public static void main(String[] args) {
+        Solution s = new Solution();
+        System.out.println(s.countSmaller(new int[]{26, 78, 27, 100, 33, 67, 90, 23, 66, 5, 38, 7, 35, 23, 52, 22, 83, 51, 98, 69, 81, 32, 78, 28, 94, 13, 2, 97, 3, 76, 99, 51, 9, 21, 84, 66, 65, 36, 100, 41}));
     }
 }
