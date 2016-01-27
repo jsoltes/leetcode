@@ -67,56 +67,6 @@ public class Solution {
                 higher[i] = higher[compared];
                 higher[compared] = i;
             }
-            //balances the tree
-            if (elem >= nums[root]) {
-                rightWing++;
-            } else {
-                leftWing++;
-            }
-            if (rightWing - leftWing == 2) {
-                int rightElem = higher[root];
-                int newRoot = rightElem;
-                int prevRoot = -1;
-                while (lower[newRoot] != -1) {
-                    prevRoot = newRoot;
-                    updated[prevRoot]--;
-                    newRoot = lower[newRoot];
-                }
-                higher[root] = -1;
-                lower[newRoot] = root;
-                if (rightElem != newRoot) {
-                    if (higher[newRoot] != -1) {
-                        lower[prevRoot] = higher[newRoot];
-                    } else {
-                        lower[prevRoot] = -1;
-                    }
-                    higher[newRoot] = rightElem;
-                }
-                updated[newRoot] = updated[root] + 1;
-                root=newRoot;
-
-            } else if (leftWing - rightWing == 2) {
-                int leftElem = lower[root];
-                int newRoot = leftElem;
-                int prevRoot = -1;
-                while (higher[newRoot] != -1) {
-                    prevRoot = newRoot;
-                    newRoot = higher[newRoot];
-                }
-                lower[root] = -1;
-                higher[newRoot] = root;
-                if (leftElem != newRoot) {
-                    if (lower[newRoot] != -1) {
-                        higher[prevRoot] = lower[newRoot];
-                    } else {
-                        higher[prevRoot] = -1;
-                    }
-                    lower[newRoot] = leftElem;
-                }
-                updated[newRoot] = updated[root] - 1;
-                updated[root] = 1;
-                root=newRoot;
-            }
         }
         List<Integer> solution = new ArrayList<>(len);
         for (int c : count) {
