@@ -24,40 +24,28 @@ public class Solution {
         int updated[] = new int[len]; //updated count+1
         int lower[] = new int[len]; //pointers to lower numbers
         int higher[] = new int[len]; //pointers to higher numbers
-        //first element
-        count[len - 1] = 0;
-        updated[len - 1] = 1;
-        lower[len - 1] = -1;
-        higher[len - 1] = -1;
-        //the rest
         int compared = -1;
         int celem = 0;
-        int leftWing = 0;
-        int rightWing = 0;
         int root = len - 1;
         //iterates through the nums backwards
         for (int i = len - 2; i >= 0; i--) {
             int elem = nums[i];
-            count[i] = 0;
-            updated[i] = 1;
-            higher[i] = -1;
-            lower[i] = -1;
             int nextCompared = root;
             //iterates through the tree, updates updated count and calculates count
             do {
                 compared = nextCompared;
                 celem = nums[compared];
                 if (elem > celem) {
-                    count[i] += updated[compared];
+                    count[i] += updated[compared]+1;
                     nextCompared = higher[compared];
                 } else if (elem < celem) {
                     updated[compared] += 1;
                     nextCompared = lower[compared];
                 } else if (elem == celem) {
-                    count[i] += updated[compared] - 1;
+                    count[i] += updated[compared];
                     break;
                 }
-            } while (nextCompared != -1);
+            } while (nextCompared != 0);
             //adds the element to the tree structure
             if (elem > celem) {
                 higher[compared] = i;
@@ -77,6 +65,6 @@ public class Solution {
 
     public static void main(String[] args) {
         Solution s = new Solution();
-        System.out.println(s.countSmaller(new int[]{26, 78, 27, 100, 33, 67, 90, 23, 66, 5, 38, 7, 35, 23, 52, 22, 83, 51, 98, 69, 81, 32, 78, 28, 94, 13, 2, 97, 3, 76, 99, 51, 9, 21, 84, 66, 65, 36, 100, 41}));
+        System.out.println(s.countSmaller(new int[]{5,2,6,1}));
     }
 }
