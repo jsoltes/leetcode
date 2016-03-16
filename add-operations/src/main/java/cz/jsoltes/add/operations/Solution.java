@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 
 /**
  *
@@ -16,42 +19,48 @@ import java.util.List;
  */
 public class Solution {
 
-    //method that recursively generates all solutions for positive target
-    //TODO generalize for negative target
-    private List<String> generatePositiveSolutions(String num, int len, int target, int result, StringBuilder solution) {
-        if (num.isEmpty()) {
-            if (result == target) {
-                return Arrays.asList(solution.toString());
+    //helper method to calculate result from String
+    private int getResultFrom(String input) throws ScriptException {
+        ScriptEngineManager mgr = new ScriptEngineManager();
+        ScriptEngine engine = mgr.getEngineByName("JavaScript");
+        return (int) engine.eval(input);
+    }
+
+    //method that recursively generates all solutions for target
+    private List<String> generateSolutions(String num, int target, StringBuilder solution) throws ScriptException {
+        if (num.isEmpty()) { //base case
+            String s = solution.toString();
+            int result = getResultFrom(s);
+            //if the solution gives target result, returns the solution, else, returns empty list
+            if (target == result) {
+                return Arrays.asList(s);
             } else {
                 return Collections.EMPTY_LIST;
             }
-        } else {
+        } else { //recursive case
             List<String> solutions = new ArrayList<>();
-            int nextResult;
-            String nextString, theRest;
-            StringBuilder nextSolution;
-            len=num.length();
+            List<String> signs = Arrays.asList("+", "-", "*");
+            int len = num.length();
+            //calls method recursively for different digit numbers
             for (int i = 0; i < len; i++) {
-                nextString = num.substring(0, i + 1);
-                theRest = num.substring(i + 1, len);
-                //plus solutions
-                nextResult = result + Integer.valueOf(nextString);
-                nextSolution = solution.append("+").append(nextString);
-                solutions.addAll(generatePositiveSolutions(theRest, len, target, nextResult, nextSolution));
-                //minus solutions
-                nextResult = result - Integer.valueOf(nextString);
-                nextSolution = solution.append("-").append(nextString);
-                solutions.addAll(generatePositiveSolutions(theRest, len, target, nextResult, nextSolution));
-                //times solutions
-                nextResult = result * Integer.valueOf(nextString);
-                nextSolution = solution.append("*").append(nextString);
-                solutions.addAll(generatePositiveSolutions(theRest, len, target, nextResult, nextSolution));
+                String nextNumber = num.substring(0, i + 1);
+                String theRest = num.substring(i + 1);
+                solution.append(nextNumber);
+                System.out.println(solution);
+                if (!theRest.isEmpty()) {
+                    for (String s : signs) {
+                        solution.append(s);
+                        solutions.addAll(generateSolutions(theRest, target, solution));
+                    }
+                } else {
+                    solutions.addAll(generateSolutions(theRest, target, solution));
+                }
             }
             return solutions;
         }
     }
 
-    public List<String> addOperators(String num, int target) {
+    public List<String> addOperators(String num, int target) throws ScriptException {
         List<String> solutions = new ArrayList<>();
         int len = num.length();
         //num is empty String or its value is smaller than target
@@ -62,13 +71,11 @@ public class Solution {
             return Arrays.asList(num);
             //num is number higher than the target
         } else {
-            String firstChar = num.substring(0,1);
-            StringBuilder sb = new StringBuilder(firstChar);
-            return generatePositiveSolutions(num.substring(1, len), len - 1, target, Integer.valueOf(firstChar), sb);
+            return generateSolutions(num, target, new StringBuilder());
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ScriptException {
         Solution s = new Solution();
         System.out.println(s.addOperators("123", 6));
     }
