@@ -7,12 +7,8 @@ package cz.jsoltes.add.operations;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
 
 /**
  *
@@ -32,31 +28,24 @@ public class Solution {
         } else {
             List<String> solutions = new ArrayList<>();
             int nextResult;
+            String nextString, theRest;
             StringBuilder nextSolution;
-            for (int i = 1; i < len; i++) {
-                String nextString = num.substring(1, i + 1);
-                String theRest = num.substring(i + 1, len);
-                //a logic that decides that it is time to finish looping
-                int resultDigits = Integer.toString(result).length();
-                int nextDigits = nextString.length();
-                int restDigits = theRest.length();
-                int targetDigits = Integer.toString(target).length();
-                if (Math.max(resultDigits, nextDigits) <= Math.max(restDigits, targetDigits)) {
-                    //plus solutions
-                    nextResult = result + Integer.valueOf(nextString);
-                    nextSolution = solution.append("+").append(nextString);
-                    solutions.addAll(generatePositiveSolutions(theRest, len, target, nextResult, nextSolution));
-                    //minus solutions
-                    nextResult = result - Integer.valueOf(nextString);
-                    nextSolution = solution.append("-").append(nextString);
-                    solutions.addAll(generatePositiveSolutions(theRest, len, target, nextResult, nextSolution));
-                    //times solutions
-                    nextResult = result * Integer.valueOf(nextString);
-                    nextSolution = solution.append("*").append(nextString);
-                    solutions.addAll(generatePositiveSolutions(theRest, len, target, nextResult, nextSolution));
-                } else {
-                    break;
-                }
+            len=num.length();
+            for (int i = 0; i < len; i++) {
+                nextString = num.substring(0, i + 1);
+                theRest = num.substring(i + 1, len);
+                //plus solutions
+                nextResult = result + Integer.valueOf(nextString);
+                nextSolution = solution.append("+").append(nextString);
+                solutions.addAll(generatePositiveSolutions(theRest, len, target, nextResult, nextSolution));
+                //minus solutions
+                nextResult = result - Integer.valueOf(nextString);
+                nextSolution = solution.append("-").append(nextString);
+                solutions.addAll(generatePositiveSolutions(theRest, len, target, nextResult, nextSolution));
+                //times solutions
+                nextResult = result * Integer.valueOf(nextString);
+                nextSolution = solution.append("*").append(nextString);
+                solutions.addAll(generatePositiveSolutions(theRest, len, target, nextResult, nextSolution));
             }
             return solutions;
         }
@@ -64,17 +53,23 @@ public class Solution {
 
     public List<String> addOperators(String num, int target) {
         List<String> solutions = new ArrayList<>();
+        int len = num.length();
         //num is empty String or its value is smaller than target
-        if (num.length() == 0) {
+        if (len == 0) {
             return solutions;
             //num is String representing the target
         } else if (Integer.valueOf(num) == target) {
             return Arrays.asList(num);
             //num is number higher than the target
         } else {
-            int len = num.length();
-            StringBuilder sb = new StringBuilder(Character.toString(num.charAt(0)));
-            return generatePositiveSolutions(num, len, target, num.charAt(0), sb);
+            String firstChar = num.substring(0,1);
+            StringBuilder sb = new StringBuilder(firstChar);
+            return generatePositiveSolutions(num.substring(1, len), len - 1, target, Integer.valueOf(firstChar), sb);
         }
+    }
+
+    public static void main(String[] args) {
+        Solution s = new Solution();
+        System.out.println(s.addOperators("123", 6));
     }
 }
