@@ -41,15 +41,13 @@ public class Solution {
             List<String> solutions = new ArrayList<>();
             int len = num.length();
             String nextNumber = num.substring(0, digits);
-            StringBuilder origSol = new StringBuilder(solution);
-            StringBuilder noSign = solution.append(nextNumber);
-            solution.append(signs.get(0));
-
+            solution.append(nextNumber);
             if (digits < len) { //generates all possible lengths
-                solutions.addAll(generateSolutions(num, target, digits + 1, signs, origSol));
+                solutions.addAll(generateSolutions(num, target, digits + 1, signs, solution));
             }
+            solution.append(signs.get(0));
             if (signs.size()>1) { //generates all possible signs
-                solutions.addAll(generateSolutions(num, target, digits, signs.subList(1, signs.size()), noSign));
+                solutions.addAll(generateSolutions(num, target, digits, signs.subList(1, signs.size()), solution));
             }
             //generates all possible solutions
             solutions.addAll(generateSolutions(num.substring(digits), target, digits, signs, solution));
