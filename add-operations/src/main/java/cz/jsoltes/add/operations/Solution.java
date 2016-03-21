@@ -27,9 +27,10 @@ public class Solution {
     }
 
     //method that recursively generates all solutions for target
-    private List<String> generateSolutions(String num, int target, int digits, List<String> signs, StringBuilder solution) throws ScriptException {
+    private List<String> generateSolutions(String num, int target, StringBuilder solution) throws ScriptException {
         if (num.isEmpty()) { //base case
             String s = solution.toString();
+            System.out.println(s);
             int result = getResultFrom(s);
             //if the solution gives target result, returns the solution, else, returns empty list+
             if (target == result) {
@@ -39,18 +40,24 @@ public class Solution {
             }
         } else { //recursive case
             List<String> solutions = new ArrayList<>();
-            int len = num.length();
-            String nextNumber = num.substring(0, digits);
-            solution.append(nextNumber);
-            if (digits < len) { //generates all possible lengths
-                solutions.addAll(generateSolutions(num, target, digits + 1, signs, solution));
-            }
-            solution.append(signs.get(0));
-            if (signs.size()>1) { //generates all possible signs
-                solutions.addAll(generateSolutions(num, target, digits, signs.subList(1, signs.size()), solution));
-            }
-            //generates all possible solutions
-            solutions.addAll(generateSolutions(num.substring(digits), target, digits, signs, solution));
+            int lastPosition = solution.length() - 1;
+            char lastElement = solution.charAt(lastPosition);
+            StringBuilder original = new StringBuilder(solution);
+            
+            solution.append('+').append(num.charAt(0));
+            solutions.addAll(generateSolutions(num.substring(1), target, solution));
+
+            solution = new StringBuilder(original);
+            solution.append('-').append(num.charAt(0));
+            solutions.addAll(generateSolutions(num.substring(1), target, solution));
+
+            solution = new StringBuilder(original);
+            solution.append('*').append(num.charAt(0));
+            solutions.addAll(generateSolutions(num.substring(1), target, solution));
+
+            solution = new StringBuilder(original);
+            solution.append(num.charAt(0));
+            solutions.addAll(generateSolutions(num.substring(1), target, solution));
             return solutions;
         }
     }
@@ -66,7 +73,7 @@ public class Solution {
             return Arrays.asList(num);
             //num is number higher than the target
         } else {
-            return generateSolutions(num, target, 1, Arrays.asList("+", "-", "*"), new StringBuilder());
+            return generateSolutions(num.substring(1), target, new StringBuilder().append(num.charAt(0)));
         }
     }
 
