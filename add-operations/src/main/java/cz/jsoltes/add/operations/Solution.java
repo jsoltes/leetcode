@@ -9,9 +9,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
 
 /**
  *
@@ -19,20 +16,63 @@ import javax.script.ScriptException;
  */
 public class Solution {
 
-    //helper method to calculate result from String
-    private int getResultFrom(String input) throws ScriptException {
-        ScriptEngineManager mgr = new ScriptEngineManager();
-        ScriptEngine engine = mgr.getEngineByName("JavaScript");
-        return (int) engine.eval(input);
+    //helper method that calculates result from stringbuilder
+    private int getResult(StringBuilder solution) {
+        int result = 0;
+        //first we get rid of the *
+        int start = 0;
+        for (int i = 1; i < solution.length(); i++) {
+            char current = solution.charAt(i);
+            if (current == '*') {
+                int factor1 = Integer.valueOf(solution.substring(start, i));
+                int start2 = i + 1;
+                while (current != '+' && current != '-' && current != '*') {
+                    i++;
+                    current = solution.charAt(i);
+                }
+                int factor2 = Integer.valueOf(solution.substring(start2, i));
+                int product = factor1 * factor2;
+                solution.replace(start, i, Integer.toString(product));
+            } else if (current == '+' || current == '-') {
+                start=i+1;
+            }
+        }
+        //now we calculate simple solution
+        char current = solution.charAt(1);
+        int i=1;
+        while(current!='+' || current!='-'){
+            i++;
+            current=solution.charAt(i);
+        }
+        result=Integer.valueOf(solution.substring(0, i));
+        int len=solution.length();
+        for(int j=i;j<len;i++){
+            current = solution.charAt(j);
+            if(current == '+'){
+                start=i+1;
+                while(current!='+' || current!='-'){
+                i++;
+                current=solution.charAt(i);
+                }
+                result+=Integer.valueOf(solution.substring(start,i));
+            } else if (current == '-'){
+                start=i+1;
+                while(current!='+' || current!='-'){
+                i++;
+                current=solution.charAt(i);
+                }
+                result-=Integer.valueOf(solution.substring(start,i));
+            }
+        }
+        return result;
     }
 
     //method that recursively generates all solutions for target
-    private List<String> generateSolutions(String num, int target, StringBuilder solution) throws ScriptException {
+    private List<String> generateSolutions(String num, int target, StringBuilder solution) {
         if (num.isEmpty()) { //base case
             String s = solution.toString();
-            System.out.println(s);
-            int result = getResultFrom(s);
-            //if the solution gives target result, returns the solution, else, returns empty list+
+            int result = getResult(solution);
+            //if the solution gives target result, returns the solution, else, returns empty list
             if (target == result) {
                 return Arrays.asList(s);
             } else {
@@ -64,11 +104,12 @@ public class Solution {
         }
     }
 
-    public List<String> addOperators(String num, int target) throws ScriptException {
-        return generateSolutions(num.substring(1), target, new StringBuilder().append(num.charAt(0)));
+    public List<String> addOperators(String num, int target) {
+        char char1 = num.charAt(0);
+        return generateSolutions(num.substring(1), target, new StringBuilder().append(char1));
     }
 
-    public static void main(String[] args) throws ScriptException {
+    public static void main(String[] args) {
         Solution s = new Solution();
         System.out.println(s.addOperators("00", 0));
     }
