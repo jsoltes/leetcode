@@ -43,7 +43,7 @@ public class Solution {
             int lastPosition = solution.length() - 1;
             char lastElement = solution.charAt(lastPosition);
             StringBuilder original = new StringBuilder(solution);
-            
+
             solution.append('+').append(num.charAt(0));
             solutions.addAll(generateSolutions(num.substring(1), target, solution));
 
@@ -55,30 +55,21 @@ public class Solution {
             solution.append('*').append(num.charAt(0));
             solutions.addAll(generateSolutions(num.substring(1), target, solution));
 
-            solution = new StringBuilder(original);
-            solution.append(num.charAt(0));
-            solutions.addAll(generateSolutions(num.substring(1), target, solution));
+            if ('0' != lastElement) {
+                solution = new StringBuilder(original);
+                solution.append(num.charAt(0));
+                solutions.addAll(generateSolutions(num.substring(1), target, solution));
+            }
             return solutions;
         }
     }
 
     public List<String> addOperators(String num, int target) throws ScriptException {
-        List<String> solutions = new ArrayList<>();
-        int len = num.length();
-        //num is empty String or its value is smaller than target
-        if (len == 0) {
-            return solutions;
-            //num is String representing the target
-        } else if (Integer.valueOf(num) == target) {
-            return Arrays.asList(num);
-            //num is number higher than the target
-        } else {
-            return generateSolutions(num.substring(1), target, new StringBuilder().append(num.charAt(0)));
-        }
+        return generateSolutions(num.substring(1), target, new StringBuilder().append(num.charAt(0)));
     }
 
     public static void main(String[] args) throws ScriptException {
         Solution s = new Solution();
-        System.out.println(s.addOperators("123", 6));
+        System.out.println(s.addOperators("00", 0));
     }
 }
