@@ -58,7 +58,6 @@ public class Solution {
                 }
             }
             //then we sum up the rest
-            System.out.println(solution);
             int start; 
             for (int j = i; j < len; j++) {
                 current = solution.charAt(j);
@@ -68,7 +67,6 @@ public class Solution {
                         j++;
                     }
                     result += Integer.valueOf(solution.substring(start, j--));
-                    System.out.println(result);
                 } else if (current == '-') {
                     start = ++j;//2
                     while (j < len && solution.charAt(j) != '+' && solution.charAt(j) != '-') {
@@ -121,10 +119,5 @@ public class Solution {
     public List<String> addOperators(String num, int target) {
         char char1 = num.charAt(0);
         return generateSolutions(num.substring(1), target, new StringBuilder().append(char1));
-    }
-
-    public static void main(String[] args) {
-        Solution s = new Solution();
-        System.out.println(s.addOperators("123", 6));
     }
 }
