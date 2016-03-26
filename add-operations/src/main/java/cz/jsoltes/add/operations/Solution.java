@@ -17,36 +17,35 @@ import java.util.List;
 public class Solution {
 
     //helper method that calculates result from stringbuilder
-    private int getResult(StringBuilder solution) {
-        //first we get rid of the * signs (0+0->0+0, 0*0->0)
+    private long getResult(StringBuilder solution) {
+        //first we get rid of the * signs
         int start1 = 0;
         int len = solution.length();
         char current;
         boolean noSigns = true;
-        //1*2*3
         for (int i = 1; i < len; i++) {
-            current = solution.charAt(i);//*
+            current = solution.charAt(i);
             if (current == '*') {
-                int factor1 = Integer.valueOf(solution.substring(start1, i));//1
-                int start2 = ++i;//2
+                int factor1 = Integer.valueOf(solution.substring(start1, i));
+                int start2 = ++i;
                 while (i < len && "+-*".indexOf(solution.charAt(i)) == -1) {
-                    i++;//3
+                    i++;
                 }
-                int factor2 = Integer.valueOf(solution.substring(start2, i));//2
-                int product = factor1 * factor2;//2
+                int factor2 = Integer.valueOf(solution.substring(start2, i));
+                int product = factor1 * factor2;
                 solution.replace(start1, i, Integer.toString(product));
                 int newLen = solution.length();
-                i -= len - newLen +1;
+                i -= len - newLen + 1;
                 len = newLen;
             } else if (current == '+' || current == '-') {
-                start1 = i+1;
+                start1 = i + 1;
                 noSigns = false;
             }
         }
         //now we calculate the solution
-        int result = 0;
+        long result = 0;
         if (noSigns == true) { //if after removing the * there is nothing more to do
-            result = Integer.valueOf(solution.toString());
+            result = Long.valueOf(solution.toString());
         } else {
             //first we get the first number
             int i;
@@ -58,21 +57,21 @@ public class Solution {
                 }
             }
             //then we sum up the rest
-            int start; 
+            int start;
             for (int j = i; j < len; j++) {
                 current = solution.charAt(j);
                 if (current == '+') {
                     start = ++j;
-                    while (j<len && solution.charAt(j) != '+' && solution.charAt(j) != '-') {
+                    while (j < len && solution.charAt(j) != '+' && solution.charAt(j) != '-') {
                         j++;
                     }
                     result += Integer.valueOf(solution.substring(start, j--));
                 } else if (current == '-') {
-                    start = ++j;//2
+                    start = ++j;
                     while (j < len && solution.charAt(j) != '+' && solution.charAt(j) != '-') {
                         j++;
                     }
-                    result -= Integer.valueOf(solution.substring(start,j--));//2,2
+                    result -= Integer.valueOf(solution.substring(start, j--));
                 }
             }
         }
@@ -83,7 +82,7 @@ public class Solution {
     private List<String> generateSolutions(String num, int target, StringBuilder solution) {
         if (num.isEmpty()) { //base case
             String s = solution.toString();
-            int result = getResult(solution);
+            long result = getResult(solution);
             //if the solution gives target result, returns the solution, else, returns empty list
             if (target == result) {
                 return Arrays.asList(s);
@@ -117,7 +116,11 @@ public class Solution {
     }
 
     public List<String> addOperators(String num, int target) {
-        char char1 = num.charAt(0);
-        return generateSolutions(num.substring(1), target, new StringBuilder().append(char1));
+        if (num.isEmpty()) {
+            return Collections.EMPTY_LIST;
+        } else {
+            char char1 = num.charAt(0);
+            return generateSolutions(num.substring(1), target, new StringBuilder().append(char1));
+        }
     }
 }
