@@ -18,50 +18,64 @@ public class Solution {
 
     //helper method that calculates result from stringbuilder
     private int getResult(StringBuilder solution) {
-        int result = 0;
-        //first we get rid of the *
-        int start = 0;
-        for (int i = 1; i < solution.length(); i++) {
-            char current = solution.charAt(i);
+        //first we get rid of the * signs (0+0->0+0, 0*0->0)
+        int start1 = 0;
+        int len = solution.length();
+        char current;
+        boolean noSigns = true;
+        //1*2*3
+        for (int i = 1; i < len; i++) {
+            current = solution.charAt(i);//*
             if (current == '*') {
-                int factor1 = Integer.valueOf(solution.substring(start, i));
-                int start2 = i + 1;
-                while (current != '+' && current != '-' && current != '*') {
-                    i++;
-                    current = solution.charAt(i);
+                int factor1 = Integer.valueOf(solution.substring(start1, i));//1
+                int start2 = ++i;//2
+                while (i < len && "+-*".indexOf(solution.charAt(i)) == -1) {
+                    i++;//3
                 }
-                int factor2 = Integer.valueOf(solution.substring(start2, i));
-                int product = factor1 * factor2;
-                solution.replace(start, i, Integer.toString(product));
+                int factor2 = Integer.valueOf(solution.substring(start2, i));//2
+                int product = factor1 * factor2;//2
+                solution.replace(start1, i, Integer.toString(product));
+                int newLen = solution.length();
+                i -= len - newLen +1;
+                len = newLen;
             } else if (current == '+' || current == '-') {
-                start=i+1;
+                start1 = i+1;
+                noSigns = false;
             }
         }
-        //now we calculate simple solution
-        char current = solution.charAt(1);
-        int i=1;
-        while(current!='+' || current!='-'){
-            i++;
-            current=solution.charAt(i);
-        }
-        result=Integer.valueOf(solution.substring(0, i));
-        int len=solution.length();
-        for(int j=i;j<len;i++){
-            current = solution.charAt(j);
-            if(current == '+'){
-                start=i+1;
-                while(current!='+' || current!='-'){
-                i++;
-                current=solution.charAt(i);
+        //now we calculate the solution
+        int result = 0;
+        if (noSigns == true) { //if after removing the * there is nothing more to do
+            result = Integer.valueOf(solution.toString());
+        } else {
+            //first we get the first number
+            int i;
+            for (i = 1; i < len; i++) {
+                current = solution.charAt(i);
+                if (current == '+' || current == '-') {
+                    result = Integer.valueOf(solution.substring(0, i));
+                    break;
                 }
-                result+=Integer.valueOf(solution.substring(start,i));
-            } else if (current == '-'){
-                start=i+1;
-                while(current!='+' || current!='-'){
-                i++;
-                current=solution.charAt(i);
+            }
+            //then we sum up the rest
+            System.out.println(solution);
+            int start; 
+            for (int j = i; j < len; j++) {
+                current = solution.charAt(j);
+                if (current == '+') {
+                    start = ++j;
+                    while (j<len && solution.charAt(j) != '+' && solution.charAt(j) != '-') {
+                        j++;
+                    }
+                    result += Integer.valueOf(solution.substring(start, j--));
+                    System.out.println(result);
+                } else if (current == '-') {
+                    start = ++j;//2
+                    while (j < len && solution.charAt(j) != '+' && solution.charAt(j) != '-') {
+                        j++;
+                    }
+                    result -= Integer.valueOf(solution.substring(start,j--));//2,2
                 }
-                result-=Integer.valueOf(solution.substring(start,i));
             }
         }
         return result;
@@ -111,6 +125,6 @@ public class Solution {
 
     public static void main(String[] args) {
         Solution s = new Solution();
-        System.out.println(s.addOperators("00", 0));
+        System.out.println(s.addOperators("123", 6));
     }
 }
