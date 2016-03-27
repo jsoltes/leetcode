@@ -79,12 +79,12 @@ public class Solution {
     }
 
     //method that recursively generates all solutions for target
-    private List<String> generateSolutions(String num, int target, StringBuilder solution) {
+    private List<String> generateSolutions(String num, int target, StringBuilder solution, boolean containsSign) {
         if (num.isEmpty()) { //base case
             String s = solution.toString();
             long result = getResult(solution);
             //if the solution gives target result, returns the solution, else, returns empty list
-            if (target == result) {
+            if (result < 2147483647 && target == result) {
                 return Arrays.asList(s);
             } else {
                 return Collections.EMPTY_LIST;
@@ -94,33 +94,42 @@ public class Solution {
             int lastPosition = solution.length() - 1;
             char lastElement = solution.charAt(lastPosition);
             StringBuilder original = new StringBuilder(solution);
-
+            //add + and number
             solution.append('+').append(num.charAt(0));
-            solutions.addAll(generateSolutions(num.substring(1), target, solution));
-
+            solutions.addAll(generateSolutions(num.substring(1), target, solution, true));
+            //add - and number
             solution = new StringBuilder(original);
             solution.append('-').append(num.charAt(0));
-            solutions.addAll(generateSolutions(num.substring(1), target, solution));
-
+            solutions.addAll(generateSolutions(num.substring(1), target, solution, true));
+            //add * and number
             solution = new StringBuilder(original);
             solution.append('*').append(num.charAt(0));
-            solutions.addAll(generateSolutions(num.substring(1), target, solution));
-
-            if ('0' != lastElement) {
-                solution = new StringBuilder(original);
-                solution.append(num.charAt(0));
-                solutions.addAll(generateSolutions(num.substring(1), target, solution));
+            solutions.addAll(generateSolutions(num.substring(1), target, solution, true));
+            //adds another cipher
+            if ('0' != lastElement || (lastPosition - 1 >= 0 && "+-*".indexOf(original.charAt(lastPosition-1))==-1)) {//this ensures we don't get numbers starting on 0
+            solution = new StringBuilder(original);
+                if (containsSign || num.charAt(0) == '0' || Integer.valueOf(solution.toString()) - Integer.valueOf(num) <= target) {
+                    solution.append(num.charAt(0));
+                    solutions.addAll(generateSolutions(num.substring(1), target, solution, containsSign));
+                }
             }
             return solutions;
         }
     }
 
     public List<String> addOperators(String num, int target) {
-        if (num.isEmpty()) {
+        if (num.isEmpty() || Long.valueOf(num) < target) {
             return Collections.EMPTY_LIST;
+        } else if (num.equals(Integer.toString(target))) {
+            return Arrays.asList(num);
         } else {
             char char1 = num.charAt(0);
-            return generateSolutions(num.substring(1), target, new StringBuilder().append(char1));
+            return generateSolutions(num.substring(1), target, new StringBuilder().append(char1), false);
         }
+    }
+
+    public static void main(String[] args) {
+        Solution s = new Solution();
+        System.out.println(s.addOperators("105", 5));
     }
 }
