@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cz.jsoltes.add.operations;
 
 import java.util.ArrayList;
@@ -26,12 +21,12 @@ public class Solution {
         for (int i = 1; i < len; i++) {
             current = solution.charAt(i);
             if (current == '*') {
-                int factor1 = Integer.valueOf(solution.substring(start1, i));
+                int factor1 = Integer.parseInt(solution.substring(start1, i));
                 int start2 = ++i;
                 while (i < len && "+-*".indexOf(solution.charAt(i)) == -1) {
                     i++;
                 }
-                int factor2 = Integer.valueOf(solution.substring(start2, i));
+                int factor2 = Integer.parseInt(solution.substring(start2, i));
                 int product = factor1 * factor2;
                 solution.replace(start1, i, Integer.toString(product));
                 int newLen = solution.length();
@@ -45,14 +40,14 @@ public class Solution {
         //now we calculate the solution
         long result = 0;
         if (noSigns == true) { //if after removing the * there is nothing more to do
-            result = Long.valueOf(solution.toString());
+            result = Long.parseLong(solution.toString());
         } else {
             //first we get the first number
             int i;
             for (i = 1; i < len; i++) {
                 current = solution.charAt(i);
                 if (current == '+' || current == '-') {
-                    result = Integer.valueOf(solution.substring(0, i));
+                    result = Integer.parseInt(solution.substring(0, i));
                     break;
                 }
             }
@@ -65,13 +60,13 @@ public class Solution {
                     while (j < len && solution.charAt(j) != '+' && solution.charAt(j) != '-') {
                         j++;
                     }
-                    result += Integer.valueOf(solution.substring(start, j--));
+                    result += Integer.parseInt(solution.substring(start, j--));
                 } else if (current == '-') {
                     start = ++j;
                     while (j < len && solution.charAt(j) != '+' && solution.charAt(j) != '-') {
                         j++;
                     }
-                    result -= Integer.valueOf(solution.substring(start, j--));
+                    result -= Integer.parseInt(solution.substring(start, j--));
                 }
             }
         }
@@ -108,7 +103,7 @@ public class Solution {
             //adds another cipher
             if ('0' != lastElement || (lastPosition - 1 >= 0 && "+-*".indexOf(original.charAt(lastPosition-1))==-1)) {//this ensures we don't get numbers starting on 0
             solution = new StringBuilder(original);
-                if (containsSign || num.charAt(0) == '0' || Integer.valueOf(solution.toString()) - Integer.valueOf(num) <= target) {
+                if (containsSign || num.charAt(0) == '0' || Integer.parseInt(solution.toString()) - Integer.parseInt(num) <= target) {
                     solution.append(num.charAt(0));
                     solutions.addAll(generateSolutions(num.substring(1), target, solution, containsSign));
                 }
@@ -118,7 +113,7 @@ public class Solution {
     }
 
     public List<String> addOperators(String num, int target) {
-        if (num.isEmpty() || Long.valueOf(num) < target) {
+        if (num.isEmpty() || Long.parseLong(num) < target) {
             return Collections.EMPTY_LIST;
         } else if (num.equals(Integer.toString(target))) {
             return Arrays.asList(num);
