@@ -89,18 +89,18 @@ public class Solution {
             int lastPosition = solution.length() - 1;
             char lastElement = solution.charAt(lastPosition);
             StringBuilder original = new StringBuilder(solution);
-            //add + and number
+            //add + and first digit of the next number
             solution.append('+').append(num.charAt(0));
             solutions.addAll(generateSolutions(num.substring(1), target, solution, true));
-            //add - and number
+            //add - and first digit of the next number
             solution = new StringBuilder(original);
             solution.append('-').append(num.charAt(0));
             solutions.addAll(generateSolutions(num.substring(1), target, solution, true));
-            //add * and number
+            //add * and first digit of the next number
             solution = new StringBuilder(original);
             solution.append('*').append(num.charAt(0));
             solutions.addAll(generateSolutions(num.substring(1), target, solution, true));
-            //adds another cipher
+            //adds another digit
             if ('0' != lastElement || (lastPosition - 1 >= 0 && "+-*".indexOf(original.charAt(lastPosition-1))==-1)) {//this ensures we don't get numbers starting on 0
             solution = new StringBuilder(original);
                 if (containsSign || num.charAt(0) == '0' || Integer.parseInt(solution.toString()) - Integer.parseInt(num) <= target) {
