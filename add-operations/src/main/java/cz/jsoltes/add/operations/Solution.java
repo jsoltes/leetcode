@@ -74,42 +74,41 @@ public class Solution {
     }
 
     //method that recursively generates all solutions for target
-    private List<String> generateSolutions(String num, int target, StringBuilder solution, boolean containsSign) {
+    private List<String> generateSolutions(String num, int target, StringBuilder solution, boolean containsSign, List<String> solutions) {
         if (num.isEmpty()) { //base case
             String s = solution.toString();
             long result = getResult(solution);
             //if the solution gives target result, returns the solution, else, returns empty list
             if (result < 2147483647 && target == result) {
-                return Arrays.asList(s);
-            } else {
-                return Collections.EMPTY_LIST;
+                solutions.add(s);
+                return solutions;
             }
         } else { //recursive case
-            List<String> solutions = new ArrayList<>();
             int lastPosition = solution.length() - 1;
             char lastElement = solution.charAt(lastPosition);
             StringBuilder original = new StringBuilder(solution);
             //add + and first digit of the next number
             solution.append('+').append(num.charAt(0));
-            solutions.addAll(generateSolutions(num.substring(1), target, solution, true));
+            generateSolutions(num.substring(1), target, solution, true, solutions);
             //add - and first digit of the next number
             solution = new StringBuilder(original);
             solution.append('-').append(num.charAt(0));
-            solutions.addAll(generateSolutions(num.substring(1), target, solution, true));
+            generateSolutions(num.substring(1), target, solution, true, solutions);
             //add * and first digit of the next number
             solution = new StringBuilder(original);
             solution.append('*').append(num.charAt(0));
-            solutions.addAll(generateSolutions(num.substring(1), target, solution, true));
+            generateSolutions(num.substring(1), target, solution, true, solutions);
             //adds another digit
-            if ('0' != lastElement || (lastPosition - 1 >= 0 && "+-*".indexOf(original.charAt(lastPosition-1))==-1)) {//this ensures we don't get numbers starting on 0
-            solution = new StringBuilder(original);
+            if ('0' != lastElement || (lastPosition - 1 >= 0 && "+-*".indexOf(original.charAt(lastPosition - 1)) == -1)) {//this ensures we don't get numbers starting on 0
+                solution = new StringBuilder(original);
                 if (containsSign || num.charAt(0) == '0' || Integer.parseInt(solution.toString()) - Integer.parseInt(num) <= target) {
                     solution.append(num.charAt(0));
-                    solutions.addAll(generateSolutions(num.substring(1), target, solution, containsSign));
+                    generateSolutions(num.substring(1), target, solution, containsSign, solutions);
                 }
             }
             return solutions;
         }
+        return null;
     }
 
     public List<String> addOperators(String num, int target) {
@@ -119,7 +118,7 @@ public class Solution {
             return Arrays.asList(num);
         } else {
             char char1 = num.charAt(0);
-            return generateSolutions(num.substring(1), target, new StringBuilder().append(char1), false);
+            return generateSolutions(num.substring(1), target, new StringBuilder().append(char1), false, new ArrayList<String>());
         }
     }
 
