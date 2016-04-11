@@ -11,104 +11,51 @@ import java.util.List;
  */
 public class Solution {
 
-    //helper method that calculates result from stringbuilder
-    private long getResult(StringBuilder solution) {
-        //first we get rid of the * signs
-        int start1 = 0;
-        int len = solution.length();
-        char current;
-        boolean noSigns = true;
-        for (int i = 1; i < len; i++) {
-            current = solution.charAt(i);
-            if (current == '*') {
-                int factor1 = Integer.parseInt(solution.substring(start1, i));
-                int start2 = ++i;
-                while (i < len && "+-*".indexOf(solution.charAt(i)) == -1) {
-                    i++;
-                }
-                int factor2 = Integer.parseInt(solution.substring(start2, i));
-                int product = factor1 * factor2;
-                solution.replace(start1, i, Integer.toString(product));
-                int newLen = solution.length();
-                i -= len - newLen + 1;
-                len = newLen;
-            } else if (current == '+' || current == '-') {
-                start1 = i + 1;
-                noSigns = false;
-            }
-        }
-        //now we calculate the solution
-        long result = 0;
-        if (noSigns == true) { //if after removing the * there is nothing more to do
-            result = Long.parseLong(solution.toString());
-        } else {
-            //first we get the first number
-            int i;
-            for (i = 1; i < len; i++) {
-                current = solution.charAt(i);
-                if (current == '+' || current == '-') {
-                    result = Integer.parseInt(solution.substring(0, i));
-                    break;
-                }
-            }
-            //then we sum up the rest
-            int start;
-            for (int j = i; j < len; j++) {
-                current = solution.charAt(j);
-                if (current == '+') {
-                    start = ++j;
-                    while (j < len && solution.charAt(j) != '+' && solution.charAt(j) != '-') {
-                        j++;
-                    }
-                    result += Integer.parseInt(solution.substring(start, j--));
-                } else if (current == '-') {
-                    start = ++j;
-                    while (j < len && solution.charAt(j) != '+' && solution.charAt(j) != '-') {
-                        j++;
-                    }
-                    result -= Integer.parseInt(solution.substring(start, j--));
-                }
-            }
+    private int calculateResult(int op1, int op2, char sign, int result) {
+        if (sign == '+') {
+            result = op1 + op2;
+        } else if (sign == '-') {
+            result = op1 - op2;
+        } else if (sign == '*') {
+            result = op1 * op2;
         }
         return result;
     }
 
     //method that recursively generates all solutions for target
-    private List<String> generateSolutions(String num, int target, StringBuilder solution, boolean containsSign, List<String> solutions) {
-        if (num.isEmpty()) { //base case
-            String s = solution.toString();
-            long result = getResult(solution);
-            //if the solution gives target result, returns the solution, else, returns empty list
-            if (result < 2147483647 && target == result) {
-                solutions.add(s);
-                return solutions;
+    private List<String> generateSolutions(String num, int last, int target, int index, int op1, int op2, char sign, int result, StringBuilder solution, List<String> solutions) {
+        if (index == last) { //base case
+            if (target == result) {
+                solutions.add(solution.toString());
             }
-        } else { //recursive case
-            int lastPosition = solution.length() - 1;
-            char lastElement = solution.charAt(lastPosition);
+        } else if (result - Integer.parseInt(num.substring(index, last + 1)) <= target) { //recursive case
             StringBuilder original = new StringBuilder(solution);
-            //add + and first digit of the next number
-            solution.append('+').append(num.charAt(0));
-            generateSolutions(num.substring(1), target, solution, true, solutions);
-            //add - and first digit of the next number
+
+            //add + and the first digit of the next number
+            String nextChar = num.substring(index, index + 1);
+            solution.append('+').append(nextChar);
+            result = calculateResult(op1, op2, sign, result);
+            generateSolutions(num, last, target, index + 1, result, Integer.parseInt(nextChar), '+', result, solution, solutions);
+
+            //add - and the first digit of the next number
             solution = new StringBuilder(original);
-            solution.append('-').append(num.charAt(0));
-            generateSolutions(num.substring(1), target, solution, true, solutions);
-            //add * and first digit of the next number
+            nextChar = num.substring(index, index + 1);
+            solution.append('-').append(nextChar);
+            result = calculateResult(op1, op2, sign, result);
+            generateSolutions(num, last, target, index + 1, result, Integer.parseInt(nextChar), '-', result, solution, solutions);
+
+            //add * and the first digit of the next number
             solution = new StringBuilder(original);
-            solution.append('*').append(num.charAt(0));
-            generateSolutions(num.substring(1), target, solution, true, solutions);
-            //adds another digit
-            if ('0' != lastElement || (lastPosition - 1 >= 0 && "+-*".indexOf(original.charAt(lastPosition - 1)) == -1)) {//this ensures we don't get numbers starting on 0
-                solution = new StringBuilder(original);
-                if (containsSign || num.charAt(0) == '0' || Integer.parseInt(solution.toString()) - Integer.parseInt(num) <= target) {
-                    solution.append(num.charAt(0));
-                    generateSolutions(num.substring(1), target, solution, containsSign, solutions);
-                }
-            }
-            return solutions;
+            nextChar = num.substring(index, index + 1);
+            solution.append('*').append(nextChar);
+            op2 = op2 * Integer.parseInt(nextChar);
+            generateSolutions(num, last, target, index + 1, op1, op2, sign, result, solution, solutions);
+            //adds another digit, but only to the numbers that doesn't start on 0
+            //TODO finish this part
+            solution = new StringBuilder(original);
+            nextChar = num.substring(index, index + 1);
         }
-        return null;
+        return solutions;
     }
 
     public List<String> addOperators(String num, int target) {
@@ -117,8 +64,9 @@ public class Solution {
         } else if (num.equals(Integer.toString(target))) {
             return Arrays.asList(num);
         } else {
-            char char1 = num.charAt(0);
-            return generateSolutions(num.substring(1), target, new StringBuilder().append(char1), false, new ArrayList<String>());
+            String firstChar = num.substring(0, 1);
+            int firstNum = Integer.parseInt(firstChar);
+            return generateSolutions(num, num.length() - 1, target, 1, 0, firstNum, '+', firstNum, new StringBuilder(firstChar), new ArrayList<String>());
         }
     }
 
